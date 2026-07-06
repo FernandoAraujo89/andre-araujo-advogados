@@ -15,13 +15,12 @@ export const metadata: Metadata = pageMetadata({
 
 export default function EquipePage() {
   return (
-    <div className="px-5 pb-24 pt-32 lg:px-8 lg:pb-32">
+    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs items={[{ label: "Equipe" }]} />
         <Reveal>
           <SectionHeading
             as="h1"
-            eyebrow="Equipe"
             title="As pessoas por trás de cada caso"
             description="Uma equipe de 13 advogados inscritos na OAB/MG, com atuação em sete áreas do direito, a serviço de Formiga e região."
           />

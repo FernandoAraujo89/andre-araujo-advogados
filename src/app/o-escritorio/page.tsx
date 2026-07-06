@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { MessageCircle } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import Button from "@/components/Button";
-import PhotoPlaceholder from "@/components/PhotoPlaceholder";
+import Photo from "@/components/Photo";
 import { site } from "@/data/site";
 import { pageMetadata } from "@/lib/seo";
 
@@ -36,7 +35,7 @@ const valores = [
 
 export default function OEscritorioPage() {
   return (
-    <div className="px-5 pb-24 pt-32 lg:px-8 lg:pb-32">
+    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs items={[{ label: "O Escritório" }]} />
 
@@ -44,16 +43,18 @@ export default function OEscritorioPage() {
           <Reveal>
             <SectionHeading
               as="h1"
-              eyebrow="O Escritório"
               title="Advocacia feita de perto, para quem confia de perto"
               description="O André Araújo Advogados nasceu em Formiga, MG, com a convicção de que a boa advocacia se faz com técnica e com vínculo: conhecer o cliente, a cidade e o contexto de cada caso."
             />
           </Reveal>
           <Reveal delay={0.15}>
             {/* TODO: substituir pela foto real da fachada ou recepção do escritório */}
-            <PhotoPlaceholder
-              label="Foto real do escritório (fachada ou recepção)"
+            <Photo
+              src="https://images.unsplash.com/photo-1571624436279-b272aff752b5?auto=format&fit=crop&w=1400&q=80"
+              alt="Sala de reunião com mesa de madeira e cadeiras"
               ratio="4/3"
+              credit="Foto: S O C I A L . C U T / Unsplash"
+              creditUrl="https://unsplash.com/@socialcut?utm_source=site_andre_araujo&utm_medium=referral"
             />
           </Reveal>
         </div>
@@ -61,7 +62,7 @@ export default function OEscritorioPage() {
         {/* História */}
         <div className="mt-24 grid gap-12 lg:grid-cols-2">
           <Reveal>
-            <SectionHeading eyebrow="Nossa história" title="De Formiga, para toda a região" />
+            <SectionHeading title="De Formiga, para toda a região" />
           </Reveal>
           <Reveal delay={0.1}>
             <div className="space-y-5 text-lg text-ink-soft">
@@ -74,11 +75,12 @@ export default function OEscritorioPage() {
                 suporte jurídico de qualidade.
               </p>
               <p>
-                Hoje, a equipe reúne 13 advogados inscritos na OAB/MG e atua em
-                sete áreas do direito, além de uma frente dedicada aos
-                servidores públicos estaduais. O crescimento veio da forma que
-                o escritório mais valoriza: pela indicação de quem já confiou
-                seu caso a nós.
+                Hoje, a equipe reúne 13 advogados inscritos na OAB/MG, com a
+                atuação organizada em duas vertentes: o Direito Cível e
+                Empresarial, que abrange sete áreas, e o Direito do Servidor
+                Público, dedicado aos servidores estaduais de Minas Gerais. O
+                crescimento veio da forma que o escritório mais valoriza: pela
+                indicação de quem já confiou seu caso a nós.
               </p>
             </div>
           </Reveal>
@@ -86,14 +88,14 @@ export default function OEscritorioPage() {
 
         {/* Missão — bloco de citação em serif */}
         <Reveal>
-          <figure className="mx-auto mt-24 max-w-4xl border-l-2 border-brass py-4 pl-8 lg:pl-12">
+          <figure className="mx-auto mt-24 max-w-4xl border-l-2 border-wine py-4 pl-8 lg:pl-12">
             <blockquote className="font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-normal leading-[1.35] text-ink">
               “Prestar serviços jurídicos que ultrapassem a esfera da
               excelência profissional, mediante a valorização dos laços criados
               com os clientes, a fim de desenvolver parcerias consistentes e
               perduráveis.”
             </blockquote>
-            <figcaption className="eyebrow mt-6">
+            <figcaption className="mt-6 text-sm text-ink-soft">
               Missão do escritório
             </figcaption>
           </figure>
@@ -102,12 +104,12 @@ export default function OEscritorioPage() {
         {/* Valores */}
         <div className="mt-24">
           <Reveal>
-            <SectionHeading eyebrow="Valores" title="O que orienta a nossa prática" />
+            <SectionHeading title="O que orienta a nossa prática" />
           </Reveal>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {valores.map((v, i) => (
               <Reveal key={v.title} delay={i * 0.08} className="h-full">
-                <div className="h-full rounded-[1.75rem] border border-line bg-paper-light p-8">
+                <div className="h-full rounded-md border border-line bg-paper-light p-8">
                   <h3 className="font-serif text-xl font-medium text-ink">
                     {v.title}
                   </h3>
@@ -120,7 +122,7 @@ export default function OEscritorioPage() {
 
         {/* CTA final */}
         <Reveal>
-          <div className="mt-24 rounded-[2rem] bg-ink px-6 py-16 text-center lg:px-16">
+          <div className="mt-24 rounded-md bg-ink px-6 py-16 text-center lg:px-16">
             <h2 className="mx-auto max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.1] text-paper-light">
               Conheça o escritório de perto
             </h2>
@@ -130,13 +132,12 @@ export default function OEscritorioPage() {
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Button href={site.whatsappHref} external variant="light" size="lg">
-                <MessageCircle className="h-4 w-4 text-brass" strokeWidth={1.5} aria-hidden />
                 Falar no WhatsApp
               </Button>
               <Button
                 href="/contato"
                 size="lg"
-                className="border border-paper/30 bg-transparent text-paper-light hover:bg-transparent hover:text-brass"
+                className="border border-paper/40 bg-transparent text-paper-light hover:border-paper-light hover:bg-paper/10"
               >
                 Agendar atendimento
               </Button>

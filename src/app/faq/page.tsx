@@ -19,14 +19,13 @@ export default function FaqPage() {
   const allItems = faqGroups.flatMap((g) => g.items);
 
   return (
-    <div className="px-5 pb-24 pt-32 lg:px-8 lg:pb-32">
+    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
       <JsonLd data={faqPageJsonLd(allItems)} />
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs items={[{ label: "Perguntas Frequentes" }]} />
         <Reveal>
           <SectionHeading
             as="h1"
-            eyebrow="FAQ"
             title="Perguntas frequentes"
             description="Reunimos as dúvidas mais comuns de quem procura o escritório. Não encontrou a sua? Fale conosco pelo WhatsApp ou pela página de contato."
           />

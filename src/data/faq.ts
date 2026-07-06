@@ -38,7 +38,7 @@ const atendimento: AreaFaq[] = [
 export const faqGroups: FaqGroup[] = [
   { theme: "Atendimento", items: atendimento },
   {
-    theme: "Servidores Públicos",
+    theme: "Direito do Servidor Público",
     items: servidorPages.flatMap((p) => p.faq),
   },
   ...areas

@@ -1,4 +1,3 @@
-import { MessageCircle, Phone } from "lucide-react";
 import { site } from "@/data/site";
 
 /**
@@ -7,7 +6,7 @@ import { site } from "@/data/site";
 export default function ContactAside() {
   return (
     <aside className="lg:sticky lg:top-28">
-      <div className="rounded-[1.75rem] bg-ink p-8 text-paper/85">
+      <div className="rounded-md bg-ink p-8 text-paper/85">
         <h2 className="font-serif text-2xl font-medium text-paper-light">
           Converse com o escritório
         </h2>
@@ -20,16 +19,14 @@ export default function ContactAside() {
             href={site.whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-paper px-6 py-3.5 font-medium text-ink transition-all duration-300 hover:scale-[1.02] hover:bg-paper-light"
+            className="inline-flex items-center justify-center gap-2 rounded-sm bg-paper px-6 py-3.5 font-medium text-ink transition-all duration-300 hover:scale-[1.02] hover:bg-paper-light"
           >
-            <MessageCircle className="h-4 w-4 text-brass" strokeWidth={1.5} aria-hidden />
             Falar no WhatsApp
           </a>
           <a
             href={site.phoneHref}
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-paper/30 px-6 py-3.5 font-medium text-paper-light transition-colors hover:border-brass hover:text-brass"
+            className="inline-flex items-center justify-center gap-2 rounded-sm border border-paper/30 px-6 py-3.5 font-medium text-paper-light transition-colors hover:border-paper-light hover:bg-paper/10"
           >
-            <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden />
             {site.phone}
           </a>
         </div>

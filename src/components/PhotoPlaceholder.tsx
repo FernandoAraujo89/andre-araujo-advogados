@@ -1,8 +1,8 @@
-import { Scale } from "lucide-react";
-
 type PhotoPlaceholderProps = {
   /** Descrição da foto real que deve substituir este placeholder */
   label: string;
+  /** Iniciais para o monograma (ex.: "AA") — usado nos retratos da equipe */
+  initials?: string;
   /** Proporção CSS, ex.: "4/5", "1/1", "4/3" */
   ratio?: string;
   className?: string;
@@ -11,28 +11,33 @@ type PhotoPlaceholderProps = {
 
 /**
  * Placeholder de fotografia em tons da paleta, com proporção fixa (CLS zero).
- * TODO: substituir cada uso por foto real via next/image — o `label`
- * indica qual foto entra em cada posição.
+ * Com `initials`, vira um monograma serifado — usado para os retratos da
+ * equipe até as fotos reais chegarem (não usamos banco de imagens para
+ * rostos de pessoas nomeadas).
  */
 export default function PhotoPlaceholder({
   label,
+  initials,
   ratio = "4/3",
   className = "",
-  rounded = "rounded-[1.75rem]",
+  rounded = "rounded-md",
 }: PhotoPlaceholderProps) {
   return (
     <div
       role="img"
       aria-label={label}
-      className={`relative flex w-full items-center justify-center overflow-hidden bg-[#E9E2D3] ${rounded} ${className}`}
+      className={`relative flex w-full items-center justify-center overflow-hidden bg-wine-mist ${rounded} ${className}`}
       style={{ aspectRatio: ratio }}
     >
-      <div className="flex flex-col items-center gap-3 px-6 text-center">
-        <Scale className="h-8 w-8 text-brass/60" strokeWidth={1.25} aria-hidden />
-        <span className="max-w-[22ch] text-[0.8125rem] leading-snug text-ink-soft/70">
+      {initials ? (
+        <span className="select-none font-serif text-[clamp(3rem,8vw,5rem)] font-medium text-wine/70">
+          {initials}
+        </span>
+      ) : (
+        <span className="max-w-[22ch] px-6 text-center text-[0.8125rem] leading-snug text-ink-soft/70">
           {label}
         </span>
-      </div>
+      )}
     </div>
   );
 }

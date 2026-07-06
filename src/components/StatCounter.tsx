@@ -48,7 +48,7 @@ export default function StatCounter({ value, display, suffix = "", label }: Stat
     <div ref={ref}>
       <p className="font-serif text-[clamp(2.5rem,4.5vw,3.75rem)] font-medium leading-none text-ink">
         {value === null ? display : formatNumber(shown)}
-        {suffix && <span className="text-brass">{suffix}</span>}
+        {suffix && <span className="text-wine">{suffix}</span>}
       </p>
       <p className="mt-3 text-[0.9375rem] text-ink-soft">{label}</p>
     </div>

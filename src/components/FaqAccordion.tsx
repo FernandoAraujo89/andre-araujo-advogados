@@ -2,7 +2,6 @@
 
 import { useId, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 import type { AreaFaq } from "@/data/areas";
 
 type FaqAccordionProps = {
@@ -15,7 +14,7 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
   const baseId = useId();
 
   return (
-    <div className="divide-y divide-line rounded-[1.25rem] border border-line bg-paper-light">
+    <div className="divide-y divide-line rounded-md border border-line bg-paper-light">
       {items.map((item, i) => {
         const open = openIndex === i;
         const buttonId = `${baseId}-q-${i}`;
@@ -31,13 +30,12 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
               className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
             >
               <span className="font-medium text-ink">{item.question}</span>
-              <ChevronDown
-                className={`h-5 w-5 shrink-0 text-brass transition-transform duration-300 ${
-                  open ? "rotate-180" : ""
-                }`}
-                strokeWidth={1.5}
+              <span
                 aria-hidden
-              />
+                className="shrink-0 text-xl leading-none text-wine"
+              >
+                {open ? "−" : "+"}
+              </span>
             </button>
             <AnimatePresence initial={false}>
               {open && (

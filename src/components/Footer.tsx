@@ -1,47 +1,42 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail } from "lucide-react";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedinIcon,
-  YoutubeIcon,
-} from "./SocialIcons";
+import Image from "next/image";
 import { site, navMain, navSecondary } from "@/data/site";
 import { servidorPages } from "@/data/servidores";
 
 const socials = [
-  { label: "Facebook", href: site.social.facebook, Icon: FacebookIcon },
-  { label: "Instagram", href: site.social.instagram, Icon: InstagramIcon },
-  { label: "LinkedIn", href: site.social.linkedin, Icon: LinkedinIcon },
-  { label: "YouTube", href: site.social.youtube, Icon: YoutubeIcon },
+  { label: "Facebook", href: site.social.facebook },
+  { label: "Instagram", href: site.social.instagram },
+  { label: "LinkedIn", href: site.social.linkedin },
+  { label: "YouTube", href: site.social.youtube },
 ];
 
 export default function Footer() {
   return (
     <footer className="bg-ink text-paper/80">
-      <div className="mx-auto max-w-[1240px] px-5 py-16 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-[1240px] px-5 py-20 lg:px-8 lg:py-24">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            {/* TODO: substituir pelo logotipo real em versão clara */}
-            <p className="font-serif text-xl font-semibold text-paper-light">
-              André Araújo{" "}
-              <span className="font-normal text-brass">Advogados</span>
-            </p>
+            <Image
+              src="/logo-horizontal.png"
+              alt="André Araújo Advogados"
+              width={1311}
+              height={636}
+              className="h-16 w-auto"
+            />
             <p className="mt-4 max-w-xs text-[0.9375rem] leading-relaxed">
               Advocacia em Formiga, MG, com atendimento próximo a empresas e
               famílias de toda a região.
             </p>
-            <ul className="mt-6 flex gap-3">
-              {socials.map(({ label, href, Icon }) => (
+            <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[0.9375rem]">
+              {socials.map(({ label, href }) => (
                 <li key={label}>
                   <a
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={label}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-paper/20 transition-colors hover:border-brass hover:text-brass"
+                    className="transition-colors hover:text-paper-light"
                   >
-                    <Icon className="h-4 w-4" />
+                    {label}
                   </a>
                 </li>
               ))}
@@ -49,11 +44,11 @@ export default function Footer() {
           </div>
 
           <nav aria-label="Navegação do rodapé">
-            <h2 className="eyebrow">Navegação</h2>
+            <h2 className="text-[0.8125rem] font-medium text-gold">Navegação</h2>
             <ul className="mt-5 space-y-3 text-[0.9375rem]">
               {[...navMain, ...navSecondary].map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="transition-colors hover:text-brass">
+                  <Link href={item.href} className="transition-colors hover:text-paper-light">
                     {item.label}
                   </Link>
                 </li>
@@ -62,13 +57,13 @@ export default function Footer() {
           </nav>
 
           <nav aria-label="Links para servidores públicos">
-            <h2 className="eyebrow">Servidores Públicos</h2>
+            <h2 className="text-[0.8125rem] font-medium text-gold">Direito do Servidor Público</h2>
             <ul className="mt-5 space-y-3 text-[0.9375rem]">
               {servidorPages.map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/servidores-publicos/${p.slug}`}
-                    className="transition-colors hover:text-brass"
+                    className="transition-colors hover:text-paper-light"
                   >
                     {p.name}
                   </Link>
@@ -78,25 +73,22 @@ export default function Footer() {
           </nav>
 
           <div>
-            <h2 className="eyebrow">Contato</h2>
+            <h2 className="text-[0.8125rem] font-medium text-gold">Contato</h2>
             <ul className="mt-5 space-y-4 text-[0.9375rem]">
-              <li className="flex gap-3">
-                <MapPin className="mt-1 h-4 w-4 shrink-0 text-brass" strokeWidth={1.5} aria-hidden />
+              <li>
                 <span>
                   {site.address.street}, {site.address.neighborhood}
                   <br />
                   {site.address.city}, {site.address.state} — CEP {site.address.zip}
                 </span>
               </li>
-              <li className="flex gap-3">
-                <Phone className="mt-1 h-4 w-4 shrink-0 text-brass" strokeWidth={1.5} aria-hidden />
-                <a href={site.phoneHref} className="transition-colors hover:text-brass">
+              <li>
+                <a href={site.phoneHref} className="transition-colors hover:text-paper-light">
                   {site.phone}
                 </a>
               </li>
-              <li className="flex gap-3">
-                <Mail className="mt-1 h-4 w-4 shrink-0 text-brass" strokeWidth={1.5} aria-hidden />
-                <a href={site.emailHref} className="break-all transition-colors hover:text-brass">
+              <li>
+                <a href={site.emailHref} className="break-all transition-colors hover:text-paper-light">
                   {site.email}
                 </a>
               </li>
@@ -112,7 +104,7 @@ export default function Footer() {
           </p>
           <Link
             href="/politica-de-privacidade"
-            className="transition-colors hover:text-brass"
+            className="transition-colors hover:text-paper-light"
           >
             Política de Privacidade
           </Link>

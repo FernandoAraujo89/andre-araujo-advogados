@@ -12,14 +12,14 @@ type ButtonProps = {
 };
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.99]";
+  "inline-flex items-center justify-center gap-2 rounded-sm font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.99]";
 
 const variants = {
-  primary: "bg-ink text-paper-light hover:bg-[#22333f]",
+  primary: "bg-wine text-paper-light hover:bg-wine-deep",
   secondary:
-    "border border-ink/25 text-ink hover:border-brass hover:text-brass-deep",
+    "border border-ink/25 text-ink hover:border-wine hover:text-wine-deep",
   light: "bg-paper text-ink hover:bg-paper-light",
-  whatsapp: "bg-ink text-paper-light hover:bg-[#22333f]",
+  whatsapp: "bg-wine text-paper-light hover:bg-wine-deep",
 };
 
 const sizes = {

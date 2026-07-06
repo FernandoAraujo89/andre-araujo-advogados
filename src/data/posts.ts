@@ -19,18 +19,33 @@ export type PostSection = {
   paragraphs: string[];
 };
 
+export type PostImage = {
+  src: string;
+  alt: string;
+  /** Crédito obrigatório do Unsplash */
+  credit: string;
+  creditUrl: string;
+};
+
 export type Post = {
   slug: string;
   title: string;
   category: Category;
   date: string; // ISO yyyy-mm-dd
   excerpt: string;
+  image: PostImage;
   sections: PostSection[];
 };
 
 export const posts: Post[] = [
   {
     slug: "cancelamento-de-pacotes-de-viagem",
+    image: {
+      src: "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?auto=format&fit=crop&w=1600&q=80",
+      alt: "Viajante sentado no aeroporto com a mala, observando um avião",
+      credit: "Foto: JESHOOTS.COM / Unsplash",
+      creditUrl: "https://unsplash.com/@jeshoots?utm_source=site_andre_araujo&utm_medium=referral",
+    },
     title: "Cancelamento de pacotes de viagem: descubra seus direitos",
     category: "Consumidor e Bancário",
     date: "2026-05-18", // TODO: ajustar para a data original na migração
@@ -59,6 +74,12 @@ export const posts: Post[] = [
   },
   {
     slug: "a-importancia-da-revisao-contratual",
+    image: {
+      src: "https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=1600&q=80",
+      alt: "Duas pessoas assinando um contrato sobre a mesa",
+      credit: "Foto: Cytonn Photography / Unsplash",
+      creditUrl: "https://unsplash.com/@cytonn_photography?utm_source=site_andre_araujo&utm_medium=referral",
+    },
     title: "A importância da revisão contratual",
     category: "Empresarial e Contratos",
     date: "2026-04-27", // TODO: ajustar para a data original na migração
@@ -86,6 +107,12 @@ export const posts: Post[] = [
   },
   {
     slug: "desapropriacao",
+    image: {
+      src: "https://images.unsplash.com/photo-1561592390-ec0391c9c723?auto=format&fit=crop&w=1600&q=80",
+      alt: "Vista aérea de quarteirões urbanos com edifícios",
+      credit: "Foto: Lucas Marcomini / Unsplash",
+      creditUrl: "https://unsplash.com/@lucasmarcomini?utm_source=site_andre_araujo&utm_medium=referral",
+    },
     title: "Desapropriação",
     category: "Imobiliário e Locação",
     date: "2026-03-30", // TODO: ajustar para a data original na migração
@@ -108,6 +135,12 @@ export const posts: Post[] = [
   },
   {
     slug: "ferias-premio-do-servidor-estadual",
+    image: {
+      src: "https://images.unsplash.com/photo-1636652966850-5ac4d02370e9?auto=format&fit=crop&w=1600&q=80",
+      alt: "Fachada de prédio público com colunas clássicas",
+      credit: "Foto: Colin Lloyd / Unsplash",
+      creditUrl: "https://unsplash.com/@onthesearchforpineapples?utm_source=site_andre_araujo&utm_medium=referral",
+    },
     title: "Férias-prêmio do servidor estadual: o que diz a lei em Minas Gerais",
     category: "Tributário e Servidor Público",
     date: "2026-03-09", // Seed de exemplo — TODO: revisar conteúdo com o escritório
@@ -130,6 +163,12 @@ export const posts: Post[] = [
   },
   {
     slug: "locacao-comercial-direitos-do-lojista",
+    image: {
+      src: "https://images.unsplash.com/photo-1774845334998-616e157ec181?auto=format&fit=crop&w=1600&q=80",
+      alt: "Fachada de loja comercial de rua",
+      credit: "Foto: Owen Wei / Unsplash",
+      creditUrl: "https://unsplash.com/@owen_wei?utm_source=site_andre_araujo&utm_medium=referral",
+    },
     title: "Locação comercial: o que todo lojista precisa saber antes de assinar",
     category: "Imobiliário e Locação",
     date: "2026-02-16", // Seed de exemplo — TODO: revisar conteúdo com o escritório
@@ -152,6 +191,12 @@ export const posts: Post[] = [
   },
   {
     slug: "restituicao-de-tributos-pagos-indevidamente",
+    image: {
+      src: "https://images.unsplash.com/photo-1625225233840-695456021cde?auto=format&fit=crop&w=1600&q=80",
+      alt: "Calculadora e caneta sobre documentos em uma mesa",
+      credit: "Foto: Mediamodifier / Unsplash",
+      creditUrl: "https://unsplash.com/@mediamodifier?utm_source=site_andre_araujo&utm_medium=referral",
+    },
     title: "Pagou tributo a mais? Entenda como funciona a restituição",
     category: "Tributário e Servidor Público",
     date: "2026-01-26", // Seed de exemplo — TODO: revisar conteúdo com o escritório

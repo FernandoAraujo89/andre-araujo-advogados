@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone, MessageCircle } from "lucide-react";
 import { site, navMain, navSecondary } from "@/data/site";
 
 export default function Header() {
@@ -32,15 +32,21 @@ export default function Header() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-[76px] max-w-[1240px] items-center justify-between px-5 lg:px-8">
-        {/* TODO: substituir o wordmark pelo logotipo real do escritório (SVG) */}
+      <div className="mx-auto flex h-20 max-w-[1240px] items-center justify-between gap-8 px-5 lg:px-8">
         <Link
           href="/"
-          className="font-serif text-xl font-semibold tracking-tight text-ink"
           aria-label="André Araújo Advogados — página inicial"
+          className="shrink-0"
         >
-          André Araújo{" "}
-          <span className="font-normal text-brass">Advogados</span>
+          <Image
+            src="/logo-header.svg"
+            alt="André Araújo Advogados"
+            width={575}
+            height={130}
+            priority
+            unoptimized
+            className="h-10 w-auto lg:h-11"
+          />
         </Link>
 
         <nav aria-label="Navegação principal" className="hidden lg:block">
@@ -53,12 +59,12 @@ export default function Header() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`whitespace-nowrap text-[0.9375rem] font-medium transition-colors hover:text-brass-deep ${
-                      active ? "text-brass-deep" : "text-ink"
+                    className={`whitespace-nowrap text-[0.9375rem] font-medium transition-colors hover:text-wine-deep ${
+                      active ? "text-wine-deep" : "text-ink"
                     }`}
                     aria-current={active ? "page" : undefined}
                   >
-                    {item.label}
+                    {"shortLabel" in item ? item.shortLabel : item.label}
                   </Link>
                 </li>
               );
@@ -66,37 +72,30 @@ export default function Header() {
           </ul>
         </nav>
 
-        <div className="hidden items-center gap-5 lg:flex">
+        <div className="hidden items-center gap-5 xl:flex">
           <a
             href={site.phoneHref}
-            className="hidden items-center gap-2 whitespace-nowrap text-[0.9375rem] font-medium text-ink transition-colors hover:text-brass-deep xl:flex"
+            className="hidden items-center gap-2 whitespace-nowrap text-[0.9375rem] font-medium text-ink transition-colors hover:text-wine-deep 2xl:flex"
           >
-            <Phone className="h-4 w-4 text-brass" strokeWidth={1.5} aria-hidden />
             {site.phone}
           </a>
           <a
             href={site.whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-ink px-5 py-2.5 text-[0.9375rem] font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-[#22333f]"
+            className="inline-flex items-center gap-2 whitespace-nowrap rounded-sm bg-wine px-5 py-2.5 text-[0.9375rem] font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-wine-deep"
           >
-            <MessageCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden />
             Falar no WhatsApp
           </a>
         </div>
 
         <button
           type="button"
-          className="lg:hidden"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
+          className="text-[0.9375rem] font-medium text-ink lg:hidden"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? (
-            <X className="h-6 w-6 text-ink" strokeWidth={1.5} aria-hidden />
-          ) : (
-            <Menu className="h-6 w-6 text-ink" strokeWidth={1.5} aria-hidden />
-          )}
+          {open ? "Fechar" : "Menu"}
         </button>
       </div>
 
@@ -112,7 +111,7 @@ export default function Header() {
                 <Link
                   href={item.href}
                   onClick={closeMenu}
-                  className="block rounded-xl px-3 py-3 text-lg font-medium text-ink hover:bg-paper-light"
+                  className="block rounded-sm px-3 py-3 text-lg font-medium text-ink hover:bg-paper-light"
                 >
                   {item.label}
                 </Link>
@@ -126,7 +125,7 @@ export default function Header() {
                   <Link
                     href={item.href}
                     onClick={closeMenu}
-                    className="block rounded-xl px-3 py-2.5 text-base text-ink-soft hover:bg-paper-light"
+                    className="block rounded-sm px-3 py-2.5 text-base text-ink-soft hover:bg-paper-light"
                   >
                     {item.label}
                   </Link>
@@ -139,16 +138,14 @@ export default function Header() {
               href={site.whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3.5 font-medium text-paper-light"
+              className="inline-flex items-center justify-center gap-2 rounded-sm bg-wine px-6 py-3.5 font-medium text-paper-light"
             >
-              <MessageCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden />
               Falar no WhatsApp
             </a>
             <a
               href={site.phoneHref}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-ink/25 px-6 py-3.5 font-medium text-ink"
+              className="inline-flex items-center justify-center gap-2 rounded-sm border border-ink/25 px-6 py-3.5 font-medium text-ink"
             >
-              <Phone className="h-4 w-4 text-brass" strokeWidth={1.5} aria-hidden />
               {site.phone}
             </a>
           </div>

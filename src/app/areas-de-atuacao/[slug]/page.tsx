@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Check } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Reveal from "@/components/Reveal";
 import AreaCard from "@/components/AreaCard";
-import AreaIcon from "@/components/AreaIcon";
 import FaqAccordion from "@/components/FaqAccordion";
 import ContactAside from "@/components/ContactAside";
 import SectionHeading from "@/components/SectionHeading";
@@ -38,27 +36,21 @@ export default async function AreaPage({ params }: Props) {
   const outras = areas.filter((a) => a.slug !== area.slug).slice(0, 3);
 
   return (
-    <div className="px-5 pb-24 pt-32 lg:px-8 lg:pb-32">
+    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs
           items={[
-            { label: "Áreas de Atuação", href: "/areas-de-atuacao" },
+            { label: "Direito Cível e Empresarial", href: "/areas-de-atuacao" },
             { label: area.name },
           ]}
         />
 
         <Reveal>
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-paper-light text-brass">
-            <AreaIcon name={area.icon} className="h-7 w-7" />
-          </span>
-          <div className="mt-6">
-            <SectionHeading
-              as="h1"
-              eyebrow="Área de Atuação"
-              title={area.name}
-              description={area.intro}
-            />
-          </div>
+          <SectionHeading
+            as="h1"
+            title={area.name}
+            description={area.intro}
+          />
         </Reveal>
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_360px]">
@@ -74,15 +66,10 @@ export default async function AreaPage({ params }: Props) {
                   </p>
                 )}
                 {block.items && (
-                  <ul className="mt-6 space-y-4">
+                  <ul className="mt-6 list-disc space-y-3 pl-5 marker:text-wine">
                     {block.items.map((item) => (
-                      <li key={item} className="flex gap-3">
-                        <Check
-                          className="mt-1.5 h-4 w-4 shrink-0 text-brass"
-                          strokeWidth={2}
-                          aria-hidden
-                        />
-                        <span className="text-ink-soft">{item}</span>
+                      <li key={item} className="text-ink-soft">
+                        {item}
                       </li>
                     ))}
                   </ul>
@@ -107,7 +94,7 @@ export default async function AreaPage({ params }: Props) {
 
         <div className="mt-24">
           <Reveal>
-            <SectionHeading eyebrow="Outras áreas" title="Veja também" />
+            <SectionHeading title="Veja também" />
           </Reveal>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {outras.map((a, i) => (

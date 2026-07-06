@@ -1,6 +1,5 @@
 /**
  * Áreas de atuação — conteúdo editável sem tocar em componentes.
- * `icon` é uma chave mapeada para lucide-react em src/components/AreaIcon.tsx.
  */
 
 export type AreaBlock = {
@@ -17,7 +16,6 @@ export type AreaFaq = {
 export type Area = {
   slug: string;
   name: string;
-  icon: string;
   tagline: string;
   metaDescription: string;
   intro: string;
@@ -29,7 +27,6 @@ export const areas: Area[] = [
   {
     slug: "direito-tributario",
     name: "Direito Tributário",
-    icon: "landmark",
     tagline:
       "Orientação sobre tributos para empresas e pessoas físicas, do planejamento à defesa.",
     metaDescription:
@@ -69,7 +66,6 @@ export const areas: Area[] = [
   {
     slug: "direito-condominial",
     name: "Direito Condominial",
-    icon: "building",
     tagline:
       "Assessoria a condomínios, síndicos e condôminos em cobranças, assembleias e convenções.",
     metaDescription:
@@ -104,7 +100,6 @@ export const areas: Area[] = [
   {
     slug: "direito-do-consumidor",
     name: "Direito do Consumidor",
-    icon: "shield",
     tagline:
       "Defesa dos seus direitos em compras, serviços, planos, bancos e cobranças indevidas.",
     metaDescription:
@@ -139,7 +134,6 @@ export const areas: Area[] = [
   {
     slug: "direito-imobiliario",
     name: "Direito Imobiliário",
-    icon: "home",
     tagline:
       "Segurança jurídica na compra, venda, locação e regularização de imóveis.",
     metaDescription:
@@ -174,7 +168,6 @@ export const areas: Area[] = [
   {
     slug: "direito-empresarial",
     name: "Direito Empresarial",
-    icon: "briefcase",
     tagline:
       "Suporte jurídico para a rotina e as decisões estratégicas da sua empresa.",
     metaDescription:
@@ -209,7 +202,6 @@ export const areas: Area[] = [
   {
     slug: "direito-trabalhista",
     name: "Direito Trabalhista",
-    icon: "users",
     tagline:
       "Atuação para empregadores e trabalhadores em demandas e rotinas trabalhistas.",
     metaDescription:
@@ -244,7 +236,6 @@ export const areas: Area[] = [
   {
     slug: "recuperacao-de-credito",
     name: "Recuperação de Crédito",
-    icon: "coins",
     tagline:
       "Cobrança estratégica para transformar dívidas em recebimentos, com respeito ao devedor.",
     metaDescription:

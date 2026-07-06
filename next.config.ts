@@ -2,6 +2,15 @@ import type { NextConfig } from "next";
 import { legacyRedirects } from "./src/lib/redirects";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+    ],
+  },
   /**
    * Redirects 301 das URLs do site antigo (Wix).
    * Funcionam em deploy com servidor (Vercel, Node). Para export estático

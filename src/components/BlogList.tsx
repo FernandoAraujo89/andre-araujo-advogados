@@ -37,10 +37,10 @@ export default function BlogList({ posts }: BlogListProps) {
             type="button"
             onClick={() => selectCategory(c)}
             aria-pressed={category === c}
-            className={`rounded-full px-5 py-2.5 text-[0.9375rem] font-medium transition-colors ${
+            className={`rounded-sm px-5 py-2.5 text-[0.9375rem] font-medium transition-colors ${
               category === c
-                ? "bg-ink text-paper-light"
-                : "border border-line bg-paper-light text-ink-soft hover:border-brass hover:text-brass-deep"
+                ? "bg-wine text-paper-light"
+                : "border border-line bg-paper-light text-ink-soft hover:border-wine hover:text-wine-deep"
             }`}
           >
             {c}
@@ -69,10 +69,10 @@ export default function BlogList({ posts }: BlogListProps) {
               onClick={() => setPage(n)}
               aria-current={page === n ? "page" : undefined}
               aria-label={`Página ${n}`}
-              className={`h-11 w-11 rounded-full text-[0.9375rem] font-medium transition-colors ${
+              className={`h-11 w-11 rounded-sm text-[0.9375rem] font-medium transition-colors ${
                 page === n
-                  ? "bg-ink text-paper-light"
-                  : "border border-line text-ink-soft hover:border-brass hover:text-brass-deep"
+                  ? "bg-wine text-paper-light"
+                  : "border border-line text-ink-soft hover:border-wine hover:text-wine-deep"
               }`}
             >
               {n}

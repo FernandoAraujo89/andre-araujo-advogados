@@ -2,7 +2,12 @@
 
 /*
  * Tokens de design — André Araújo Advogados
- * Paleta derivada da referência cadmus.io (creme + tinta) com acento dourado latão.
+ * Paleta derivada da referência cadmus.io (creme + tinta) com as cores
+ * oficiais do Guia de Marca: vinho #721420 (primária) e dourado #D5BC80
+ * (apoio, fundos escuros). Contrastes validados em WCAG AA: wine sobre
+ * paper ≈ 10,5:1 · paper-light sobre wine ≈ 10,8:1 · gold sobre ink ≈ 8,7:1
+ * · ink-soft sobre paper ≈ 6,9:1. Nunca usar wine como texto sobre ink
+ * (1,4:1) nem gold como texto sobre paper (contraste insuficiente).
  */
 @theme {
   /* Cores */
@@ -10,8 +15,10 @@
   --color-paper-light: #fdfbf7;
   --color-ink: #16222c;
   --color-ink-soft: #4a5560;
-  --color-brass: #b08d57;
-  --color-brass-deep: #96733f;
+  --color-wine: #721420;
+  --color-wine-deep: #4e0d16;
+  --color-wine-mist: #f1e7e4;
+  --color-gold: #d5bc80;
   --color-line: #e5dfd3;
   --color-whatsapp: #25d366;
 
@@ -19,9 +26,9 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
 
-  /* Raios */
-  --radius-card: 1.75rem; /* 28px — cards grandes */
-  --radius-card-sm: 1.25rem; /* 20px — cards menores */
+  /* Raios — cantos discretos, quase retos, como na referência editorial */
+  --radius-card: 0.375rem; /* 6px — cards e fotos */
+  --radius-card-sm: 0.25rem; /* 4px — botões, chips e inputs */
 
   /* Sombras quentes e sutis */
   --shadow-card: 0 10px 40px rgba(22, 34, 44, 0.08);
@@ -48,19 +55,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Eyebrow — label em caixa alta na cor do acento */
-.eyebrow {
+/* Label discreto — rótulo neutro para colunas e campos (sem caixa alta/acento) */
+.label {
   font-family: var(--font-sans);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.8125rem; /* 13px */
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-brass);
+  color: var(--color-ink-soft);
 }
 
 /* Foco visível e consistente para navegação por teclado */
 :focus-visible {
-  outline: 2px solid var(--color-brass);
+  outline: 2px solid var(--color-wine);
   outline-offset: 3px;
   border-radius: 4px;
 }

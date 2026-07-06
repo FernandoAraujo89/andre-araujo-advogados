@@ -1,5 +1,4 @@
 type SectionHeadingProps = {
-  eyebrow?: string;
   title: string;
   description?: string;
   align?: "left" | "center";
@@ -8,7 +7,6 @@ type SectionHeadingProps = {
 };
 
 export default function SectionHeading({
-  eyebrow,
   title,
   description,
   align = "left",
@@ -22,7 +20,6 @@ export default function SectionHeading({
       : "text-[clamp(2rem,4vw,3rem)]";
   return (
     <div className={`max-w-3xl ${alignCls}`}>
-      {eyebrow && <p className="eyebrow mb-4">{eyebrow}</p>}
       <Tag
         className={`font-serif font-medium leading-[1.1] tracking-[-0.01em] ${titleSize} ${
           dark ? "text-paper-light" : "text-ink"

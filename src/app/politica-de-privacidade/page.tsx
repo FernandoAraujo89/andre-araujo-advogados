@@ -17,12 +17,11 @@ export const metadata: Metadata = pageMetadata({
  */
 export default function PrivacidadePage() {
   return (
-    <div className="px-5 pb-24 pt-32 lg:px-8 lg:pb-32">
+    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
       <div className="mx-auto max-w-3xl">
         <Breadcrumbs items={[{ label: "Política de Privacidade" }]} />
         <SectionHeading
           as="h1"
-          eyebrow="Transparência"
           title="Política de Privacidade"
           description="Como o André Araújo Advogados trata os dados pessoais informados neste site, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018)."
         />

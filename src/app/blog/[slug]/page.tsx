@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Reveal from "@/components/Reveal";
+import Photo from "@/components/Photo";
 import PostCard from "@/components/PostCard";
 import ContactAside from "@/components/ContactAside";
 import SectionHeading from "@/components/SectionHeading";
@@ -37,7 +38,7 @@ export default async function PostPage({ params }: Props) {
     .slice(0, 3);
 
   return (
-    <div className="px-5 pb-24 pt-32 lg:px-8 lg:pb-32">
+    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs
           items={[{ label: "Blog", href: "/blog" }, { label: post.title }]}
@@ -46,13 +47,23 @@ export default async function PostPage({ params }: Props) {
         <div className="grid gap-12 lg:grid-cols-[1fr_360px]">
           <article>
             <Reveal>
-              <p className="eyebrow mb-4">{post.category}</p>
               <h1 className="max-w-3xl font-serif text-[clamp(2.25rem,4.5vw,3.5rem)] font-medium leading-[1.1] text-ink">
                 {post.title}
               </h1>
               <time dateTime={post.date} className="mt-5 block text-ink-soft">
                 {formatDate(post.date)}
               </time>
+              <div className="mt-8">
+                <Photo
+                  src={post.image.src}
+                  alt={post.image.alt}
+                  ratio="16/9"
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  priority
+                  credit={post.image.credit}
+                  creditUrl={post.image.creditUrl}
+                />
+              </div>
             </Reveal>
 
             <div className="mt-10 max-w-3xl space-y-10">
@@ -75,7 +86,7 @@ export default async function PostPage({ params }: Props) {
             </div>
 
             <Reveal>
-              <p className="mt-12 max-w-3xl rounded-[1.25rem] border border-line bg-paper-light p-6 text-[0.9375rem] text-ink-soft">
+              <p className="mt-12 max-w-3xl rounded-md border border-line bg-paper-light p-6 text-[0.9375rem] text-ink-soft">
                 Este conteúdo tem caráter informativo e não substitui a análise
                 do seu caso concreto. Para orientação específica, fale com o
                 escritório.
@@ -89,7 +100,7 @@ export default async function PostPage({ params }: Props) {
         {related.length > 0 && (
           <div className="mt-24">
             <Reveal>
-              <SectionHeading eyebrow="Leia também" title="Artigos relacionados" />
+              <SectionHeading title="Artigos relacionados" />
             </Reveal>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {related.map((p, i) => (

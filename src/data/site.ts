@@ -11,7 +11,7 @@ export const site = {
   shortName: "André Araújo",
   url: "https://www.andrearaujoadvogados.com.br",
   description:
-    "Escritório de advocacia em Formiga, MG. Atendimento a empresas e famílias em direito tributário, imobiliário, condominial, empresarial e mais.",
+    "Escritório de advocacia em Formiga, MG, com duas vertentes de atuação: Direito do Servidor Público e Direito Cível e Empresarial.",
 
   phone: "(37) 3322-5265",
   phoneHref: "tel:+553733225265",
@@ -44,16 +44,28 @@ export const site = {
   mapsQuery: "Rua João Vaz, 2, Centro, Formiga, MG, 35570-116",
 } as const;
 
+/**
+ * O escritório se organiza em duas macro vertentes — elas abrem o menu
+ * global. `shortLabel` é usado na barra desktop, onde o espaço é curto.
+ */
 export const navMain = [
+  {
+    label: "Direito do Servidor Público",
+    shortLabel: "Servidor Público",
+    href: "/servidores-publicos",
+  },
+  {
+    label: "Direito Cível e Empresarial",
+    shortLabel: "Cível e Empresarial",
+    href: "/areas-de-atuacao",
+  },
   { label: "O Escritório", href: "/o-escritorio" },
-  { label: "Áreas de Atuação", href: "/areas-de-atuacao" },
   { label: "Equipe", href: "/equipe" },
   { label: "Blog", href: "/blog" },
   { label: "Contato", href: "/contato" },
 ] as const;
 
 export const navSecondary = [
-  { label: "Servidores Públicos", href: "/servidores-publicos" },
   { label: "Perguntas Frequentes", href: "/faq" },
 ] as const;
 

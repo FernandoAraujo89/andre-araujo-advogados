@@ -9,7 +9,6 @@ export type ServidorPage = {
   slug: string;
   name: string;
   shortLabel: string;
-  icon: string;
   metaDescription: string;
   headline: string;
   problem: {
@@ -25,10 +24,9 @@ export type ServidorPage = {
 };
 
 export const servidoresIntro = {
-  eyebrow: "Servidores Públicos Estaduais",
-  title: "Orientação jurídica para quem serve Minas Gerais",
+  title: "Direito do Servidor Público",
   description:
-    "O escritório atende servidores públicos do Estado de Minas Gerais — incluindo policiais penais — na análise de direitos da carreira, como férias-prêmio, progressões, adicional noturno e vale-transporte. Atendimento próximo, com linguagem clara e sem juridiquês.",
+    "A vertente do escritório dedicada a quem serve Minas Gerais. Atendemos servidores públicos estaduais — incluindo policiais penais — na análise de direitos da carreira, como férias-prêmio, progressões, adicional noturno e vale-transporte. Atendimento próximo, com linguagem clara e sem juridiquês.",
 };
 
 export const servidorPages: ServidorPage[] = [
@@ -36,7 +34,6 @@ export const servidorPages: ServidorPage[] = [
     slug: "ferias-premio",
     name: "Férias-Prêmio",
     shortLabel: "Férias-Prêmio",
-    icon: "calendar",
     metaDescription:
       "Orientação a servidores estaduais de MG sobre férias-prêmio: aquisição, gozo e conversão em indenização. Escritório em Formiga, MG.",
     headline: "Férias-prêmio do servidor estadual",
@@ -81,7 +78,6 @@ export const servidorPages: ServidorPage[] = [
     slug: "progressao-e-promocao",
     name: "Progressão e Promoção",
     shortLabel: "Progressão e Promoção",
-    icon: "trending",
     metaDescription:
       "Orientação a servidores estaduais de MG sobre progressão e promoção na carreira: requisitos, atrasos e efeitos financeiros. Formiga, MG.",
     headline: "Progressão e promoção na carreira",
@@ -120,7 +116,6 @@ export const servidorPages: ServidorPage[] = [
     slug: "adicional-noturno",
     name: "Adicional Noturno",
     shortLabel: "Adicional Noturno",
-    icon: "moon",
     metaDescription:
       "Orientação a servidores estaduais de MG, incluindo policiais penais, sobre adicional noturno: direito, cálculo e valores em atraso.",
     headline: "Adicional noturno do servidor estadual",
@@ -160,7 +155,6 @@ export const servidorPages: ServidorPage[] = [
     slug: "vale-transporte",
     name: "Vale-Transporte",
     shortLabel: "Vale-Transporte",
-    icon: "bus",
     metaDescription:
       "Orientação a servidores estaduais de MG sobre auxílio e vale-transporte: direito ao benefício e valores não pagos. Formiga, MG.",
     headline: "Vale-transporte e auxílio-transporte",

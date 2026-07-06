@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, AlertCircle, Send } from "lucide-react";
 import { areas } from "@/data/areas";
 
 type FormState = "idle" | "sending" | "success" | "error";
@@ -35,7 +34,7 @@ async function submitContact(data: {
 }
 
 const inputCls =
-  "w-full rounded-2xl border border-line bg-paper-light px-5 py-3.5 text-ink placeholder:text-ink-soft/50 focus:border-brass focus:outline-none";
+  "w-full rounded-md border border-line bg-paper-light px-5 py-3.5 text-ink placeholder:text-ink-soft/50 focus:border-wine focus:outline-none";
 
 export default function ContactForm() {
   const [nome, setNome] = useState("");
@@ -80,9 +79,8 @@ export default function ContactForm() {
     return (
       <div
         role="status"
-        className="flex flex-col items-start gap-4 rounded-[1.75rem] border border-line bg-paper-light p-8"
+        className="flex flex-col items-start gap-4 rounded-md border border-line bg-paper-light p-8"
       >
-        <CheckCircle2 className="h-10 w-10 text-brass" strokeWidth={1.5} aria-hidden />
         <h3 className="font-serif text-2xl font-medium text-ink">
           Mensagem enviada
         </h3>
@@ -114,7 +112,7 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.nome && (
-          <p id="nome-error" className="mt-2 text-sm text-brass-deep">
+          <p id="nome-error" className="mt-2 text-sm text-wine-deep">
             {errors.nome}
           </p>
         )}
@@ -138,7 +136,7 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.celular && (
-          <p id="celular-error" className="mt-2 text-sm text-brass-deep">
+          <p id="celular-error" className="mt-2 text-sm text-wine-deep">
             {errors.celular}
           </p>
         )}
@@ -163,11 +161,11 @@ export default function ContactForm() {
               {a.name}
             </option>
           ))}
-          <option value="Servidores Públicos">Servidores Públicos</option>
+          <option value="Direito do Servidor Público">Direito do Servidor Público</option>
           <option value="Outro">Outro assunto</option>
         </select>
         {errors.assunto && (
-          <p id="assunto-error" className="mt-2 text-sm text-brass-deep">
+          <p id="assunto-error" className="mt-2 text-sm text-wine-deep">
             {errors.assunto}
           </p>
         )}
@@ -189,15 +187,14 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.mensagem && (
-          <p id="mensagem-error" className="mt-2 text-sm text-brass-deep">
+          <p id="mensagem-error" className="mt-2 text-sm text-wine-deep">
             {errors.mensagem}
           </p>
         )}
       </div>
 
       {state === "error" && (
-        <p role="alert" className="flex items-center gap-2 text-sm text-brass-deep">
-          <AlertCircle className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+        <p role="alert" className="text-sm text-wine-deep">
           Não foi possível enviar agora. Tente novamente ou fale conosco pelo
           WhatsApp.
         </p>
@@ -206,9 +203,8 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={state === "sending"}
-        className="inline-flex items-center gap-2 rounded-full bg-ink px-8 py-4 font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-[#22333f] disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-sm bg-wine px-8 py-4 font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-wine-deep disabled:opacity-60"
       >
-        <Send className="h-4 w-4" strokeWidth={1.5} aria-hidden />
         {state === "sending" ? "Enviando..." : "Enviar mensagem"}
       </button>
     </form>

@@ -51,3 +51,9 @@ export const team: Lawyer[] = [
 export function getLawyer(slug: string): Lawyer | undefined {
   return team.find((l) => l.slug === slug);
 }
+
+/** Primeira e última inicial do nome, ex.: "André Augusto de Araújo" → "AA" */
+export function initialsOf(name: string): string {
+  const parts = name.split(" ").filter((p) => p[0] === p[0]?.toUpperCase());
+  return (parts[0]?.[0] ?? "") + (parts.at(-1)?.[0] ?? "");
+}
