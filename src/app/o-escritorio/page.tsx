@@ -75,10 +75,11 @@ export default function OEscritorioPage() {
                 suporte jurídico de qualidade.
               </p>
               <p>
-                Hoje, a equipe reúne 13 advogados inscritos na OAB/MG, com a
-                atuação organizada em duas vertentes: o Direito Cível e
-                Empresarial, que abrange sete áreas, e o Direito do Servidor
-                Público, dedicado aos servidores estaduais de Minas Gerais. O
+                Hoje, o escritório reúne 12 profissionais — entre advocacia,
+                controladoria jurídica, estágio e atendimento — com a atuação
+                organizada em duas vertentes: o Direito Cível e Empresarial,
+                que abrange sete áreas, e o Direito do Servidor Público,
+                dedicado aos servidores estaduais de Minas Gerais. O
                 crescimento veio da forma que o escritório mais valoriza: pela
                 indicação de quem já confiou seu caso a nós.
               </p>

@@ -77,6 +77,6 @@ export const navSecondary = [
 export const stats = [
   { value: 15, suffix: "+", label: "anos de atuação" }, // TODO: confirmar número real
   { value: 1000, suffix: "+", label: "casos acompanhados" }, // TODO: confirmar número real
-  { value: 13, suffix: "", label: "advogados inscritos na OAB/MG" },
+  { value: 12, suffix: "", label: "profissionais na equipe" },
   { value: null, display: "Formiga", suffix: "", label: "e região, atendimento próximo" },
 ] as const;

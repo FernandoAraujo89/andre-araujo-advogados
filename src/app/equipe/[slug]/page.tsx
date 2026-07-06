@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Reveal from "@/components/Reveal";
 import Button from "@/components/Button";
+import Photo from "@/components/Photo";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { team, getLawyer, initialsOf } from "@/data/team";
 import { getArea } from "@/data/areas";
@@ -15,7 +16,7 @@ type Props = {
 };
 
 export function generateStaticParams() {
-  return team.map((l) => ({ slug: l.slug }));
+  return team.filter((m) => m.hasProfile).map((m) => ({ slug: m.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -34,7 +35,7 @@ export default async function LawyerPage({ params }: Props) {
   const lawyer = getLawyer(slug);
   if (!lawyer) notFound();
 
-  const lawyerAreas = lawyer.areas
+  const lawyerAreas = (lawyer.areas ?? [])
     .map((s) => getArea(s))
     .filter((a) => a !== undefined);
 
@@ -47,12 +48,21 @@ export default async function LawyerPage({ params }: Props) {
 
         <div className="grid gap-12 lg:grid-cols-[380px_1fr]">
           <Reveal>
-            {/* TODO: substituir pela foto real do(a) advogado(a), proporção 4:5 */}
-            <PhotoPlaceholder
-              label={`Foto de ${lawyer.name}`}
-              initials={initialsOf(lawyer.name)}
-              ratio="4/5"
-            />
+            {lawyer.photo ? (
+              <Photo
+                src={lawyer.photo}
+                alt={`Foto de ${lawyer.name}`}
+                ratio="1/1"
+                sizes="(max-width: 1024px) 100vw, 380px"
+                priority
+              />
+            ) : (
+              <PhotoPlaceholder
+                label={`Foto de ${lawyer.name}`}
+                initials={initialsOf(lawyer.name)}
+                ratio="1/1"
+              />
+            )}
           </Reveal>
 
           <Reveal delay={0.1}>
@@ -60,7 +70,7 @@ export default async function LawyerPage({ params }: Props) {
               {lawyer.name}
             </h1>
             <p className="mt-3 text-ink-soft">
-              {lawyer.role} — {lawyer.oab}
+              {[lawyer.role, lawyer.oab].filter(Boolean).join(" — ")}
             </p>
             <p className="mt-8 max-w-2xl text-lg text-ink-soft">{lawyer.bio}</p>
 

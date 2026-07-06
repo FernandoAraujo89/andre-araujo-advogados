@@ -4,7 +4,6 @@ import Button from "@/components/Button";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import AreaCard from "@/components/AreaCard";
-import TeamCard from "@/components/TeamCard";
 import PostCard from "@/components/PostCard";
 import StatCounter from "@/components/StatCounter";
 import ContactForm from "@/components/ContactForm";
@@ -45,7 +44,7 @@ const diferenciais = [
 ];
 
 export default function Home() {
-  const socios = team.slice(0, 2);
+  const [andre] = team;
   const recentPosts = posts.slice(0, 3);
 
   return (
@@ -222,29 +221,47 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. Equipe — sócios em destaque */}
+      {/* 6. Equipe — André em destaque com resumo do currículo */}
       <section className="px-5 py-24 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <SectionHeading
               title="Quem conduz o seu caso"
-              description="Uma equipe de 13 advogados inscritos na OAB/MG, liderada pelos sócios André Augusto de Araújo e Sávio Ribeiro Oliveira."
+              description="O escritório é liderado pelo sócio fundador André Augusto de Araújo, à frente de uma equipe de 12 profissionais."
             />
           </Reveal>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:max-w-3xl">
-            {socios.map((lawyer, i) => (
-              <Reveal key={lawyer.slug} delay={i * 0.08} className="h-full">
-                <TeamCard lawyer={lawyer} />
-              </Reveal>
-            ))}
+          <div className="mt-14 grid items-center gap-10 lg:grid-cols-[380px_1fr] lg:gap-16">
+            <Reveal>
+              <Photo
+                src={andre.photo!}
+                alt={`Foto de ${andre.name}`}
+                ratio="1/1"
+                sizes="(max-width: 1024px) 100vw, 380px"
+              />
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h3 className="font-serif text-2xl font-medium text-ink lg:text-3xl">
+                {andre.name}
+              </h3>
+              <p className="mt-2 text-ink-soft">
+                {andre.role} — {andre.oab}
+              </p>
+              <p className="mt-6 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-soft">
+                Graduado em Direito pelo UNIFOR-MG, com pós-graduações em
+                Direito Empresarial e Advocacia Empresarial e em Direito
+                Tributário (Anhanguera Uniderp) e em Advocacia Tributária
+                (FUMEC), é pós-graduando em Direito Tributário pelo IBET e
+                membro da ABRADT. Soma mais de 12 anos de advocacia preventiva,
+                consultiva e contenciosa nas áreas cível, empresarial,
+                trabalhista e tributária.
+              </p>
+              <div className="mt-8">
+                <Button href="/equipe" variant="secondary">
+                  Conheça toda a equipe
+                </Button>
+              </div>
+            </Reveal>
           </div>
-          <Reveal delay={0.2}>
-            <div className="mt-10">
-              <Button href="/equipe" variant="secondary">
-                Conheça toda a equipe
-              </Button>
-            </div>
-          </Reveal>
         </div>
       </section>
 

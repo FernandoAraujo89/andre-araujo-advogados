@@ -21,7 +21,8 @@ export const legacyRedirects: { source: string; destination: string }[] = [
   { source: "/profissionais", destination: "/equipe" },
   { source: "/noticias", destination: "/blog" },
   { source: "/andrearaujo", destination: "/equipe/andre-augusto-de-araujo" },
-  { source: "/saviooliveira", destination: "/equipe/savio-ribeiro-oliveira" },
+  // Sávio deixou o escritório — a URL antiga cai na página geral da equipe
+  { source: "/saviooliveira", destination: "/equipe" },
   { source: "/lp", destination: "/servidores-publicos/ferias-premio" },
   { source: "/copy-of-lp", destination: "/servidores-publicos/progressao-e-promocao" },
   { source: "/cópia-policial-penal-do-estado-de-mi", destination: "/servidores-publicos/adicional-noturno" },

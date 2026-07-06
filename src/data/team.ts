@@ -1,55 +1,112 @@
 /**
- * Equipe — 13 advogados.
- * André e Sávio com dados reais (números de OAB pendentes de confirmação).
- * Os demais 11 são entradas placeholder a preencher pelo cliente.
+ * Equipe — dados e fotos extraídos do site atual
+ * (andrearaujoadvogados.com.br/equipe), já sem o Sávio Ribeiro Oliveira,
+ * que deixou o escritório. Fotos quadradas (800×800) em public/equipe/.
  */
 
-export type Lawyer = {
+export type TeamMember = {
   slug: string;
   name: string;
   role: string;
-  oab: string;
-  bio: string;
-  areas: string[]; // slugs de src/data/areas.ts
-  placeholder?: boolean;
+  /** Foto quadrada em public/equipe/<slug>.jpg */
+  photo?: string;
+  oab?: string;
+  bio?: string;
+  areas?: string[]; // slugs de src/data/areas.ts
+  /** Tem página própria em /equipe/[slug] (apenas advogados) */
+  hasProfile?: boolean;
 };
 
-export const team: Lawyer[] = [
+export const team: TeamMember[] = [
   {
     slug: "andre-augusto-de-araujo",
     name: "André Augusto de Araújo",
     role: "Sócio fundador",
-    oab: "OAB/MG — TODO: confirmar número",
-    // TODO: substituir pela bio real fornecida pelo escritório
-    bio: "Sócio fundador do André Araújo Advogados, conduz o escritório com atuação voltada a empresas e famílias de Formiga e região. TODO: bio completa a fornecer pelo cliente.",
-    areas: ["direito-tributario", "direito-empresarial", "direito-imobiliario"],
+    photo: "/equipe/andre-augusto-de-araujo.jpg",
+    oab: "OAB/MG 142.853",
+    bio: "Graduado em Direito pelo Centro Universitário de Formiga/MG (UNIFOR-MG). Pós-graduado em Direito Empresarial e Advocacia Empresarial e em Direito Tributário pela Universidade Anhanguera Uniderp; pós-graduado em Advocacia Tributária pela Universidade FUMEC; pós-graduando em Direito Tributário pelo Instituto Brasileiro de Estudos Tributários (IBET). Membro da Associação Brasileira de Direito Tributário (ABRADT). Soma mais de 12 anos de experiência prática na advocacia, atuando de forma preventiva, consultiva e contenciosa com foco nas áreas do Direito Civil, Direito Empresarial, Direito do Trabalho e Direito Tributário.",
+    areas: ["direito-tributario", "direito-empresarial", "direito-trabalhista"],
+    hasProfile: true,
   },
   {
-    slug: "savio-ribeiro-oliveira",
-    name: "Sávio Ribeiro Oliveira",
-    role: "Sócio",
-    oab: "OAB/MG — TODO: confirmar número",
+    slug: "jade-de-souza-rodrigues",
+    name: "Jade de Souza Rodrigues",
+    role: "Advogada",
+    photo: "/equipe/jade-de-souza-rodrigues.jpg",
+    oab: "OAB/MG", // TODO: confirmar número de inscrição
     // TODO: substituir pela bio real fornecida pelo escritório
-    bio: "Sócio do André Araújo Advogados, atua no atendimento a clientes do escritório em Formiga e região. TODO: bio completa a fornecer pelo cliente.",
-    areas: ["direito-do-consumidor", "direito-condominial", "recuperacao-de-credito"],
+    bio: "Advogada do André Araújo Advogados, atua no atendimento aos clientes do escritório em Formiga e região.",
+    hasProfile: true,
   },
-  // TODO: substituir as 11 entradas abaixo pelos dados reais dos demais advogados
-  ...Array.from({ length: 11 }, (_, i) => {
-    const n = i + 3;
-    return {
-      slug: `advogado-${n}`,
-      name: `Advogado(a) ${n} — TODO: nome`,
-      role: "Advogado(a)",
-      oab: "OAB/MG — TODO: número",
-      bio: "TODO: bio curta a fornecer pelo cliente.",
-      areas: [] as string[],
-      placeholder: true,
-    };
-  }),
+  {
+    slug: "debora-silvino-dos-santos",
+    name: "Débora Silvino dos Santos",
+    role: "Advogada",
+    photo: "/equipe/debora-silvino-dos-santos.jpg",
+    oab: "OAB/MG", // TODO: confirmar número de inscrição
+    // TODO: substituir pela bio real fornecida pelo escritório
+    bio: "Advogada do André Araújo Advogados, atua no atendimento aos clientes do escritório em Formiga e região.",
+    hasProfile: true,
+  },
+  {
+    slug: "matheus-sebastiao-menezes",
+    name: "Matheus Sebastião Menezes",
+    role: "Auxiliar Jurídico",
+    photo: "/equipe/matheus-sebastiao-menezes.jpg",
+  },
+  {
+    slug: "barbara-pereira-da-cunha",
+    name: "Bárbara Pereira da Cunha",
+    role: "Controller Jurídico",
+    photo: "/equipe/barbara-pereira-da-cunha.jpg",
+  },
+  {
+    slug: "geovanna-ribeiro-lima",
+    name: "Geovanna Ribeiro Lima",
+    role: "Estagiária",
+    photo: "/equipe/geovanna-ribeiro-lima.jpg",
+  },
+  {
+    slug: "lucianna-veloso-souza-resende",
+    name: "Lucianna Veloso Souza Resende",
+    role: "Estagiária",
+    photo: "/equipe/lucianna-veloso-souza-resende.jpg",
+  },
+  {
+    slug: "maria-rita-de-faria",
+    name: "Maria Rita de Faria",
+    role: "Estagiária",
+    photo: "/equipe/maria-rita-de-faria.jpg",
+  },
+  {
+    slug: "emily-campos-faria",
+    name: "Emily Campos Faria",
+    role: "Estagiária",
+    photo: "/equipe/emily-campos-faria.jpg",
+  },
+  {
+    slug: "gabriele-silva-melo",
+    name: "Gabriele Silva Melo",
+    role: "Estagiária",
+    photo: "/equipe/gabriele-silva-melo.jpg",
+  },
+  {
+    slug: "mariana-pinheiro-silva",
+    name: "Mariana Pinheiro Silva",
+    role: "Agente de Vendas",
+    photo: "/equipe/mariana-pinheiro-silva.jpg",
+  },
+  {
+    slug: "ellen-junia-silva-nascimento",
+    name: "Ellen Junia Silva Nascimento",
+    role: "Secretária",
+    photo: "/equipe/ellen-junia-silva-nascimento.jpg",
+  },
 ];
 
-export function getLawyer(slug: string): Lawyer | undefined {
-  return team.find((l) => l.slug === slug);
+/** Membros com página própria em /equipe/[slug] */
+export function getLawyer(slug: string): TeamMember | undefined {
+  return team.find((m) => m.slug === slug && m.hasProfile);
 }
 
 /** Primeira e última inicial do nome, ex.: "André Augusto de Araújo" → "AA" */

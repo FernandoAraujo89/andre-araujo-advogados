@@ -9,7 +9,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Equipe",
   description:
-    "Conheça os 13 advogados do André Araújo Advogados em Formiga, MG, liderados por André Augusto de Araújo e Sávio Ribeiro Oliveira.",
+    "Conheça a equipe do André Araújo Advogados em Formiga, MG, liderada pelo sócio fundador André Augusto de Araújo (OAB/MG 142.853).",
   path: "/equipe",
 });
 
@@ -22,13 +22,13 @@ export default function EquipePage() {
           <SectionHeading
             as="h1"
             title="As pessoas por trás de cada caso"
-            description="Uma equipe de 13 advogados inscritos na OAB/MG, com atuação em sete áreas do direito, a serviço de Formiga e região."
+            description="Uma equipe de 12 profissionais — advocacia, controladoria jurídica, estágio e atendimento — liderada pelo sócio fundador André Augusto de Araújo."
           />
         </Reveal>
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {team.map((lawyer, i) => (
-            <Reveal key={lawyer.slug} delay={(i % 4) * 0.06} className="h-full">
-              <TeamCard lawyer={lawyer} />
+          {team.map((member, i) => (
+            <Reveal key={member.slug} delay={(i % 4) * 0.06} className="h-full">
+              <TeamCard member={member} />
             </Reveal>
           ))}
         </div>
