@@ -1,0 +1,21 @@
+# Redirects 301 — formato Netlify / Cloudflare Pages.
+# Para usar: copie este arquivo para a pasta publicada (out/ no export
+# estático, ou configure como asset em public/). Instruções no README.
+# URLs de origem mantidas exatamente como no site antigo (Wix),
+# inclusive acentos (o host compara o caminho já decodificado).
+
+/direitocondominal                       /areas-de-atuacao/direito-condominial          301
+/direitodoconsumidor                     /areas-de-atuacao/direito-do-consumidor        301
+/direitoimobiliário                      /areas-de-atuacao/direito-imobiliario          301
+/direitotributário                       /areas-de-atuacao/direito-tributario           301
+/direitoempresarial                      /areas-de-atuacao/direito-empresarial          301
+/recuperaçãodecrédito                    /areas-de-atuacao/recuperacao-de-credito       301
+/institucional                           /o-escritorio                                  301
+/escritorio                              /o-escritorio                                  301
+/profissionais                           /equipe                                        301
+/noticias                                /blog                                          301
+/andrearaujo                             /equipe/andre-augusto-de-araujo                301
+/saviooliveira                           /equipe/savio-ribeiro-oliveira                 301
+/lp                                      /servidores-publicos/ferias-premio             301
+/copy-of-lp                              /servidores-publicos/progressao-e-promocao     301
+/cópia-policial-penal-do-estado-de-mi    /servidores-publicos/adicional-noturno         301

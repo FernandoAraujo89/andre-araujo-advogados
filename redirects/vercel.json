@@ -1,0 +1,20 @@
+{
+  "_comment": "Exemplo para Vercel. Em geral DESNECESSÁRIO: os redirects já estão em next.config.ts e a Vercel os aplica no build. Use este arquivo apenas se optar por export estático (output: 'export') servido pela Vercel — copie-o para a raiz do projeto como vercel.json.",
+  "redirects": [
+    { "source": "/direitocondominal", "destination": "/areas-de-atuacao/direito-condominial", "permanent": true },
+    { "source": "/direitodoconsumidor", "destination": "/areas-de-atuacao/direito-do-consumidor", "permanent": true },
+    { "source": "/direitoimobili%C3%A1rio", "destination": "/areas-de-atuacao/direito-imobiliario", "permanent": true },
+    { "source": "/direitotribut%C3%A1rio", "destination": "/areas-de-atuacao/direito-tributario", "permanent": true },
+    { "source": "/direitoempresarial", "destination": "/areas-de-atuacao/direito-empresarial", "permanent": true },
+    { "source": "/recupera%C3%A7%C3%A3odecr%C3%A9dito", "destination": "/areas-de-atuacao/recuperacao-de-credito", "permanent": true },
+    { "source": "/institucional", "destination": "/o-escritorio", "permanent": true },
+    { "source": "/escritorio", "destination": "/o-escritorio", "permanent": true },
+    { "source": "/profissionais", "destination": "/equipe", "permanent": true },
+    { "source": "/noticias", "destination": "/blog", "permanent": true },
+    { "source": "/andrearaujo", "destination": "/equipe/andre-augusto-de-araujo", "permanent": true },
+    { "source": "/saviooliveira", "destination": "/equipe/savio-ribeiro-oliveira", "permanent": true },
+    { "source": "/lp", "destination": "/servidores-publicos/ferias-premio", "permanent": true },
+    { "source": "/copy-of-lp", "destination": "/servidores-publicos/progressao-e-promocao", "permanent": true },
+    { "source": "/c%C3%B3pia-policial-penal-do-estado-de-mi", "destination": "/servidores-publicos/adicional-noturno", "permanent": true }
+  ]
+}
