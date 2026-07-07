@@ -24,6 +24,10 @@ export const metadata: Metadata = pageMetadata({
   path: "/",
 });
 
+// A home é estática, mas revalida a cada 5 min para refletir os posts mais
+// recentes do blog (a seção de destaques lê do Blob).
+export const revalidate = 300;
+
 const diferenciais = [
   {
     title: "Atendimento próximo e regional",

@@ -13,9 +13,9 @@ export const metadata: Metadata = pageMetadata({
   path: "/blog",
 });
 
-// Rede de segurança: além da revalidação sob demanda ao publicar no /admin,
-// as páginas do blog se atualizam sozinhas a cada 5 min.
-export const revalidate = 300;
+// Renderização dinâmica: lê o Blob a cada requisição — publicar reflete na
+// hora. Segue SSR (SEO completo).
+export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
   const ordered = await getAllPosts();

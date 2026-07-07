@@ -5,8 +5,8 @@ import { team } from "@/data/team";
 import { getAllPosts } from "@/lib/blog";
 import { servidorPages } from "@/data/servidores";
 
-// Reflete posts publicados via /admin; recalculado ao revalidar /sitemap.xml.
-export const revalidate = 300;
+// Dinâmico: reflete os posts publicados no /admin a cada requisição.
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllPosts();
