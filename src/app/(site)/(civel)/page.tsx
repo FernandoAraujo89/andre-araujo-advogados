@@ -220,6 +220,13 @@ export default async function Home() {
               </Reveal>
             ))}
           </div>
+          <Reveal>
+            <div className="mt-14">
+              <Button href="/o-escritorio" variant="light">
+                Conheça o escritório
+              </Button>
+            </div>
+          </Reveal>
         </div>
       </section>
 

@@ -24,7 +24,7 @@ export default function SiteChrome({
       >
         Ir para o conteúdo
       </a>
-      <Header world={world} />
+      <Header />
       <main id="conteudo">{children}</main>
       <Footer />
       <WhatsAppFloat />

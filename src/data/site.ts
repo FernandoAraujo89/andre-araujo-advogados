@@ -61,7 +61,7 @@ export const navMain = [
   },
   { label: "O Escritório", href: "/o-escritorio" },
   { label: "Equipe", href: "/equipe" },
-  { label: "Blog", href: "/blog" },
+  { label: "Publicações", href: "/blog" },
   { label: "Contato", href: "/contato" },
 ] as const;
 
@@ -76,13 +76,13 @@ export const navSecondary = [
  */
 export const worlds = {
   civel: {
-    label: "Cível e Empresarial",
-    shortLabel: "Cível",
-    home: "/",
+    label: "Direito Cível e Empresarial",
+    shortLabel: "Cível e Empresarial",
+    home: "/areas-de-atuacao",
   },
   servidor: {
-    label: "Servidor Público",
-    shortLabel: "Servidor",
+    label: "Direito do Servidor Público",
+    shortLabel: "Servidor Público",
     home: "/servidores-publicos",
   },
 } as const;
@@ -94,7 +94,7 @@ export const navCivel = [
   { label: "Áreas de Atuação", href: "/areas-de-atuacao" },
   { label: "O Escritório", href: "/o-escritorio" },
   { label: "Equipe", href: "/equipe" },
-  { label: "Blog", href: "/blog" },
+  { label: "Publicações", href: "/blog" },
   { label: "Contato", href: "/contato" },
 ] as const;
 
@@ -103,7 +103,7 @@ export const navServidor = [
   { label: "Direitos do Servidor", href: "/servidores-publicos" },
   { label: "O Escritório", href: "/o-escritorio" },
   { label: "Equipe", href: "/equipe" },
-  { label: "Blog", href: "/blog" },
+  { label: "Publicações", href: "/blog" },
   { label: "Contato", href: "/contato" },
 ] as const;
 
