@@ -19,19 +19,30 @@ export default function ServidoresPage() {
   const allFaq = servidorPages.flatMap((p) => p.faq).slice(0, 6);
 
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
-      <div className="mx-auto max-w-[1240px]">
-        <Breadcrumbs items={[{ label: "Direito do Servidor Público" }]} />
-        <Reveal>
-          <SectionHeading
-            as="h1"
-            title={servidoresIntro.title}
-            description={servidoresIntro.description}
+    <>
+      {/* Hero — fundo forte do mundo Servidor Público (vinho) */}
+      <section className="bg-wine px-5 pb-16 pt-28 lg:px-8 lg:pb-20 lg:pt-32">
+        <div className="mx-auto max-w-[1240px]">
+          <Breadcrumbs
+            items={[{ label: "Direito do Servidor Público" }]}
+            light
           />
-        </Reveal>
+          <Reveal>
+            <SectionHeading
+              as="h1"
+              dark
+              title={servidoresIntro.title}
+              description={servidoresIntro.description}
+            />
+          </Reveal>
+        </div>
+      </section>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_360px]">
-          <div>
+      {/* Conteúdo */}
+      <div className="px-5 pb-28 pt-16 lg:px-8 lg:pb-36">
+        <div className="mx-auto max-w-[1240px]">
+          <div className="grid gap-12 lg:grid-cols-[1fr_360px]">
+            <div>
             <div className="grid gap-6 sm:grid-cols-2">
               {servidorPages.map((p, i) => (
                 <Reveal key={p.slug} delay={(i % 2) * 0.08} className="h-full">
@@ -64,8 +75,9 @@ export default function ServidoresPage() {
           </div>
 
           <ContactAside />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

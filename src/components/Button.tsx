@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 type ButtonProps = {
   href: string;
   children: ReactNode;
-  variant?: "primary" | "secondary" | "light" | "whatsapp";
+  variant?: "primary" | "secondary" | "light" | "ghost-light" | "whatsapp";
   size?: "md" | "lg";
   external?: boolean;
   className?: string;
@@ -19,6 +19,9 @@ const variants = {
   secondary:
     "border border-ink/25 text-ink hover:border-accent hover:text-accent-deep",
   light: "bg-paper text-ink hover:bg-paper-light",
+  // Contorno claro para uso sobre fundos escuros (heros coloridos).
+  "ghost-light":
+    "border border-paper/40 text-paper-light hover:border-paper-light hover:bg-paper/10",
   whatsapp: "bg-accent-surface text-paper-light hover:bg-accent-surface-deep",
 };
 

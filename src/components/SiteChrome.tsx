@@ -1,13 +1,13 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
-import WorldSwitcher from "@/components/WorldSwitcher";
 import type { World } from "@/data/site";
 
 /**
  * Chrome do site público, tematizado por "mundo" (data-world define o acento
- * no globals.css). Cada subgrupo de rota — (civel) e (servidor) — envolve
- * suas páginas com este chrome passando o mundo correspondente.
+ * no globals.css). O seletor das duas vertentes fica na navegação global
+ * (barra do topo do Header). Cada subgrupo de rota — (civel) e (servidor) —
+ * envolve suas páginas com este chrome passando o mundo correspondente.
  */
 export default function SiteChrome({
   world,
@@ -27,7 +27,6 @@ export default function SiteChrome({
       <Header world={world} />
       <main id="conteudo">{children}</main>
       <Footer />
-      <WorldSwitcher current={world} />
       <WhatsAppFloat />
     </div>
   );

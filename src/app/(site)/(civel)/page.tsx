@@ -55,24 +55,24 @@ export default async function Home() {
     <>
       <JsonLd data={legalServiceJsonLd()} />
 
-      {/* 2. Hero — ocupa exatamente a altura da viewport (100svh) em qualquer resolução */}
-      <section className="flex min-h-svh items-center px-5 pb-12 pt-24 lg:px-8">
+      {/* 2. Hero — fundo forte do mundo Cível (azul-tinta), ocupa a viewport */}
+      <section className="flex min-h-svh items-center bg-ink px-5 pb-12 pt-28 lg:px-8 lg:pt-32">
         <div className="mx-auto grid w-full max-w-[1240px] items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
           <Reveal>
-            <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-ink">
+            <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-paper-light">
               Advocacia especializada para{" "}
-              <em className="italic text-accent">Formiga e região</em>
+              <em className="italic text-gold">Formiga e região</em>
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-pretty text-ink-soft">
+            <p className="mt-6 max-w-xl text-lg text-pretty text-paper/75">
               Duas vertentes de atuação: Direito do Servidor Público e
               Direito Cível e Empresarial, a serviço de pessoas, empresas e
               servidores de Minas Gerais.
             </p>
             <div className="mt-9 flex flex-wrap gap-4">
-              <Button href={site.whatsappHref} external size="lg">
+              <Button href={site.whatsappHref} external variant="light" size="lg">
                 Falar no WhatsApp
               </Button>
-              <Button href="/contato" variant="secondary" size="lg">
+              <Button href="/contato" variant="ghost-light" size="lg">
                 Agendar atendimento
               </Button>
             </div>
@@ -81,7 +81,7 @@ export default async function Home() {
             <div className="relative">
               <div
                 aria-hidden
-                className="absolute -bottom-5 -right-5 h-full w-full rounded-md bg-accent-mist"
+                className="absolute -bottom-5 -right-5 h-full w-full rounded-md bg-gold/25"
               />
               <Photo
                 src="/images/escritorio/fachada.jpg"
@@ -89,7 +89,7 @@ export default async function Home() {
                 ratio="4/5"
                 preload
                 sizes="(max-width: 1024px) 0px, 45vw"
-                className="max-h-[calc(100svh-11rem)]"
+                className="max-h-[calc(100svh-12rem)]"
                 objectPosition="60% center"
               />
             </div>
