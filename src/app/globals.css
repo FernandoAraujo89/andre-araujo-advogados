@@ -55,6 +55,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/*
+ * Quebras de linha: usamos as utilities `text-balance` (títulos) e
+ * `text-pretty` (parágrafos) direto nos componentes — o Lightning CSS
+ * do Tailwind v4 descarta `text-wrap` escrito como CSS bruto aqui, mas
+ * preserva as utilities. Ver SectionHeading e os heros.
+ */
+
 /* Label discreto — rótulo neutro para colunas e campos (sem caixa alta/acento) */
 .label {
   font-family: var(--font-sans);

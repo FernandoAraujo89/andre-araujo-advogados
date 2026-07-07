@@ -152,11 +152,11 @@ export default function OEscritorioPage() {
 
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
             <Reveal>
-              <h1 className="font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-ink">
+              <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-ink">
                 Advocacia com endereço,{" "}
                 <em className="italic text-wine">rosto e história</em>
               </h1>
-              <p className="mt-6 max-w-xl text-lg text-ink-soft">
+              <p className="mt-6 max-w-xl text-lg text-pretty text-ink-soft">
                 O André Araújo Advogados nasceu em Formiga, MG, com a convicção
                 de que a boa advocacia se faz com técnica e com vínculo:
                 conhecer o cliente, a cidade e o contexto de cada caso.
@@ -212,7 +212,7 @@ export default function OEscritorioPage() {
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <figure className="mx-auto max-w-4xl text-center">
-              <blockquote className="font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-normal leading-[1.35] text-paper-light">
+              <blockquote className="text-balance font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-normal leading-[1.35] text-paper-light">
                 “Prestar serviços jurídicos que ultrapassem a esfera da
                 excelência profissional, mediante a valorização dos laços
                 criados com os clientes, a fim de desenvolver parcerias
@@ -274,7 +274,7 @@ export default function OEscritorioPage() {
       <section className="bg-wine-mist px-5 py-24 text-center lg:px-8 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <h2 className="mx-auto max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.1] text-ink">
+            <h2 className="text-balance mx-auto max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.1] text-ink">
               Conheça o escritório de perto
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">

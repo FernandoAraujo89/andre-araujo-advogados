@@ -63,7 +63,7 @@ export default function ContatoPage() {
                     {...(external
                       ? { target: "_blank", rel: "noopener noreferrer" }
                       : {})}
-                    className="mt-1 inline-block break-all text-lg font-medium text-ink hover:text-wine-deep"
+                    className="mt-1 inline-block break-words text-lg font-medium text-ink hover:text-wine-deep"
                   >
                     {value}
                   </a>

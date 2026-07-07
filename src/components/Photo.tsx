@@ -11,6 +11,9 @@ type PhotoProps = {
   /** Pré-carrega a imagem (LCP acima da dobra) — substitui a prop
    *  `priority`, deprecada no Next 16 */
   preload?: boolean;
+  /** Ponto focal do recorte (object-position), ex.: "center 30%".
+   *  Útil quando uma foto paisagem entra num frame retrato. */
+  objectPosition?: string;
   /** Crédito do fotógrafo (Unsplash) — exibido sobre a imagem */
   credit?: string;
   creditUrl?: string;
@@ -29,6 +32,7 @@ export default function Photo({
   rounded = "rounded-md",
   sizes = "(max-width: 1024px) 100vw, 50vw",
   preload = false,
+  objectPosition,
   credit,
   creditUrl,
 }: PhotoProps) {
@@ -44,6 +48,7 @@ export default function Photo({
         sizes={sizes}
         preload={preload}
         className="object-cover"
+        style={objectPosition ? { objectPosition } : undefined}
       />
       {credit && (
         <a

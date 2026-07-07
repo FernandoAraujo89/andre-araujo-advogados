@@ -55,11 +55,11 @@ export default function Home() {
       <section className="flex min-h-svh items-center px-5 pb-12 pt-24 lg:px-8">
         <div className="mx-auto grid w-full max-w-[1240px] items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
           <Reveal>
-            <h1 className="font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-ink">
+            <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-ink">
               Advocacia especializada para{" "}
               <em className="italic text-wine">Formiga e região</em>
             </h1>
-            <p className="mt-6 max-w-xl text-lg text-ink-soft">
+            <p className="mt-6 max-w-xl text-lg text-pretty text-ink-soft">
               Duas vertentes de atuação — Direito do Servidor Público e
               Direito Cível e Empresarial — a serviço de pessoas, empresas e
               servidores de Minas Gerais.
@@ -74,21 +74,19 @@ export default function Home() {
             </div>
           </Reveal>
           <Reveal delay={0.15} className="hidden lg:block">
-            {/* TODO: substituir pela foto real do escritório quando disponível */}
             <div className="relative">
               <div
                 aria-hidden
                 className="absolute -bottom-5 -right-5 h-full w-full rounded-md bg-wine-mist"
               />
               <Photo
-                src="https://images.unsplash.com/photo-1765371514777-73aaaab1c6d3?auto=format&fit=crop&w=1200&q=80"
-                alt="Interior de escritório com painéis de madeira"
+                src="/images/escritorio/fachada.jpg"
+                alt="Fachada do escritório André Araújo Advogados, com a placa e o logotipo, no centro de Formiga"
                 ratio="4/5"
                 preload
                 sizes="(max-width: 1024px) 0px, 45vw"
                 className="max-h-[calc(100svh-11rem)]"
-                credit="Foto: Caroline Badran / Unsplash"
-                creditUrl="https://unsplash.com/@___atmos?utm_source=site_andre_araujo&utm_medium=referral"
+                objectPosition="60% center"
               />
             </div>
           </Reveal>
@@ -290,7 +288,7 @@ export default function Home() {
       <section className="bg-wine px-5 py-24 text-center lg:px-8 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <h2 className="mx-auto max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.1] text-paper-light">
+            <h2 className="text-balance mx-auto max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.1] text-paper-light">
               Você é servidor público estadual?
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-lg text-paper/85">
@@ -352,7 +350,7 @@ export default function Home() {
                 </li>
                 <li>
                   <p className="label text-xs">E-mail</p>
-                  <a href={site.emailHref} className="mt-1 inline-block text-lg font-medium break-all hover:text-wine-deep">
+                  <a href={site.emailHref} className="mt-1 inline-block text-lg font-medium break-words hover:text-wine-deep">
                     {site.email}
                   </a>
                 </li>

@@ -21,7 +21,7 @@ export default function SectionHeading({
   return (
     <div className={`max-w-3xl ${alignCls}`}>
       <Tag
-        className={`font-serif font-medium leading-[1.1] tracking-[-0.01em] ${titleSize} ${
+        className={`text-balance font-serif font-medium leading-[1.1] tracking-[-0.01em] ${titleSize} ${
           dark ? "text-paper-light" : "text-ink"
         }`}
       >
@@ -29,7 +29,7 @@ export default function SectionHeading({
       </Tag>
       {description && (
         <p
-          className={`mt-5 text-lg ${dark ? "text-paper/75" : "text-ink-soft"}`}
+          className={`mt-5 text-lg text-pretty ${dark ? "text-paper/75" : "text-ink-soft"}`}
         >
           {description}
         </p>

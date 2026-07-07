@@ -5,6 +5,10 @@ import { servidorPages } from "@/data/servidores";
 import SocialLinks from "@/components/SocialLinks";
 
 export default function Footer() {
+  // Quebra o e-mail só após o "@" (via <wbr>), evitando cortes no meio
+  // do domínio na coluna estreita do rodapé.
+  const [emailLocal, emailDomain] = site.email.split("@");
+
   return (
     <footer className="bg-ink text-paper/80">
       <div className="mx-auto max-w-[1240px] px-5 py-20 lg:px-8 lg:py-24">
@@ -69,8 +73,12 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href={site.emailHref} className="break-all transition-colors hover:text-paper-light">
-                  {site.email}
+                <a
+                  href={site.emailHref}
+                  className="break-words transition-colors hover:text-paper-light"
+                >
+                  {emailLocal}@<wbr />
+                  {emailDomain}
                 </a>
               </li>
             </ul>
