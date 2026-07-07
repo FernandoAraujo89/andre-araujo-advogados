@@ -25,9 +25,11 @@ async function readFromBlob(): Promise<Post[] | null> {
   const { blobs } = await list({ prefix: POSTS_KEY, limit: 1 });
   const found = blobs.find((b) => b.pathname === POSTS_KEY);
   if (!found) return null;
-  // no-store + query única: garante o JSON recém-gravado, furando o cache
-  // de borda do Blob (que tem TTL mínimo de 60s).
-  const res = await fetch(`${found.url}?t=${Date.now()}`, { cache: "no-store" });
+  // Query única fura o cache de borda do Blob (TTL mínimo 60s) e garante o
+  // JSON recém-gravado. SEM `no-store`: as páginas do blog são estáticas/ISR
+  // e são atualizadas ao publicar via revalidatePath — usar no-store aqui
+  // dispararia "Dynamic server usage" e quebraria a geração estática.
+  const res = await fetch(`${found.url}?t=${Date.now()}`);
   if (!res.ok) return null;
   const data = (await res.json()) as Post[];
   return Array.isArray(data) ? data : null;
