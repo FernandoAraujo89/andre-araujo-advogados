@@ -2,13 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { site, navMain, navSecondary } from "@/data/site";
 import { servidorPages } from "@/data/servidores";
-
-const socials = [
-  { label: "Facebook", href: site.social.facebook },
-  { label: "Instagram", href: site.social.instagram },
-  { label: "LinkedIn", href: site.social.linkedin },
-  { label: "YouTube", href: site.social.youtube },
-];
+import SocialLinks from "@/components/SocialLinks";
 
 export default function Footer() {
   return (
@@ -27,20 +21,7 @@ export default function Footer() {
               Advocacia em Formiga, MG, com atendimento próximo a empresas e
               famílias de toda a região.
             </p>
-            <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[0.9375rem]">
-              {socials.map(({ label, href }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-colors hover:text-paper-light"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <SocialLinks className="mt-6" />
           </div>
 
           <nav aria-label="Navegação do rodapé">
