@@ -31,7 +31,7 @@ export default function TeamCard({ member }: TeamCardProps) {
           {member.name}
         </h3>
         <p className="mt-1 flex-1 text-base text-ink-soft">
-          {[member.role, member.oab].filter(Boolean).join(" — ")}
+          {[member.role, member.oab].filter(Boolean).join(", ")}
         </p>
         {member.hasProfile && (
           <span className="mt-4 text-base font-medium text-wine-deep">

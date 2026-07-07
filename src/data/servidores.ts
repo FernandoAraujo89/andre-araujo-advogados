@@ -26,7 +26,7 @@ export type ServidorPage = {
 export const servidoresIntro = {
   title: "Direito do Servidor Público",
   description:
-    "A vertente do escritório dedicada a quem serve Minas Gerais. Atendemos servidores públicos estaduais — incluindo policiais penais — na análise de direitos da carreira, como férias-prêmio, progressões, adicional noturno e vale-transporte. Atendimento próximo, com linguagem clara e sem juridiquês.",
+    "A vertente do escritório dedicada a quem serve Minas Gerais. Atendemos servidores públicos estaduais, incluindo policiais penais, na análise de direitos da carreira, como férias-prêmio, progressões, adicional noturno e vale-transporte. Atendimento próximo, com linguagem clara e sem juridiquês.",
 };
 
 export const servidorPages: ServidorPage[] = [
@@ -40,7 +40,7 @@ export const servidorPages: ServidorPage[] = [
     problem: {
       heading: "O benefício que muitos servidores deixam para trás",
       paragraphs: [
-        "A legislação de Minas Gerais assegura aos servidores públicos estaduais períodos de férias-prêmio a cada ciclo de efetivo exercício. Na prática, porém, muitos servidores se aposentam ou se desligam sem usufruir integralmente o benefício — e sem saber que os períodos não gozados podem, em determinadas situações, gerar direito a indenização.",
+        "A legislação de Minas Gerais assegura aos servidores públicos estaduais períodos de férias-prêmio a cada ciclo de efetivo exercício. Na prática, porém, muitos servidores se aposentam ou se desligam sem usufruir integralmente o benefício, sem saber que os períodos não gozados podem, em determinadas situações, gerar direito a indenização.",
         "Contagens de tempo incompletas, indeferimentos administrativos e dúvidas sobre a conversão em espécie são as situações mais comuns que chegam ao escritório.",
       ],
     },
@@ -84,7 +84,7 @@ export const servidorPages: ServidorPage[] = [
     problem: {
       heading: "Quando a carreira não anda como a lei prevê",
       paragraphs: [
-        "Os planos de carreira dos servidores estaduais de Minas Gerais preveem progressões e promoções mediante requisitos como tempo de exercício, avaliação de desempenho e titulação. Atrasos na concessão e critérios aplicados de forma equivocada afetam diretamente a remuneração do servidor — inclusive com reflexos na aposentadoria.",
+        "Os planos de carreira dos servidores estaduais de Minas Gerais preveem progressões e promoções mediante requisitos como tempo de exercício, avaliação de desempenho e titulação. Atrasos na concessão e critérios aplicados de forma equivocada afetam diretamente a remuneração do servidor, inclusive com reflexos na aposentadoria.",
       ],
     },
     how: {
@@ -122,7 +122,7 @@ export const servidorPages: ServidorPage[] = [
     problem: {
       heading: "Trabalho noturno deve ser remunerado como tal",
       paragraphs: [
-        "Servidores que trabalham à noite — como é rotina para policiais penais e outros plantonistas — têm direito à remuneração diferenciada pelo serviço noturno, conforme a Constituição e as normas aplicáveis a cada carreira.",
+        "Servidores que trabalham à noite, como é rotina para policiais penais e outros plantonistas, têm direito à remuneração diferenciada pelo serviço noturno, conforme a Constituição e as normas aplicáveis a cada carreira.",
         "Nem sempre o adicional é pago, ou é pago com base de cálculo incorreta. Escalas de plantão, horas noturnas não computadas e ausência do pagamento retroativo são queixas frequentes.",
       ],
     },

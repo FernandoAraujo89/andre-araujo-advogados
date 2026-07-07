@@ -22,7 +22,7 @@ export default function AreasPage() {
           <SectionHeading
             as="h1"
             title="Direito Cível e Empresarial"
-            description="A vertente cível e empresarial do escritório reúne sete áreas — da consultoria preventiva ao contencioso — para pessoas físicas, condomínios e empresas de Formiga e região."
+            description="A vertente cível e empresarial do escritório reúne sete áreas, da consultoria preventiva ao contencioso, para pessoas físicas, condomínios e empresas de Formiga e região."
           />
         </Reveal>
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

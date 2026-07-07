@@ -105,7 +105,7 @@ export const areas: Area[] = [
     metaDescription:
       "Atuação em direito do consumidor em Formiga, MG: cobranças indevidas, negativação, vícios de produtos e serviços e contratos bancários.",
     intro:
-      "Relações de consumo fazem parte do dia a dia — e nem sempre fornecedores cumprem o que prometem. O escritório orienta consumidores de Formiga e região na defesa dos direitos previstos no Código de Defesa do Consumidor.",
+      "Relações de consumo fazem parte do dia a dia, e nem sempre fornecedores cumprem o que prometem. O escritório orienta consumidores de Formiga e região na defesa dos direitos previstos no Código de Defesa do Consumidor.",
     blocks: [
       {
         heading: "Como o escritório atua",
@@ -161,7 +161,7 @@ export const areas: Area[] = [
       {
         question: "Comprei um imóvel sem escritura. É possível regularizar?",
         answer:
-          "Em muitos casos, sim — por meio de usucapião, adjudicação ou outros instrumentos de regularização, conforme a origem da posse e a documentação existente. A análise dos documentos define o procedimento adequado.",
+          "Em muitos casos, sim: por meio de usucapião, adjudicação ou outros instrumentos de regularização, conforme a origem da posse e a documentação existente. A análise dos documentos define o procedimento adequado.",
       },
     ],
   },
@@ -241,7 +241,7 @@ export const areas: Area[] = [
     metaDescription:
       "Recuperação de crédito em Formiga, MG: cobrança extrajudicial e judicial, execução de títulos e negociação de dívidas.",
     intro:
-      "Inadimplência compromete o caixa de qualquer negócio. O escritório estrutura a cobrança de forma profissional — priorizando a negociação e recorrendo ao Judiciário quando necessário.",
+      "Inadimplência compromete o caixa de qualquer negócio. O escritório estrutura a cobrança de forma profissional, priorizando a negociação e recorrendo ao Judiciário quando necessário.",
     blocks: [
       {
         heading: "Como o escritório atua",

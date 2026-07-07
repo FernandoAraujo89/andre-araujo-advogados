@@ -60,8 +60,8 @@ export default async function Home() {
               <em className="italic text-wine">Formiga e região</em>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-pretty text-ink-soft">
-              Duas vertentes de atuação — Direito do Servidor Público e
-              Direito Cível e Empresarial — a serviço de pessoas, empresas e
+              Duas vertentes de atuação: Direito do Servidor Público e
+              Direito Cível e Empresarial, a serviço de pessoas, empresas e
               servidores de Minas Gerais.
             </p>
             <div className="mt-9 flex flex-wrap gap-4">
@@ -134,7 +134,7 @@ export default async function Home() {
                 </h3>
                 <p className="mt-4 flex-1 text-[0.9375rem] leading-relaxed text-paper/85">
                   Férias-prêmio, progressão e promoção, adicional noturno e
-                  vale-transporte para servidores estaduais de Minas Gerais —
+                  vale-transporte para servidores estaduais de Minas Gerais,
                   incluindo policiais penais.
                 </p>
                 <span className="mt-8 font-medium text-paper-light">
@@ -242,7 +242,7 @@ export default async function Home() {
                 {andre.name}
               </h3>
               <p className="mt-2 text-ink-soft">
-                {andre.role} — {andre.oab}
+                {andre.role}, {andre.oab}
               </p>
               <p className="mt-6 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-soft">
                 Graduado em Direito pelo UNIFOR-MG, com pós-graduações em
@@ -292,8 +292,8 @@ export default async function Home() {
               Você é servidor público estadual?
             </h2>
             <p className="mx-auto mt-5 max-w-2xl text-lg text-paper/85">
-              O escritório orienta servidores de Minas Gerais — incluindo
-              policiais penais — sobre direitos da carreira.
+              O escritório orienta servidores de Minas Gerais, incluindo
+              policiais penais, sobre direitos da carreira.
             </p>
             <ul className="mt-9 flex flex-wrap justify-center gap-3">
               {servidorPages.map((p) => (

@@ -189,12 +189,12 @@ export default function OEscritorioPage() {
                   Há sete anos, André Augusto de Araújo fundou o escritório com
                   o propósito de oferecer, em Formiga e no centro-oeste de Minas
                   Gerais, uma advocacia completa para pessoas físicas,
-                  condomínios e empresas — sem que fosse preciso buscar nos
+                  condomínios e empresas, sem que fosse preciso buscar nos
                   grandes centros o suporte jurídico de qualidade.
                 </p>
                 <p>
-                  Hoje, o escritório reúne 12 profissionais — entre advocacia,
-                  controladoria jurídica, estágio e atendimento — com a atuação
+                  Hoje, o escritório reúne 12 profissionais (advocacia,
+                  controladoria jurídica, estágio e atendimento) com a atuação
                   organizada em duas vertentes: o Direito Cível e Empresarial,
                   que abrange sete áreas, e o Direito do Servidor Público,
                   dedicado aos servidores estaduais de Minas Gerais. O

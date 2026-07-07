@@ -50,7 +50,7 @@ export const SEED_POSTS: Post[] = [
     date: "2026-05-18",
     excerpt:
       "Precisou cancelar uma viagem ou teve o pacote cancelado pela agência? Entenda o que o Código de Defesa do Consumidor garante em cada situação.",
-    body: `Imprevistos acontecem — e, quando envolvem um pacote de viagem já contratado, surgem dúvidas sobre reembolso, remarcação e multas. O Código de Defesa do Consumidor traz regras que equilibram a relação entre viajante e agência.
+    body: `Imprevistos acontecem e, quando envolvem um pacote de viagem já contratado, surgem dúvidas sobre reembolso, remarcação e multas. O Código de Defesa do Consumidor traz regras que equilibram a relação entre viajante e agência.
 
 ## Quando o consumidor cancela
 
@@ -123,7 +123,7 @@ O proprietário pode contestar o valor ofertado, apresentar avaliação própria
 
 ## Gozo, conversão e pendências
 
-Em determinadas situações — como a aposentadoria sem o gozo integral do benefício — discute-se a conversão dos períodos em indenização. Cada caso depende do histórico funcional do servidor e das normas aplicáveis à sua carreira.
+Em determinadas situações, como a aposentadoria sem o gozo integral do benefício, discute-se a conversão dos períodos em indenização. Cada caso depende do histórico funcional do servidor e das normas aplicáveis à sua carreira.
 
 Servidores que identificam períodos não reconhecidos devem reunir sua contagem de tempo e buscar orientação para avaliar as vias administrativa e judicial.`,
   },
@@ -140,13 +140,13 @@ Servidores que identificam períodos não reconhecidos devem reunir sua contagem
     date: "2026-02-16",
     excerpt:
       "Ponto comercial é patrimônio. Conheça as cláusulas mais importantes do contrato de locação comercial e os direitos que protegem o seu negócio.",
-    body: `Para o comerciante, o ponto é parte do valor do negócio. A Lei do Inquilinato traz proteções específicas para a locação não residencial — mas muitas delas dependem de condições contratuais que precisam ser observadas desde a assinatura.
+    body: `Para o comerciante, o ponto é parte do valor do negócio. A Lei do Inquilinato traz proteções específicas para a locação não residencial, mas muitas delas dependem de condições contratuais que precisam ser observadas desde a assinatura.
 
 ## Cláusulas que merecem atenção
 
 Prazo do contrato, condições de renovação, índice de reajuste, responsabilidade por reformas e garantias locatícias são pontos que costumam gerar conflito. A ação renovatória, por exemplo, exige contrato escrito com prazo determinado e requisitos específicos.
 
-Revisar o contrato antes de assinar — e guardar toda a documentação da locação — evita surpresas na renovação ou na devolução do imóvel.`,
+Revisar o contrato antes de assinar e guardar toda a documentação da locação evita surpresas na renovação ou na devolução do imóvel.`,
   },
   {
     slug: "restituicao-de-tributos-pagos-indevidamente",

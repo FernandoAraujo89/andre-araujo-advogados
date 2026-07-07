@@ -35,7 +35,7 @@ export default function Header() {
       <div className="mx-auto flex h-20 max-w-[1240px] items-center justify-between gap-8 px-5 lg:px-8">
         <Link
           href="/"
-          aria-label="André Araújo Advogados — página inicial"
+          aria-label="André Araújo Advogados, ir para a página inicial"
           className="shrink-0"
         >
           <Image

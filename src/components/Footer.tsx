@@ -64,7 +64,7 @@ export default function Footer() {
                 <span>
                   {site.address.street}, {site.address.neighborhood}
                   <br />
-                  {site.address.city}, {site.address.state} — CEP {site.address.zip}
+                  {site.address.city}, {site.address.state}, CEP {site.address.zip}
                 </span>
               </li>
               <li>

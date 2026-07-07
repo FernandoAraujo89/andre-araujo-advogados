@@ -70,7 +70,7 @@ export default async function LawyerPage({ params }: Props) {
               {lawyer.name}
             </h1>
             <p className="mt-3 text-ink-soft">
-              {[lawyer.role, lawyer.oab].filter(Boolean).join(" — ")}
+              {[lawyer.role, lawyer.oab].filter(Boolean).join(", ")}
             </p>
             <p className="mt-8 max-w-2xl text-lg text-ink-soft">{lawyer.bio}</p>
 
