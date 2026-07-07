@@ -77,7 +77,7 @@ export default async function ServidorSubPage({ params }: Props) {
                   </p>
                 ))}
               </div>
-              <ul className="mt-6 list-disc space-y-3 pl-5 marker:text-wine">
+              <ul className="mt-6 list-disc space-y-3 pl-5 marker:text-accent">
                 {page.how.items.map((item) => (
                   <li key={item} className="text-ink-soft">
                     {item}
@@ -110,7 +110,7 @@ export default async function ServidorSubPage({ params }: Props) {
               <li key={p.slug}>
                 <Link
                   href={`/servidores-publicos/${p.slug}`}
-                  className="inline-block rounded-sm border border-line bg-paper-light px-6 py-3 font-medium text-ink transition-colors hover:border-wine hover:text-wine-deep"
+                  className="inline-block rounded-sm border border-line bg-paper-light px-6 py-3 font-medium text-ink transition-colors hover:border-accent hover:text-accent-deep"
                 >
                   {p.name}
                 </Link>

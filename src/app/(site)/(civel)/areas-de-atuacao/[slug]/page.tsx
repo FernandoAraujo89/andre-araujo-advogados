@@ -66,7 +66,7 @@ export default async function AreaPage({ params }: Props) {
                   </p>
                 )}
                 {block.items && (
-                  <ul className="mt-6 list-disc space-y-3 pl-5 marker:text-wine">
+                  <ul className="mt-6 list-disc space-y-3 pl-5 marker:text-accent">
                     {block.items.map((item) => (
                       <li key={item} className="text-ink-soft">
                         {item}

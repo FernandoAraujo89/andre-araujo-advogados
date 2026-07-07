@@ -57,7 +57,7 @@ export default async function Home() {
           <Reveal>
             <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-ink">
               Advocacia especializada para{" "}
-              <em className="italic text-wine">Formiga e região</em>
+              <em className="italic text-accent">Formiga e região</em>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-pretty text-ink-soft">
               Duas vertentes de atuação: Direito do Servidor Público e
@@ -77,7 +77,7 @@ export default async function Home() {
             <div className="relative">
               <div
                 aria-hidden
-                className="absolute -bottom-5 -right-5 h-full w-full rounded-md bg-wine-mist"
+                className="absolute -bottom-5 -right-5 h-full w-full rounded-md bg-accent-mist"
               />
               <Photo
                 src="/images/escritorio/fachada.jpg"
@@ -178,7 +178,7 @@ export default async function Home() {
               />
               <Link
                 href="/areas-de-atuacao"
-                className="font-medium text-wine-deep transition-colors hover:text-wine"
+                className="font-medium text-accent-deep transition-colors hover:text-accent"
               >
                 Ver a vertente completa
               </Link>
@@ -263,8 +263,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 7. Blog — fundo rosado (wine-mist) */}
-      <section className="border-y border-line bg-wine-mist px-5 py-24 lg:px-8 lg:py-32">
+      {/* 7. Blog — fundo em tom claro do acento (accent-mist) */}
+      <section className="border-y border-line bg-accent-mist px-5 py-24 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
@@ -333,7 +333,7 @@ export default async function Home() {
               <ul className="space-y-6 text-ink">
                 <li>
                   <p className="label">Telefone</p>
-                  <a href={site.phoneHref} className="mt-1 inline-block text-lg font-medium hover:text-wine-deep">
+                  <a href={site.phoneHref} className="mt-1 inline-block text-lg font-medium hover:text-accent-deep">
                     {site.phone}
                   </a>
                 </li>
@@ -343,14 +343,14 @@ export default async function Home() {
                     href={site.whatsappHref}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1 inline-block text-lg font-medium hover:text-wine-deep"
+                    className="mt-1 inline-block text-lg font-medium hover:text-accent-deep"
                   >
                     {site.whatsapp}
                   </a>
                 </li>
                 <li>
                   <p className="label">E-mail</p>
-                  <a href={site.emailHref} className="mt-1 inline-block text-lg font-medium break-words hover:text-wine-deep">
+                  <a href={site.emailHref} className="mt-1 inline-block text-lg font-medium break-words hover:text-accent-deep">
                     {site.email}
                   </a>
                 </li>

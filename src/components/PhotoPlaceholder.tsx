@@ -26,11 +26,11 @@ export default function PhotoPlaceholder({
     <div
       role="img"
       aria-label={label}
-      className={`relative flex w-full items-center justify-center overflow-hidden bg-wine-mist ${rounded} ${className}`}
+      className={`relative flex w-full items-center justify-center overflow-hidden bg-accent-mist ${rounded} ${className}`}
       style={{ aspectRatio: ratio }}
     >
       {initials ? (
-        <span className="select-none font-serif text-[clamp(3rem,8vw,5rem)] font-medium text-wine/70">
+        <span className="select-none font-serif text-[clamp(3rem,8vw,5rem)] font-medium text-accent/70">
           {initials}
         </span>
       ) : (

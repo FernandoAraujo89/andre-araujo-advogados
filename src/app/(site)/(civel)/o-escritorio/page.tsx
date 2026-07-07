@@ -154,7 +154,7 @@ export default function OEscritorioPage() {
             <Reveal>
               <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-ink">
                 Advocacia com endereço,{" "}
-                <em className="italic text-wine">rosto e história</em>
+                <em className="italic text-accent">rosto e história</em>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-pretty text-ink-soft">
                 O André Araújo Advogados nasceu em Formiga, MG, com a convicção
@@ -208,7 +208,7 @@ export default function OEscritorioPage() {
       </section>
 
       {/* 3. Missão — faixa vinho, citação centrada */}
-      <section className="bg-wine px-5 py-24 lg:px-8 lg:py-32">
+      <section className="bg-accent-surface px-5 py-24 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <figure className="mx-auto max-w-4xl text-center">
@@ -271,7 +271,7 @@ export default function OEscritorioPage() {
       </section>
 
       {/* 6. CTA — faixa rosada entre a galeria escura e o rodapé escuro */}
-      <section className="bg-wine-mist px-5 py-24 text-center lg:px-8 lg:py-32">
+      <section className="bg-accent-mist px-5 py-24 text-center lg:px-8 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <h2 className="text-balance mx-auto max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.1] text-ink">

@@ -15,11 +15,11 @@ const base =
   "inline-flex items-center justify-center gap-2 rounded-sm font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.99]";
 
 const variants = {
-  primary: "bg-wine text-paper-light hover:bg-wine-deep",
+  primary: "bg-accent-surface text-paper-light hover:bg-accent-surface-deep",
   secondary:
-    "border border-ink/25 text-ink hover:border-wine hover:text-wine-deep",
+    "border border-ink/25 text-ink hover:border-accent hover:text-accent-deep",
   light: "bg-paper text-ink hover:bg-paper-light",
-  whatsapp: "bg-wine text-paper-light hover:bg-wine-deep",
+  whatsapp: "bg-accent-surface text-paper-light hover:bg-accent-surface-deep",
 };
 
 const sizes = {

@@ -22,6 +22,22 @@
   --color-line: #e5dfd3;
   --color-whatsapp: #25d366;
 
+  /*
+   * Acento por "mundo" (as duas vertentes funcionam como dois sites).
+   * Valores-base = mundo Cível e Empresarial (principal): azul-tinta
+   * dominante + dourado. O mundo Servidor Público sobrescreve para vinho
+   * sobre creme via [data-world="servidor"] abaixo.
+   *  - accent            → texto de destaque: links, rótulos, números, bordas
+   *  - accent-deep       → hover/variação mais escura do accent
+   *  - accent-surface    → fundo forte: botões primários e faixas
+   *  - accent-mist       → tom claro para fundos de seção
+   */
+  --color-accent: #7d5e2c; /* bronze-dourado, AA sobre creme */
+  --color-accent-deep: #5f4720;
+  --color-accent-surface: #16222c; /* azul-tinta */
+  --color-accent-surface-deep: #0d1319;
+  --color-accent-mist: #efe7d1; /* dourado claro */
+
   /* Tipografia (variáveis injetadas pelo next/font em layout.tsx) */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
@@ -34,6 +50,18 @@
   --shadow-card: 0 10px 40px rgba(22, 34, 44, 0.08);
   --shadow-card-hover: 0 18px 50px rgba(22, 34, 44, 0.12);
   --shadow-header: 0 2px 24px rgba(22, 34, 44, 0.06);
+}
+
+/*
+ * Mundo Servidor Público — sobrescreve o acento para o vinho sobre creme.
+ * Aplicado no wrapper com data-world="servidor" (layout do subgrupo).
+ */
+[data-world="servidor"] {
+  --color-accent: var(--color-wine);
+  --color-accent-deep: var(--color-wine-deep);
+  --color-accent-surface: var(--color-wine);
+  --color-accent-surface-deep: var(--color-wine-deep);
+  --color-accent-mist: var(--color-wine-mist);
 }
 
 html {
@@ -76,7 +104,7 @@ body {
 
 /* Foco visível e consistente para navegação por teclado */
 :focus-visible {
-  outline: 2px solid var(--color-wine);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 4px;
 }

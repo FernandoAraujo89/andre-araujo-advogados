@@ -32,7 +32,7 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
               <span className="font-medium text-ink">{item.question}</span>
               <span
                 aria-hidden
-                className="shrink-0 text-xl leading-none text-wine"
+                className="shrink-0 text-xl leading-none text-accent"
               >
                 {open ? "−" : "+"}
               </span>

@@ -62,7 +62,7 @@ export default async function PostPage({ params }: Props) {
         <div className="grid gap-12 lg:grid-cols-[1fr_360px]">
           <article>
             <Reveal>
-              <p className="label mb-3 text-wine">{post.category}</p>
+              <p className="label mb-3 text-accent">{post.category}</p>
               <h1 className="max-w-3xl font-serif text-[clamp(2.25rem,4.5vw,3.5rem)] font-medium leading-[1.1] text-ink">
                 {post.title}
               </h1>

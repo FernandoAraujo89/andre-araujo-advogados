@@ -84,7 +84,7 @@ export default async function LawyerPage({ params }: Props) {
                     <li key={a.slug}>
                       <Link
                         href={`/areas-de-atuacao/${a.slug}`}
-                        className="inline-block rounded-sm border border-line bg-paper-light px-5 py-2.5 text-[0.9375rem] font-medium text-ink transition-colors hover:border-wine hover:text-wine-deep"
+                        className="inline-block rounded-sm border border-line bg-paper-light px-5 py-2.5 text-[0.9375rem] font-medium text-ink transition-colors hover:border-accent hover:text-accent-deep"
                       >
                         {a.name}
                       </Link>

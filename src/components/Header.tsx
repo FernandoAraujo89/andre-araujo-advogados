@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { site, navMain, navSecondary } from "@/data/site";
+import { site, navCivel, navServidor, type World } from "@/data/site";
 
-export default function Header() {
+export default function Header({ world }: { world: World }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const nav = world === "servidor" ? navServidor : navCivel;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -34,7 +36,7 @@ export default function Header() {
     >
       <div className="mx-auto flex h-20 max-w-[1240px] items-center justify-between gap-8 px-5 lg:px-8">
         <Link
-          href="/"
+          href={world === "servidor" ? "/servidores-publicos" : "/"}
           aria-label="André Araújo Advogados, ir para a página inicial"
           className="shrink-0"
         >
@@ -51,7 +53,7 @@ export default function Header() {
 
         <nav aria-label="Navegação principal" className="hidden lg:block">
           <ul className="flex items-center gap-6 xl:gap-8">
-            {navMain.map((item) => {
+            {nav.map((item) => {
               const active =
                 pathname === item.href ||
                 pathname.startsWith(`${item.href}/`);
@@ -59,12 +61,12 @@ export default function Header() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`whitespace-nowrap text-[0.9375rem] font-medium transition-colors hover:text-wine-deep ${
-                      active ? "text-wine-deep" : "text-ink"
+                    className={`whitespace-nowrap text-[0.9375rem] font-medium transition-colors hover:text-accent-deep ${
+                      active ? "text-accent-deep" : "text-ink"
                     }`}
                     aria-current={active ? "page" : undefined}
                   >
-                    {"shortLabel" in item ? item.shortLabel : item.label}
+                    {item.label}
                   </Link>
                 </li>
               );
@@ -75,7 +77,7 @@ export default function Header() {
         <div className="hidden items-center gap-5 xl:flex">
           <a
             href={site.phoneHref}
-            className="hidden items-center gap-2 whitespace-nowrap text-[0.9375rem] font-medium text-ink transition-colors hover:text-wine-deep 2xl:flex"
+            className="hidden items-center gap-2 whitespace-nowrap text-[0.9375rem] font-medium text-ink transition-colors hover:text-accent-deep 2xl:flex"
           >
             {site.phone}
           </a>
@@ -83,7 +85,7 @@ export default function Header() {
             href={site.whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 whitespace-nowrap rounded-sm bg-wine px-5 py-2.5 text-[0.9375rem] font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-wine-deep"
+            className="inline-flex items-center gap-2 whitespace-nowrap rounded-sm bg-accent-surface px-5 py-2.5 text-[0.9375rem] font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-accent-surface-deep"
           >
             Falar no WhatsApp
           </a>
@@ -91,7 +93,7 @@ export default function Header() {
 
         <button
           type="button"
-          className="flex h-11 items-center gap-2 rounded-sm border border-ink/20 bg-paper-light px-4 text-[0.9375rem] font-medium text-ink transition-colors hover:border-wine lg:hidden"
+          className="flex h-11 items-center gap-2 rounded-sm border border-ink/20 bg-paper-light px-4 text-[0.9375rem] font-medium text-ink transition-colors hover:border-accent lg:hidden"
           aria-expanded={open}
           aria-controls="menu-mobile"
           onClick={() => setOpen((v) => !v)}
@@ -132,7 +134,7 @@ export default function Header() {
           className="border-t border-line bg-paper px-5 pb-8 pt-4 lg:hidden"
         >
           <ul className="flex flex-col gap-1">
-            {navMain.map((item) => (
+            {nav.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
@@ -144,27 +146,12 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          <div className="mt-3 border-t border-line pt-3">
-            <ul className="flex flex-col gap-1">
-              {navSecondary.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={closeMenu}
-                    className="block rounded-sm px-3 py-2.5 text-base text-ink-soft hover:bg-paper-light"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
           <div className="mt-6 flex flex-col gap-3">
             <a
               href={site.whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-sm bg-wine px-6 py-3.5 font-medium text-paper-light"
+              className="inline-flex items-center justify-center gap-2 rounded-sm bg-accent-surface px-6 py-3.5 font-medium text-paper-light"
             >
               Falar no WhatsApp
             </a>

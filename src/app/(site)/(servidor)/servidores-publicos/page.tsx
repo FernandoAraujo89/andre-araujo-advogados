@@ -45,7 +45,7 @@ export default function ServidoresPage() {
                     <p className="mt-3 flex-1 text-[0.9375rem] text-ink-soft">
                       {p.problem.paragraphs[0].slice(0, 120)}...
                     </p>
-                    <span className="mt-6 text-[0.9375rem] font-medium text-wine-deep">
+                    <span className="mt-6 text-[0.9375rem] font-medium text-accent-deep">
                       Saiba mais
                     </span>
                   </Link>

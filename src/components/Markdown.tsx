@@ -25,7 +25,7 @@ export default function Markdown({ children }: { children: string }) {
           a: ({ href, children }) => (
             <a
               href={href}
-              className="font-medium text-wine underline decoration-wine/40 underline-offset-2 transition-colors hover:text-wine-deep"
+              className="font-medium text-accent underline decoration-accent/40 underline-offset-2 transition-colors hover:text-accent-deep"
               {...(href?.startsWith("http")
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
@@ -37,7 +37,7 @@ export default function Markdown({ children }: { children: string }) {
             <strong className="font-semibold text-ink">{children}</strong>
           ),
           ul: ({ children }) => (
-            <ul className="ml-5 list-disc space-y-2 marker:text-wine">
+            <ul className="ml-5 list-disc space-y-2 marker:text-accent">
               {children}
             </ul>
           ),
@@ -48,7 +48,7 @@ export default function Markdown({ children }: { children: string }) {
           ),
           li: ({ children }) => <li className="pl-1">{children}</li>,
           blockquote: ({ children }) => (
-            <blockquote className="border-l-2 border-wine pl-5 font-serif text-xl italic text-ink">
+            <blockquote className="border-l-2 border-accent pl-5 font-serif text-xl italic text-ink">
               {children}
             </blockquote>
           ),

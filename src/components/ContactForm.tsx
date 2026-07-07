@@ -34,7 +34,7 @@ async function submitContact(data: {
 }
 
 const inputCls =
-  "w-full rounded-md border border-line bg-paper-light px-5 py-3.5 text-ink placeholder:text-ink-soft/50 focus:border-wine focus:outline-none";
+  "w-full rounded-md border border-line bg-paper-light px-5 py-3.5 text-ink placeholder:text-ink-soft/50 focus:border-accent focus:outline-none";
 
 export default function ContactForm() {
   const [nome, setNome] = useState("");
@@ -112,7 +112,7 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.nome && (
-          <p id="nome-error" className="mt-2 text-base text-wine-deep">
+          <p id="nome-error" className="mt-2 text-base text-accent-deep">
             {errors.nome}
           </p>
         )}
@@ -136,7 +136,7 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.celular && (
-          <p id="celular-error" className="mt-2 text-base text-wine-deep">
+          <p id="celular-error" className="mt-2 text-base text-accent-deep">
             {errors.celular}
           </p>
         )}
@@ -165,7 +165,7 @@ export default function ContactForm() {
           <option value="Outro">Outro assunto</option>
         </select>
         {errors.assunto && (
-          <p id="assunto-error" className="mt-2 text-base text-wine-deep">
+          <p id="assunto-error" className="mt-2 text-base text-accent-deep">
             {errors.assunto}
           </p>
         )}
@@ -187,14 +187,14 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.mensagem && (
-          <p id="mensagem-error" className="mt-2 text-base text-wine-deep">
+          <p id="mensagem-error" className="mt-2 text-base text-accent-deep">
             {errors.mensagem}
           </p>
         )}
       </div>
 
       {state === "error" && (
-        <p role="alert" className="text-base text-wine-deep">
+        <p role="alert" className="text-base text-accent-deep">
           Não foi possível enviar agora. Tente novamente ou fale conosco pelo
           WhatsApp.
         </p>
@@ -203,7 +203,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={state === "sending"}
-        className="inline-flex items-center gap-2 rounded-sm bg-wine px-8 py-4 font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-wine-deep disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-sm bg-accent-surface px-8 py-4 font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-accent-surface-deep disabled:opacity-60"
       >
         {state === "sending" ? "Enviando..." : "Enviar mensagem"}
       </button>

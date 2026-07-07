@@ -11,10 +11,10 @@ export default function AreaCard({ area, index }: AreaCardProps) {
   return (
     <Link
       href={`/areas-de-atuacao/${area.slug}`}
-      className="group flex h-full flex-col rounded-md border border-line bg-paper-light p-8 transition-all duration-300 hover:-translate-y-1 hover:border-wine hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)]"
+      className="group flex h-full flex-col rounded-md border border-line bg-paper-light p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)]"
     >
       {index !== undefined && (
-        <p aria-hidden className="font-serif text-sm italic text-wine">
+        <p aria-hidden className="font-serif text-sm italic text-accent">
           {String(index).padStart(2, "0")}
         </p>
       )}
@@ -28,7 +28,7 @@ export default function AreaCard({ area, index }: AreaCardProps) {
       <p className="mt-3 flex-1 text-[0.9375rem] text-ink-soft">
         {area.tagline}
       </p>
-      <span className="mt-6 text-[0.9375rem] font-medium text-wine-deep">
+      <span className="mt-6 text-[0.9375rem] font-medium text-accent-deep">
         Saiba mais
       </span>
     </Link>

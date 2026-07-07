@@ -39,8 +39,8 @@ export default function BlogList({ posts }: BlogListProps) {
             aria-pressed={category === c}
             className={`rounded-sm px-5 py-2.5 text-[0.9375rem] font-medium transition-colors ${
               category === c
-                ? "bg-wine text-paper-light"
-                : "border border-line bg-paper-light text-ink-soft hover:border-wine hover:text-wine-deep"
+                ? "bg-accent-surface text-paper-light"
+                : "border border-line bg-paper-light text-ink-soft hover:border-accent hover:text-accent-deep"
             }`}
           >
             {c}
@@ -71,8 +71,8 @@ export default function BlogList({ posts }: BlogListProps) {
               aria-label={`Página ${n}`}
               className={`h-11 w-11 rounded-sm text-[0.9375rem] font-medium transition-colors ${
                 page === n
-                  ? "bg-wine text-paper-light"
-                  : "border border-line text-ink-soft hover:border-wine hover:text-wine-deep"
+                  ? "bg-accent-surface text-paper-light"
+                  : "border border-line text-ink-soft hover:border-accent hover:text-accent-deep"
               }`}
             >
               {n}

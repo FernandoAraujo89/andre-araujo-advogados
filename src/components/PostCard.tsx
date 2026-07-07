@@ -23,17 +23,17 @@ export default function PostCard({ post }: PostCardProps) {
       ) : (
         <div
           aria-hidden
-          className="flex items-center justify-center bg-wine-mist"
+          className="flex items-center justify-center bg-accent-mist"
           style={{ aspectRatio: "16/10" }}
         >
-          <span className="font-serif text-2xl font-medium text-wine/40">
+          <span className="font-serif text-2xl font-medium text-accent/40">
             AA
           </span>
         </div>
       )}
       <div className="flex flex-1 flex-col p-6">
-        <span className="label mb-2 text-wine">{post.category}</span>
-        <h3 className="flex-1 font-serif text-lg font-medium leading-snug text-ink transition-colors group-hover:text-wine-deep">
+        <span className="label mb-2 text-accent">{post.category}</span>
+        <h3 className="flex-1 font-serif text-lg font-medium leading-snug text-ink transition-colors group-hover:text-accent-deep">
           {post.title}
         </h3>
         <time dateTime={post.date} className="mt-4 text-base text-ink-soft">

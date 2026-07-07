@@ -70,6 +70,44 @@ export const navSecondary = [
 ] as const;
 
 /**
+ * As duas vertentes funcionam como dois "sites" que o usuário troca por um
+ * seletor no canto. Cada mundo tem sua home, seu menu e seu tema (ver
+ * data-world no globals.css). `civel` é o principal.
+ */
+export const worlds = {
+  civel: {
+    label: "Cível e Empresarial",
+    shortLabel: "Cível",
+    home: "/",
+  },
+  servidor: {
+    label: "Servidor Público",
+    shortLabel: "Servidor",
+    home: "/servidores-publicos",
+  },
+} as const;
+
+export type World = keyof typeof worlds;
+
+/** Menu do mundo Cível e Empresarial (principal). */
+export const navCivel = [
+  { label: "Áreas de Atuação", href: "/areas-de-atuacao" },
+  { label: "O Escritório", href: "/o-escritorio" },
+  { label: "Equipe", href: "/equipe" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contato", href: "/contato" },
+] as const;
+
+/** Menu do mundo Servidor Público. */
+export const navServidor = [
+  { label: "Direitos do Servidor", href: "/servidores-publicos" },
+  { label: "O Escritório", href: "/o-escritorio" },
+  { label: "Equipe", href: "/equipe" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contato", href: "/contato" },
+] as const;
+
+/**
  * Barra de credibilidade da home.
  * TODO: confirmar o número real de casos acompanhados antes de publicar
  * (placeholder). Anos de história (7) e equipe (12) confirmados.

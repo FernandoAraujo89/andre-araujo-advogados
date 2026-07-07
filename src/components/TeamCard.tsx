@@ -34,7 +34,7 @@ export default function TeamCard({ member }: TeamCardProps) {
           {[member.role, member.oab].filter(Boolean).join(", ")}
         </p>
         {member.hasProfile && (
-          <span className="mt-4 text-base font-medium text-wine-deep">
+          <span className="mt-4 text-base font-medium text-accent-deep">
             Ver perfil
           </span>
         )}
@@ -52,7 +52,7 @@ export default function TeamCard({ member }: TeamCardProps) {
   return (
     <Link
       href={`/equipe/${member.slug}`}
-      className={`group ${cardCls} transition-all duration-300 hover:-translate-y-1 hover:border-wine hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)]`}
+      className={`group ${cardCls} transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)]`}
     >
       {inner}
     </Link>

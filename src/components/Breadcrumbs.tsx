@@ -25,7 +25,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
               {crumb.href && !last ? (
                 <Link
                   href={crumb.href}
-                  className="transition-colors hover:text-wine-deep"
+                  className="transition-colors hover:text-accent-deep"
                 >
                   {crumb.label}
                 </Link>
