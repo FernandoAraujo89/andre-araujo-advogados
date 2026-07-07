@@ -17,7 +17,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
   const crumbs: Crumb[] = [{ label: "Home", href: "/" }, ...items];
   return (
     <nav aria-label="Trilha de navegação" className="mb-10">
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-ink-soft">
+      <ol className="flex flex-wrap items-center gap-1.5 text-base text-ink-soft">
         {crumbs.map((crumb, i) => {
           const last = i === crumbs.length - 1;
           return (

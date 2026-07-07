@@ -76,7 +76,7 @@ export default async function LawyerPage({ params }: Props) {
 
             {lawyerAreas.length > 0 && (
               <div className="mt-10">
-                <h2 className="text-sm font-medium text-ink-soft">
+                <h2 className="text-base font-medium text-ink-soft">
                   Áreas em que atua
                 </h2>
                 <ul className="mt-4 flex flex-wrap gap-3">

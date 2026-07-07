@@ -332,13 +332,13 @@ export default function Home() {
             <Reveal delay={0.1}>
               <ul className="space-y-6 text-ink">
                 <li>
-                  <p className="label text-xs">Telefone</p>
+                  <p className="label">Telefone</p>
                   <a href={site.phoneHref} className="mt-1 inline-block text-lg font-medium hover:text-wine-deep">
                     {site.phone}
                   </a>
                 </li>
                 <li>
-                  <p className="label text-xs">WhatsApp</p>
+                  <p className="label">WhatsApp</p>
                   <a
                     href={site.whatsappHref}
                     target="_blank"
@@ -349,13 +349,13 @@ export default function Home() {
                   </a>
                 </li>
                 <li>
-                  <p className="label text-xs">E-mail</p>
+                  <p className="label">E-mail</p>
                   <a href={site.emailHref} className="mt-1 inline-block text-lg font-medium break-words hover:text-wine-deep">
                     {site.email}
                   </a>
                 </li>
                 <li>
-                  <p className="label text-xs">Endereço</p>
+                  <p className="label">Endereço</p>
                   <p className="mt-1 text-lg">{site.address.full}</p>
                 </li>
               </ul>

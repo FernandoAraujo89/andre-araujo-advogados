@@ -57,7 +57,7 @@ export default function ContatoPage() {
             <ul className="space-y-6">
               {canais.map(({ label, value, href, external }) => (
                 <li key={label}>
-                  <p className="label text-xs">{label}</p>
+                  <p className="label">{label}</p>
                   <a
                     href={href}
                     {...(external
@@ -70,11 +70,11 @@ export default function ContatoPage() {
                 </li>
               ))}
               <li>
-                <p className="label text-xs">Endereço</p>
+                <p className="label">Endereço</p>
                 <p className="mt-1 text-lg text-ink">{site.address.full}</p>
               </li>
               <li>
-                <p className="label text-xs">Horário de atendimento</p>
+                <p className="label">Horário de atendimento</p>
                 {/* TODO: confirmar horário de atendimento com o escritório */}
                 <p className="mt-1 text-lg text-ink">{site.openingHours}</p>
               </li>

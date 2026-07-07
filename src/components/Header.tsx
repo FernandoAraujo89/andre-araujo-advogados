@@ -91,10 +91,35 @@ export default function Header() {
 
         <button
           type="button"
-          className="text-[0.9375rem] font-medium text-ink lg:hidden"
+          className="flex h-11 items-center gap-2 rounded-sm border border-ink/20 bg-paper-light px-4 text-[0.9375rem] font-medium text-ink transition-colors hover:border-wine lg:hidden"
           aria-expanded={open}
+          aria-controls="menu-mobile"
           onClick={() => setOpen((v) => !v)}
         >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+            className="shrink-0"
+          >
+            {open ? (
+              <path
+                d="M5 5l10 10M15 5L5 15"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+              />
+            ) : (
+              <path
+                d="M3 5.5h14M3 10h14M3 14.5h14"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+              />
+            )}
+          </svg>
           {open ? "Fechar" : "Menu"}
         </button>
       </div>
@@ -102,6 +127,7 @@ export default function Header() {
       {/* Menu mobile */}
       {open && (
         <nav
+          id="menu-mobile"
           aria-label="Navegação principal (mobile)"
           className="border-t border-line bg-paper px-5 pb-8 pt-4 lg:hidden"
         >

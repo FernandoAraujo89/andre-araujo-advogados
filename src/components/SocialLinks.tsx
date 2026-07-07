@@ -44,12 +44,12 @@ export default function SocialLinks({ className = "" }: SocialLinksProps) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${title} — abre em nova aba`}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-paper/20 text-paper/70 transition-colors duration-300 hover:border-gold hover:text-gold focus-visible:border-gold focus-visible:text-gold"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-paper/20 text-paper/70 transition-colors duration-300 hover:border-gold hover:text-gold focus-visible:border-gold focus-visible:text-gold"
           >
             <svg
               viewBox="0 0 24 24"
-              width="18"
-              height="18"
+              width="20"
+              height="20"
               fill="currentColor"
               aria-hidden="true"
             >

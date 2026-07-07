@@ -34,7 +34,7 @@ export default function PhotoPlaceholder({
           {initials}
         </span>
       ) : (
-        <span className="max-w-[22ch] px-6 text-center text-[0.8125rem] leading-snug text-ink-soft/70">
+        <span className="max-w-[22ch] px-6 text-center text-[0.9375rem] leading-snug text-ink-soft/70">
           {label}
         </span>
       )}

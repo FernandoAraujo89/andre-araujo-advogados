@@ -96,7 +96,7 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
       <div>
-        <label htmlFor="nome" className="mb-2 block text-sm font-medium text-ink">
+        <label htmlFor="nome" className="mb-2 block text-base font-medium text-ink">
           Nome
         </label>
         <input
@@ -112,14 +112,14 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.nome && (
-          <p id="nome-error" className="mt-2 text-sm text-wine-deep">
+          <p id="nome-error" className="mt-2 text-base text-wine-deep">
             {errors.nome}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="celular" className="mb-2 block text-sm font-medium text-ink">
+        <label htmlFor="celular" className="mb-2 block text-base font-medium text-ink">
           Celular
         </label>
         <input
@@ -136,14 +136,14 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.celular && (
-          <p id="celular-error" className="mt-2 text-sm text-wine-deep">
+          <p id="celular-error" className="mt-2 text-base text-wine-deep">
             {errors.celular}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="assunto" className="mb-2 block text-sm font-medium text-ink">
+        <label htmlFor="assunto" className="mb-2 block text-base font-medium text-ink">
           Assunto
         </label>
         <select
@@ -165,14 +165,14 @@ export default function ContactForm() {
           <option value="Outro">Outro assunto</option>
         </select>
         {errors.assunto && (
-          <p id="assunto-error" className="mt-2 text-sm text-wine-deep">
+          <p id="assunto-error" className="mt-2 text-base text-wine-deep">
             {errors.assunto}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="mensagem" className="mb-2 block text-sm font-medium text-ink">
+        <label htmlFor="mensagem" className="mb-2 block text-base font-medium text-ink">
           Mensagem
         </label>
         <textarea
@@ -187,14 +187,14 @@ export default function ContactForm() {
           className={inputCls}
         />
         {errors.mensagem && (
-          <p id="mensagem-error" className="mt-2 text-sm text-wine-deep">
+          <p id="mensagem-error" className="mt-2 text-base text-wine-deep">
             {errors.mensagem}
           </p>
         )}
       </div>
 
       {state === "error" && (
-        <p role="alert" className="text-sm text-wine-deep">
+        <p role="alert" className="text-base text-wine-deep">
           Não foi possível enviar agora. Tente novamente ou fale conosco pelo
           WhatsApp.
         </p>

@@ -62,11 +62,15 @@ body {
  * preserva as utilities. Ver SectionHeading e os heros.
  */
 
-/* Label discreto — rótulo neutro para colunas e campos (sem caixa alta/acento) */
+/*
+ * Label discreto — rótulo neutro para colunas e campos (sem caixa alta/acento).
+ * 15px (não 13px): piso de legibilidade para usuários com dificuldade de
+ * leitura de letras pequenas — ver também Breadcrumbs, ContactForm e Footer.
+ */
 .label {
   font-family: var(--font-sans);
   font-weight: 500;
-  font-size: 0.8125rem; /* 13px */
+  font-size: 0.9375rem; /* 15px */
   color: var(--color-ink-soft);
 }
 

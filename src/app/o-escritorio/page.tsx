@@ -218,7 +218,7 @@ export default function OEscritorioPage() {
                 criados com os clientes, a fim de desenvolver parcerias
                 consistentes e perduráveis.”
               </blockquote>
-              <figcaption className="mt-6 text-sm text-paper/85">
+              <figcaption className="mt-6 text-base text-paper/85">
                 Missão do escritório
               </figcaption>
             </figure>

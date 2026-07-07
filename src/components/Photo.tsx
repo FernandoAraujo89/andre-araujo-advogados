@@ -55,7 +55,7 @@ export default function Photo({
           href={creditUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute bottom-2 right-2 rounded-sm bg-ink/70 px-2 py-1 text-[0.6875rem] leading-none text-paper-light"
+          className="absolute bottom-2 right-2 rounded-sm bg-ink/70 px-2 py-1 text-[0.75rem] leading-none text-paper-light"
         >
           {credit}
         </a>

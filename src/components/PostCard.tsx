@@ -23,7 +23,7 @@ export default function PostCard({ post }: PostCardProps) {
         <h3 className="flex-1 font-serif text-lg font-medium leading-snug text-ink transition-colors group-hover:text-wine-deep">
           {post.title}
         </h3>
-        <time dateTime={post.date} className="mt-4 text-sm text-ink-soft">
+        <time dateTime={post.date} className="mt-4 text-base text-ink-soft">
           {formatDate(post.date)}
         </time>
       </div>

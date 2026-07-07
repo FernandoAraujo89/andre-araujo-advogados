@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
 
           <nav aria-label="Navegação do rodapé">
-            <h2 className="text-[0.8125rem] font-medium text-gold">Navegação</h2>
+            <h2 className="text-[0.9375rem] font-medium text-gold">Navegação</h2>
             <ul className="mt-5 space-y-3 text-[0.9375rem]">
               {[...navMain, ...navSecondary].map((item) => (
                 <li key={item.href}>
@@ -42,7 +42,7 @@ export default function Footer() {
           </nav>
 
           <nav aria-label="Links para servidores públicos">
-            <h2 className="text-[0.8125rem] font-medium text-gold">Direito do Servidor Público</h2>
+            <h2 className="text-[0.9375rem] font-medium text-gold">Direito do Servidor Público</h2>
             <ul className="mt-5 space-y-3 text-[0.9375rem]">
               {servidorPages.map((p) => (
                 <li key={p.slug}>
@@ -58,7 +58,7 @@ export default function Footer() {
           </nav>
 
           <div>
-            <h2 className="text-[0.8125rem] font-medium text-gold">Contato</h2>
+            <h2 className="text-[0.9375rem] font-medium text-gold">Contato</h2>
             <ul className="mt-5 space-y-4 text-[0.9375rem]">
               <li>
                 <span>
@@ -85,7 +85,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-paper/15 pt-8 text-sm text-paper/60 md:flex-row md:items-center md:justify-between">
+        <div className="mt-14 flex flex-col gap-3 border-t border-paper/15 pt-8 text-base text-paper/60 md:flex-row md:items-center md:justify-between">
           <p>
             © {new Date().getFullYear()} {site.name}. Todos os direitos
             reservados.
