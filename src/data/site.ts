@@ -71,11 +71,11 @@ export const navSecondary = [
 
 /**
  * Barra de credibilidade da home.
- * TODO: confirmar com o cliente os valores de anos de atuação e casos
- * acompanhados antes de publicar — os números abaixo são placeholders.
+ * TODO: confirmar o número real de casos acompanhados antes de publicar
+ * (placeholder). Anos de história (7) e equipe (12) confirmados.
  */
 export const stats = [
-  { value: 15, suffix: "+", label: "anos de atuação" }, // TODO: confirmar número real
+  { value: 7, suffix: "", label: "anos de história" },
   { value: 1000, suffix: "+", label: "casos acompanhados" }, // TODO: confirmar número real
   { value: 12, suffix: "", label: "profissionais na equipe" },
   { value: null, display: "Formiga", suffix: "", label: "e região, atendimento próximo" },

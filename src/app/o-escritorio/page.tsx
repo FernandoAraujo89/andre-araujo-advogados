@@ -184,10 +184,10 @@ export default function OEscritorioPage() {
             </Reveal>
             <Reveal delay={0.1}>
               <div className="space-y-5 text-lg text-ink-soft">
-                {/* TODO: revisar a história com o cliente (ano de fundação, marcos) */}
+                {/* TODO: revisar marcos da história com o cliente */}
                 <p>
-                  O escritório foi fundado por André Augusto de Araújo com o
-                  propósito de oferecer, em Formiga e no centro-oeste de Minas
+                  Há sete anos, André Augusto de Araújo fundou o escritório com
+                  o propósito de oferecer, em Formiga e no centro-oeste de Minas
                   Gerais, uma advocacia completa para pessoas físicas,
                   condomínios e empresas — sem que fosse preciso buscar nos
                   grandes centros o suporte jurídico de qualidade.
