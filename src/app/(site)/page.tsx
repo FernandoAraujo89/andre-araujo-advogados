@@ -12,7 +12,7 @@ import JsonLd from "@/components/JsonLd";
 import { site, stats } from "@/data/site";
 import { areas } from "@/data/areas";
 import { team } from "@/data/team";
-import { posts } from "@/data/posts";
+import { getAllPosts } from "@/lib/blog";
 import { servidorPages } from "@/data/servidores";
 import { legalServiceJsonLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
@@ -43,9 +43,9 @@ const diferenciais = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
   const [andre] = team;
-  const recentPosts = posts.slice(0, 3);
+  const recentPosts = (await getAllPosts()).slice(0, 3);
 
   return (
     <>

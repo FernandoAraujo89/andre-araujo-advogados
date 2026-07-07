@@ -2,10 +2,15 @@ import type { MetadataRoute } from "next";
 import { site } from "@/data/site";
 import { areas } from "@/data/areas";
 import { team } from "@/data/team";
-import { posts } from "@/data/posts";
+import { getAllPosts } from "@/lib/blog";
 import { servidorPages } from "@/data/servidores";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+// Reflete posts publicados via /admin; recalculado ao revalidar /sitemap.xml.
+export const revalidate = 300;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getAllPosts();
+
   const staticPaths = [
     "",
     "/o-escritorio",
@@ -34,15 +39,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
-    ...team.map((l) => ({
-      url: `${site.url}/equipe/${l.slug}`,
-      changeFrequency: "yearly" as const,
-      priority: 0.5,
-    })),
+    ...team
+      .filter((m) => m.hasProfile)
+      .map((m) => ({
+        url: `${site.url}/equipe/${m.slug}`,
+        changeFrequency: "yearly" as const,
+        priority: 0.5,
+      })),
     ...posts.map((p) => ({
       url: `${site.url}/blog/${p.slug}`,
-      lastModified: p.date,
-      changeFrequency: "yearly" as const,
+      lastModified: p.updatedAt ?? p.date,
+      changeFrequency: "monthly" as const,
       priority: 0.6,
     })),
   ];

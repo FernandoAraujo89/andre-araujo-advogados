@@ -3,7 +3,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import BlogList from "@/components/BlogList";
-import { posts } from "@/data/posts";
+import { getAllPosts } from "@/lib/blog";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -13,8 +13,12 @@ export const metadata: Metadata = pageMetadata({
   path: "/blog",
 });
 
-export default function BlogPage() {
-  const ordered = [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));
+// Rede de segurança: além da revalidação sob demanda ao publicar no /admin,
+// as páginas do blog se atualizam sozinhas a cada 5 min.
+export const revalidate = 300;
+
+export default async function BlogPage() {
+  const ordered = await getAllPosts();
   return (
     <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
       <div className="mx-auto max-w-[1240px]">

@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -48,18 +45,7 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${fraunces.variable} ${inter.variable}`}
     >
-      <body>
-        <a
-          href="#conteudo"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-sm focus:bg-ink focus:px-5 focus:py-3 focus:text-paper-light"
-        >
-          Ir para o conteúdo
-        </a>
-        <Header />
-        <main id="conteudo">{children}</main>
-        <Footer />
-        <WhatsAppFloat />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
