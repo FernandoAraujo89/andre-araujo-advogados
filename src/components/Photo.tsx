@@ -8,7 +8,9 @@ type PhotoProps = {
   className?: string;
   rounded?: string;
   sizes?: string;
-  priority?: boolean;
+  /** Pré-carrega a imagem (LCP acima da dobra) — substitui a prop
+   *  `priority`, deprecada no Next 16 */
+  preload?: boolean;
   /** Crédito do fotógrafo (Unsplash) — exibido sobre a imagem */
   credit?: string;
   creditUrl?: string;
@@ -26,7 +28,7 @@ export default function Photo({
   className = "",
   rounded = "rounded-md",
   sizes = "(max-width: 1024px) 100vw, 50vw",
-  priority = false,
+  preload = false,
   credit,
   creditUrl,
 }: PhotoProps) {
@@ -40,7 +42,7 @@ export default function Photo({
         alt={alt}
         fill
         sizes={sizes}
-        priority={priority}
+        preload={preload}
         className="object-cover"
       />
       {credit && (

@@ -54,7 +54,7 @@ export default async function LawyerPage({ params }: Props) {
                 alt={`Foto de ${lawyer.name}`}
                 ratio="1/1"
                 sizes="(max-width: 1024px) 100vw, 380px"
-                priority
+                preload
               />
             ) : (
               <PhotoPlaceholder

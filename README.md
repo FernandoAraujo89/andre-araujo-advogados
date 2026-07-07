@@ -61,8 +61,12 @@ Para trocar: coloque a foto em `public/images/` e substitua o
 `<PhotoPlaceholder ...>` por `<Image>` do `next/image` com `fill` ou
 `width/height`, mantendo a mesma proporção. Pontos com placeholder:
 
+As 12 fotos reais do escritório (migradas do site antigo em Wix) estão em
+`public/images/escritorio/` e já abastecem o hero e a galeria "O escritório,
+de perto" de `src/app/o-escritorio/page.tsx`. Pontos que ainda usam
+placeholder ou Unsplash:
+
 - Hero da home (`src/app/page.tsx`) — foto do escritório ou da equipe, 4:5
-- O Escritório (`src/app/o-escritorio/page.tsx`) — fachada/recepção, 4:3
 - Cards da equipe (`src/components/TeamCard.tsx`) — retratos padronizados 4:5
 - Perfil do advogado (`src/app/equipe/[slug]/page.tsx`) — retrato 4:5
 - Capas de posts (`src/components/PostCard.tsx`) — 16:10
@@ -114,7 +118,7 @@ Buscar por `TODO` no código lista tudo. Resumo:
 - Valores reais da barra de credibilidade: anos de atuação e casos acompanhados (`src/data/site.ts`)
 - Horário de atendimento (`src/data/site.ts`)
 - URLs exatas de Facebook, LinkedIn e YouTube
-- Fotos reais (lista na seção acima) e logotipo em SVG
+- Fotos reais da home e retratos da equipe (lista na seção acima) e logotipo em SVG
 - História do escritório (ano de fundação, marcos) em `src/app/o-escritorio/page.tsx`
 - Revisão da política de privacidade pelo escritório
 - Coordenada geográfica exata do escritório no JSON-LD (`src/lib/jsonld.ts`)

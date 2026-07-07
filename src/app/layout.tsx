@@ -41,7 +41,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${fraunces.variable} ${inter.variable}`}>
+    // data-scroll-behavior informa ao Next 16 que o smooth scroll do
+    // globals.css é intencional (evita aviso nas transições de rota)
+    <html
+      lang="pt-BR"
+      data-scroll-behavior="smooth"
+      className={`${fraunces.variable} ${inter.variable}`}
+    >
       <body>
         <a
           href="#conteudo"

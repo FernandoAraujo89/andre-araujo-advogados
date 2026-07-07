@@ -59,7 +59,7 @@ export default async function PostPage({ params }: Props) {
                   alt={post.image.alt}
                   ratio="16/9"
                   sizes="(max-width: 1024px) 100vw, 60vw"
-                  priority
+                  preload
                   credit={post.image.credit}
                   creditUrl={post.image.creditUrl}
                 />

@@ -43,7 +43,7 @@ export default function Header() {
             alt="André Araújo Advogados"
             width={575}
             height={130}
-            priority
+            preload
             unoptimized
             className="h-10 w-auto lg:h-11"
           />

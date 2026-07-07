@@ -84,7 +84,7 @@ export default function Home() {
                 src="https://images.unsplash.com/photo-1765371514777-73aaaab1c6d3?auto=format&fit=crop&w=1200&q=80"
                 alt="Interior de escritório com painéis de madeira"
                 ratio="4/5"
-                priority
+                preload
                 sizes="(max-width: 1024px) 0px, 45vw"
                 className="max-h-[calc(100svh-11rem)]"
                 credit="Foto: Caroline Badran / Unsplash"
