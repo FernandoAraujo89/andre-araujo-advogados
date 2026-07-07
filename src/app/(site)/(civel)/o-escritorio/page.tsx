@@ -196,8 +196,9 @@ export default function OEscritorioPage() {
                   Hoje, o escritório reúne 12 profissionais (advocacia,
                   controladoria jurídica, estágio e atendimento) com a atuação
                   organizada em duas vertentes: o Direito Cível e Empresarial,
-                  que abrange sete áreas, e o Direito do Servidor Público,
-                  dedicado aos servidores estaduais de Minas Gerais. O
+                  que abrange diversas áreas do direito privado, e o Direito do
+                  Servidor Público, dedicado aos servidores estaduais de Minas
+                  Gerais. O
                   crescimento veio da forma que o escritório mais valoriza: pela
                   indicação de quem já confiou seu caso a nós.
                 </p>

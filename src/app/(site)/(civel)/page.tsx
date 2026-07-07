@@ -155,8 +155,8 @@ export default async function Home() {
                 </h3>
                 <p className="mt-4 flex-1 text-[0.9375rem] leading-relaxed text-paper/85">
                   Tributário, imobiliário, condominial, empresarial, consumidor,
-                  trabalhista e recuperação de crédito para pessoas, condomínios
-                  e empresas da região.
+                  trabalhista, sucessões, família e recuperação de crédito para
+                  pessoas, condomínios e empresas da região.
                 </p>
                 <span className="mt-8 font-medium text-paper-light">
                   Conhecer a vertente
@@ -167,14 +167,14 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 5. Direito Cível e Empresarial — as sete áreas */}
+      {/* 5. Direito Cível e Empresarial — as áreas */}
       <section className="border-y border-line bg-paper-light px-5 py-24 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <SectionHeading
                 title="Direito Cível e Empresarial"
-                description="Sete áreas de atuação para resolver as questões jurídicas de pessoas, condomínios e empresas da região."
+                description={`${areas.length} áreas de atuação para resolver as questões jurídicas de pessoas, condomínios e empresas da região.`}
               />
               <Link
                 href="/areas-de-atuacao"

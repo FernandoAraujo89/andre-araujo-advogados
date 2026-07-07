@@ -267,6 +267,84 @@ export const areas: Area[] = [
       },
     ],
   },
+  {
+    slug: "direito-das-sucessoes",
+    name: "Direito das Sucessões",
+    tagline:
+      "Inventário, partilha e planejamento sucessório para organizar a transmissão do patrimônio.",
+    metaDescription:
+      "Direito das sucessões em Formiga, MG: inventário judicial e extrajudicial, partilha de bens, testamento e planejamento sucessório.",
+    intro:
+      "A transmissão do patrimônio após o falecimento segue regras próprias e prazos a observar. O escritório conduz inventários e partilhas e orienta famílias no planejamento sucessório, buscando reduzir conflitos e custos.",
+    blocks: [
+      {
+        heading: "Como o escritório atua",
+        items: [
+          "Inventário e partilha nas vias judicial e extrajudicial (em cartório)",
+          "Elaboração e cumprimento de testamentos",
+          "Planejamento sucessório para organizar a transmissão do patrimônio em vida",
+          "Defesa dos interesses de herdeiros, do cônjuge e do companheiro",
+          "Regularização de bens e sobrepartilha",
+        ],
+      },
+      {
+        heading: "Para quem é",
+        intro:
+          "Famílias e herdeiros que precisam formalizar a transmissão de bens, e pessoas que desejam planejar a sucessão do seu patrimônio de forma preventiva.",
+      },
+    ],
+    faq: [
+      {
+        question: "Todo inventário precisa ir para a Justiça?",
+        answer:
+          "Não. Havendo consenso entre herdeiros capazes e não existindo testamento, em regra o inventário pode ser feito por escritura pública em cartório, de forma mais rápida. A via adequada depende da análise do caso.",
+      },
+      {
+        question: "Existe prazo para abrir o inventário?",
+        answer:
+          "Sim. Há prazo para a abertura a partir do falecimento, e o atraso pode gerar multa sobre o imposto de transmissão. O ideal é buscar orientação assim que possível.",
+      },
+    ],
+  },
+  {
+    slug: "direito-de-familia",
+    name: "Direito de Família",
+    tagline:
+      "Divórcio, guarda, pensão e união estável conduzidos com técnica e sensibilidade.",
+    metaDescription:
+      "Direito de família em Formiga, MG: divórcio, guarda de filhos, pensão alimentícia, união estável e partilha de bens.",
+    intro:
+      "Questões de família exigem cuidado técnico e humano. O escritório atua em divórcios, guarda, alimentos e reconhecimento de união, buscando soluções que preservem os vínculos e os direitos de cada parte.",
+    blocks: [
+      {
+        heading: "Como o escritório atua",
+        items: [
+          "Divórcio consensual e litigioso, com partilha de bens",
+          "Guarda, convivência e regulamentação de visitas",
+          "Pensão alimentícia: fixação, revisão e execução",
+          "Reconhecimento e dissolução de união estável",
+          "Investigação de paternidade e demais questões filiatórias",
+        ],
+      },
+      {
+        heading: "Para quem é",
+        intro:
+          "Pessoas que enfrentam a separação, precisam definir a guarda e o sustento dos filhos ou desejam formalizar a união e organizar o patrimônio do casal.",
+      },
+    ],
+    faq: [
+      {
+        question: "Divórcio precisa de processo judicial?",
+        answer:
+          "Nem sempre. Havendo acordo e não existindo filhos menores ou incapazes, o divórcio pode ser feito por escritura em cartório. Com filhos menores ou litígio, segue pela via judicial.",
+      },
+      {
+        question: "Como é definido o valor da pensão alimentícia?",
+        answer:
+          "O valor considera a necessidade de quem recebe e a possibilidade de quem paga, dentro do princípio da proporcionalidade. Pode ser revisto quando essas condições mudam.",
+      },
+    ],
+  },
 ];
 
 export function getArea(slug: string): Area | undefined {
