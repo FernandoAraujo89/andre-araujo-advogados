@@ -6,6 +6,7 @@ import Reveal from "@/components/Reveal";
 import AreaCard from "@/components/AreaCard";
 import PostCard from "@/components/PostCard";
 import StatCounter from "@/components/StatCounter";
+import GoogleReviews from "@/components/GoogleReviews";
 import ContactForm from "@/components/ContactForm";
 import Photo from "@/components/Photo";
 import JsonLd from "@/components/JsonLd";
@@ -273,6 +274,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* 6.5 Avaliações do Google — prova social */}
+      <GoogleReviews />
 
       {/* 7. Blog — fundo em tom claro do acento (accent-mist) */}
       <section className="border-y border-line bg-accent-mist px-5 py-24 lg:px-8 lg:py-32">
