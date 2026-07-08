@@ -65,7 +65,7 @@ export default function Header() {
     <header className="fixed inset-x-0 top-0 z-50">
       {/* Linha principal — sólida para funcionar sobre os heros coloridos */}
       <div className="bg-paper/95 shadow-[0_2px_24px_rgba(22,34,44,0.06)] backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-[1240px] items-center justify-between gap-6 px-5 lg:h-20 lg:px-8">
+        <div className="mx-auto flex h-[4.5rem] max-w-[1240px] items-center justify-between gap-6 px-5 lg:h-[5.5rem] lg:px-8">
           <Link
             href="/"
             aria-label="André Araújo Advogados, ir para a página inicial"
@@ -78,7 +78,7 @@ export default function Header() {
               height={130}
               priority
               unoptimized
-              className="h-12 w-auto lg:h-14"
+              className="h-10 w-auto lg:h-12"
             />
           </Link>
 
