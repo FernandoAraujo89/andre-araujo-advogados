@@ -56,52 +56,56 @@ export default async function Home() {
     <>
       <JsonLd data={legalServiceJsonLd()} />
 
-      {/* 2. Hero — fundo forte do mundo Cível (azul-tinta), ocupa a viewport */}
-      <section className="flex min-h-svh items-center bg-ink px-5 pb-12 pt-28 lg:px-8 lg:pt-32">
-        <div className="mx-auto grid w-full max-w-[1240px] items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
-          <Reveal>
-            <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-paper-light">
-              Advocacia especializada para{" "}
-              <em className="italic text-gold">Formiga e região</em>
-            </h1>
-            <p className="mt-6 max-w-xl text-lg text-pretty text-paper/75">
-              Duas vertentes de atuação: Direito do Servidor Público e
-              Direito Cível e Empresarial, a serviço de pessoas, empresas e
-              servidores de Minas Gerais.
-            </p>
-            <div className="mt-9 flex flex-wrap gap-4">
-              <Button href={site.whatsappHref} external variant="light" size="lg">
-                Falar no WhatsApp
-              </Button>
-              <Button href="/contato" variant="ghost-light" size="lg">
-                Agendar atendimento
-              </Button>
-            </div>
-          </Reveal>
-          <Reveal delay={0.15} className="hidden lg:block">
-            <div className="relative">
-              <div
-                aria-hidden
-                className="absolute -bottom-5 -right-5 h-full w-full rounded-md bg-gold/25"
-              />
-              <Photo
-                src="/images/escritorio/fachada.jpg"
-                alt="Fachada do escritório André Araújo Advogados, com a placa e o logotipo, no centro de Formiga"
-                ratio="4/5"
-                preload
-                sizes="(max-width: 1024px) 0px, 45vw"
-                className="max-h-[calc(100svh-12rem)]"
-                objectPosition="60% center"
-              />
-            </div>
-          </Reveal>
+      {/* 2. Hero — fundo forte do mundo Cível (azul-tinta), ocupa a viewport;
+          a barra de credibilidade fica no rodapé do próprio hero */}
+      <section className="flex min-h-svh flex-col bg-ink px-5 pb-8 pt-28 lg:px-8 lg:pb-10 lg:pt-32">
+        <div className="mx-auto flex w-full max-w-[1240px] flex-1 items-center">
+          <div className="grid w-full items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+            <Reveal>
+              <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-paper-light">
+                Advocacia especializada para{" "}
+                <em className="italic text-gold">Formiga e região</em>
+              </h1>
+              <p className="mt-6 max-w-xl text-lg text-pretty text-paper/75">
+                Duas vertentes de atuação: Direito do Servidor Público e
+                Direito Cível e Empresarial, a serviço de pessoas, empresas e
+                servidores de Minas Gerais.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-4">
+                <Button href={site.whatsappHref} external variant="light" size="lg">
+                  Falar no WhatsApp
+                </Button>
+                <Button href="/contato" variant="ghost-light" size="lg">
+                  Agendar atendimento
+                </Button>
+              </div>
+            </Reveal>
+            <Reveal delay={0.15} className="hidden lg:block">
+              <div className="relative">
+                <div
+                  aria-hidden
+                  className="absolute -bottom-5 -right-5 h-full w-full rounded-md bg-gold/25"
+                />
+                <Photo
+                  src="/images/escritorio/fachada.jpg"
+                  alt="Fachada do escritório André Araújo Advogados, com a placa e o logotipo, no centro de Formiga"
+                  ratio="4/5"
+                  preload
+                  sizes="(max-width: 1024px) 0px, 45vw"
+                  className="max-h-[calc(100svh-20rem)]"
+                  objectPosition="60% center"
+                />
+              </div>
+            </Reveal>
+          </div>
         </div>
-      </section>
 
-      {/* 3. Barra de credibilidade */}
-      <section aria-label="Números do escritório" className="px-5 lg:px-8">
-        <div className="mx-auto max-w-[1240px] border-y border-line py-14">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-line lg:[&>*]:px-10 lg:[&>*:first-child]:pl-0">
+        {/* Barra de credibilidade — dentro da viewport do hero */}
+        <div
+          aria-label="Números do escritório"
+          className="mx-auto w-full max-w-[1240px] border-t border-paper/15 pt-8 lg:pt-10"
+        >
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-paper/15 lg:[&>*]:px-10 lg:[&>*:first-child]:pl-0">
             {stats.map((stat, i) => (
               <Reveal key={stat.label} delay={i * 0.08}>
                 <StatCounter
@@ -109,6 +113,7 @@ export default async function Home() {
                   display={"display" in stat ? stat.display : undefined}
                   suffix={stat.suffix}
                   label={stat.label}
+                  dark
                 />
               </Reveal>
             ))}

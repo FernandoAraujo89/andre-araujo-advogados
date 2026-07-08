@@ -10,6 +10,8 @@ type StatCounterProps = {
   display?: string;
   suffix?: string;
   label: string;
+  /** Cores claras para uso sobre fundo escuro (ex.: hero) */
+  dark?: boolean;
 };
 
 function formatNumber(n: number): string {
@@ -20,7 +22,7 @@ function formatNumber(n: number): string {
  * Número da barra de credibilidade com contagem animada ao entrar na viewport.
  * Com prefers-reduced-motion, mostra o valor final direto.
  */
-export default function StatCounter({ value, display, suffix = "", label }: StatCounterProps) {
+export default function StatCounter({ value, display, suffix = "", label, dark = false }: StatCounterProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const reduceMotion = useReducedMotion();
@@ -46,11 +48,21 @@ export default function StatCounter({ value, display, suffix = "", label }: Stat
 
   return (
     <div ref={ref}>
-      <p className="font-serif text-[clamp(2.5rem,4.5vw,3.75rem)] font-medium leading-none text-ink">
+      <p
+        className={`font-serif text-[clamp(2.5rem,4.5vw,3.75rem)] font-medium leading-none ${
+          dark ? "text-paper-light" : "text-ink"
+        }`}
+      >
         {value === null ? display : formatNumber(shown)}
-        {suffix && <span className="text-accent">{suffix}</span>}
+        {suffix && (
+          <span className={dark ? "text-gold" : "text-accent"}>{suffix}</span>
+        )}
       </p>
-      <p className="mt-3 text-[0.9375rem] text-ink-soft">{label}</p>
+      <p
+        className={`mt-3 text-[0.9375rem] ${dark ? "text-paper/70" : "text-ink-soft"}`}
+      >
+        {label}
+      </p>
     </div>
   );
 }
