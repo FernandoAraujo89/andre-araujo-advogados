@@ -7,6 +7,7 @@ import AreaCard from "@/components/AreaCard";
 import PostCard from "@/components/PostCard";
 import StatCounter from "@/components/StatCounter";
 import GoogleReviews from "@/components/GoogleReviews";
+import ParallaxBackdrop from "@/components/ParallaxBackdrop";
 import ContactForm from "@/components/ContactForm";
 import Photo from "@/components/Photo";
 import JsonLd from "@/components/JsonLd";
@@ -204,10 +205,16 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 5. Por que o André Araújo Advogados — seção escura, contraponto editorial */}
-      <section className="bg-ink px-5 py-24 lg:px-8 lg:py-32">
-        <div className="mx-auto max-w-[1240px]">
+      {/* 5. Por que o André Araújo Advogados — portal para O Escritório:
+          foto da sede em multiply escuro com parallax no scroll */}
+      <section className="relative isolate overflow-hidden bg-ink px-5 py-24 lg:px-8 lg:py-32">
+        <ParallaxBackdrop src="/images/escritorio/sala-de-reunioes.jpg" />
+
+        <div className="relative z-10 mx-auto max-w-[1240px]">
           <Reveal>
+            <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-gold">
+              O escritório
+            </p>
             <SectionHeading dark title="Advocacia de confiança, do jeito que deveria ser" />
           </Reveal>
           <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
@@ -219,17 +226,41 @@ export default async function Home() {
                 >
                   {String(i + 1).padStart(2, "0")}
                 </p>
-                <h3 className="mt-4 border-t border-paper/20 pt-4 font-serif text-xl font-medium text-paper-light">
+                <h3 className="mt-4 border-t border-paper/25 pt-4 font-serif text-xl font-medium text-paper-light">
                   {title}
                 </h3>
-                <p className="mt-3 text-[0.9375rem] text-paper/75">{text}</p>
+                <p className="mt-3 text-[0.9375rem] text-paper/80">{text}</p>
               </Reveal>
             ))}
           </div>
           <Reveal>
-            <div className="mt-14">
-              <Button href="/o-escritorio" variant="light">
-                Conheça o escritório
+            <div className="mt-16 flex flex-col items-start gap-6 border-t border-paper/15 pt-10 sm:flex-row sm:items-center sm:justify-between">
+              <p className="max-w-md text-lg text-pretty text-paper/85">
+                Conheça nossa história, a estrutura e a equipe. Veja as fotos da
+                sede, no centro de Formiga.
+              </p>
+              <Button
+                href="/o-escritorio"
+                variant="light"
+                size="lg"
+                className="shrink-0"
+              >
+                Conhecer o escritório
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3.75 9h10.5M9.75 4.5 14.25 9l-4.5 4.5"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Button>
             </div>
           </Reveal>
