@@ -65,7 +65,7 @@ export default function Header() {
     <header className="fixed inset-x-0 top-0 z-50">
       {/* Linha principal — sólida para funcionar sobre os heros coloridos */}
       <div className="bg-paper/95 shadow-[0_2px_24px_rgba(22,34,44,0.06)] backdrop-blur-md">
-        <div className="mx-auto flex h-[4.5rem] max-w-[1240px] items-center justify-between gap-6 px-5 lg:h-[5.5rem] lg:px-8">
+        <div className="mx-auto flex h-[4.5rem] max-w-[1240px] items-center justify-between gap-6 px-5 lg:h-[5.5rem] lg:max-w-[1600px] lg:px-8 xl:px-16 2xl:px-24">
           <Link
             href="/"
             aria-label="André Araújo Advogados, ir para a página inicial"
@@ -82,7 +82,7 @@ export default function Header() {
             />
           </Link>
 
-          <nav aria-label="Navegação principal" className="hidden lg:block">
+          <nav aria-label="Navegação principal" className="hidden xl:block">
             <ul className="flex items-center gap-2">
               {verticals.map((v) => {
                 const active = v.key === activeWorld;
@@ -166,7 +166,7 @@ export default function Header() {
             </ul>
           </nav>
 
-          <div className="hidden items-center gap-5 lg:flex">
+          <div className="hidden items-center gap-5 xl:flex">
             <a
               href={site.phoneHref}
               className="hidden items-center gap-2 whitespace-nowrap text-[0.9375rem] font-medium text-ink transition-colors hover:text-accent-deep 2xl:flex"
@@ -185,7 +185,7 @@ export default function Header() {
 
           <button
             type="button"
-            className="flex h-11 items-center gap-2 rounded-sm border border-ink/20 bg-paper-light px-4 text-[0.9375rem] font-medium text-ink transition-colors hover:border-accent lg:hidden"
+            className="flex h-11 items-center gap-2 rounded-sm border border-ink/20 bg-paper-light px-4 text-[0.9375rem] font-medium text-ink transition-colors hover:border-accent xl:hidden"
             aria-expanded={open}
             aria-controls="menu-mobile"
             onClick={() => setOpen((v) => !v)}
@@ -224,7 +224,7 @@ export default function Header() {
         <nav
           id="menu-mobile"
           aria-label="Navegação principal (mobile)"
-          className="border-t border-line bg-paper px-5 pb-8 pt-4 lg:hidden"
+          className="border-t border-line bg-paper px-5 pb-8 pt-4 xl:hidden"
         >
           <ul className="flex flex-col">
             {verticals.map((v) => {
