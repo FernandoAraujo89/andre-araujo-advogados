@@ -87,7 +87,10 @@ sucesso e erro. O envio é um **stub** em
 ## Redirects 301 (site antigo → novo)
 
 Fonte única do mapa: `src/lib/redirects.ts` (URLs de origem mantidas
-exatamente como no Wix, inclusive acentuadas).
+exatamente como no Wix, inclusive acentuadas). Cobre as páginas e os 65
+posts `/post/...` do blog antigo, com um curinga final `/post/*` → `/blog`.
+Depois de alterar o mapa, rode `npm run redirects:export` para regenerar os
+arquivos em `redirects/`.
 
 - **Vercel / deploy com servidor (recomendado):** já funciona — o
   `next.config.ts` aplica os redirects no build. Nada a fazer.
