@@ -1,20 +1,32 @@
 /**
  * Autenticação do painel /admin — sessão em cookie assinado (stateless).
  *
- * Implementado só com Web Crypto (HMAC-SHA256) para funcionar tanto no
- * runtime Node (rotas de API) quanto no Edge (proxy.ts). Não há banco de
- * usuários: uma única senha (ADMIN_PASSWORD) protege o painel do escritório.
+ * Implementado só com Web Crypto (HMAC-SHA256), disponível tanto nas rotas
+ * de API quanto no proxy.ts. Não há banco de usuários: uma única senha
+ * (ADMIN_PASSWORD) protege o painel do escritório.
+ *
+ * ADMIN_SESSION_SECRET é obrigatório fora do `next dev`. O repositório é
+ * público, então um segredo fixo no código permitiria a qualquer pessoa
+ * forjar o cookie e entrar no painel sem a senha. Por isso, sem a variável,
+ * nenhuma sessão é criada nem aceita (o painel fica fechado).
  */
 
 export const SESSION_COOKIE = "aa_admin";
 const SESSION_TTL_SECONDS = 60 * 60 * 12; // 12 horas
 
-function getSecret(): string {
-  return (
-    process.env.ADMIN_SESSION_SECRET ||
-    // Fallback só para dev local; em produção defina a variável.
-    "dev-secret-troque-em-producao"
-  );
+/** Segredo que assina o cookie, ou null quando falta e não é dev local. */
+function getSecret(): string | null {
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  if (secret) return secret;
+  // Fallback só para `next dev`; qualquer outro ambiente exige a variável.
+  return process.env.NODE_ENV === "development"
+    ? "dev-secret-troque-em-producao"
+    : null;
+}
+
+/** False quando ADMIN_SESSION_SECRET falta em produção (painel fechado). */
+export function isSessionConfigured(): boolean {
+  return getSecret() !== null;
 }
 
 function toBase64Url(bytes: ArrayBuffer | Uint8Array): string {
@@ -24,10 +36,10 @@ function toBase64Url(bytes: ArrayBuffer | Uint8Array): string {
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-async function hmac(message: string): Promise<string> {
+async function hmac(secret: string, message: string): Promise<string> {
   const key = await crypto.subtle.importKey(
     "raw",
-    new TextEncoder().encode(getSecret()),
+    new TextEncoder().encode(secret),
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"]
@@ -57,9 +69,15 @@ export function checkPassword(input: string): boolean {
 
 /** Cria o valor do cookie: `<expiraEm>.<assinatura>`. */
 export async function createSessionToken(): Promise<string> {
+  const secret = getSecret();
+  if (!secret) {
+    throw new Error(
+      "ADMIN_SESSION_SECRET não definido: nenhuma sessão pode ser criada."
+    );
+  }
   const exp = Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS;
   const payload = String(exp);
-  const sig = await hmac(payload);
+  const sig = await hmac(secret, payload);
   return `${payload}.${sig}`;
 }
 
@@ -67,14 +85,15 @@ export async function createSessionToken(): Promise<string> {
 export async function verifySessionToken(
   token: string | undefined | null
 ): Promise<boolean> {
-  if (!token) return false;
+  const secret = getSecret();
+  if (!secret || !token) return false;
   const dot = token.indexOf(".");
   if (dot < 0) return false;
   const payload = token.slice(0, dot);
   const sig = token.slice(dot + 1);
   const exp = Number(payload);
   if (!Number.isFinite(exp) || exp * 1000 < Date.now()) return false;
-  const expectedSig = await hmac(payload);
+  const expectedSig = await hmac(secret, payload);
   return safeEqual(sig, expectedSig);
 }
 

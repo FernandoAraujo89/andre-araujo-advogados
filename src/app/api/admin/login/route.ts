@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import {
   checkPassword,
   createSessionToken,
+  isSessionConfigured,
   SESSION_COOKIE,
   SESSION_MAX_AGE,
 } from "@/lib/auth";
@@ -16,11 +17,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Requisição inválida." }, { status: 400 });
   }
 
-  if (!process.env.ADMIN_PASSWORD) {
+  // Sem as duas variáveis o painel fica fechado; a mensagem diz qual falta.
+  const missing = [
+    !process.env.ADMIN_PASSWORD && "ADMIN_PASSWORD",
+    !isSessionConfigured() && "ADMIN_SESSION_SECRET",
+  ].filter(Boolean);
+  if (missing.length > 0) {
     return NextResponse.json(
       {
-        error:
-          "Painel não configurado: defina ADMIN_PASSWORD nas variáveis de ambiente.",
+        error: `Painel não configurado: defina ${missing.join(" e ")} nas variáveis de ambiente.`,
       },
       { status: 500 }
     );
