@@ -18,9 +18,25 @@ export default function AdminHeader() {
   return (
     <header className="border-b border-line bg-paper-light">
       <div className="mx-auto flex h-16 max-w-[1080px] items-center justify-between px-5">
-        <Link href="/admin" className="font-serif text-lg font-semibold text-ink">
-          Painel <span className="font-normal text-wine">· Conteúdo</span>
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link href="/admin" className="font-serif text-lg font-semibold text-ink">
+            Painel <span className="font-normal text-wine">· Conteúdo</span>
+          </Link>
+          <nav aria-label="Seções do painel" className="flex items-center gap-4 text-base">
+            <Link
+              href="/admin"
+              className="font-medium text-ink-soft transition-colors hover:text-wine-deep"
+            >
+              Posts
+            </Link>
+            <Link
+              href="/admin/mensagens"
+              className="font-medium text-ink-soft transition-colors hover:text-wine-deep"
+            >
+              Mensagens
+            </Link>
+          </nav>
+        </div>
         <div className="flex items-center gap-4 text-base">
           <a
             href="/"

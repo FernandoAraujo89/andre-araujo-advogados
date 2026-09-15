@@ -27,7 +27,11 @@ Nenhuma é necessária para o site público. Elas servem ao painel `/admin`:
 |---|---|
 | `ADMIN_PASSWORD` | Senha única do painel |
 | `ADMIN_SESSION_SECRET` | Assina o cookie de sessão (qualquer string longa e aleatória, ex.: `openssl rand -base64 48`) |
-| `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob, onde os posts e as imagens de capa ficam gravados |
+| `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (store público), onde ficam os posts, as imagens de capa e, na falta do token abaixo, as mensagens do formulário |
+| `CONTACT_BLOB_TOKEN` | Opcional, recomendado. Token de um segundo store Blob, **privado**, só para as mensagens do formulário (dados pessoais) |
+| `RESEND_API_KEY` | Opcional. Chave do Resend para avisar o escritório por e-mail a cada mensagem do formulário |
+| `CONTACT_EMAIL_TO` | Opcional. Destinatário do aviso (padrão: contato@andrearaujoadvogados.com.br) |
+| `CONTACT_EMAIL_FROM` | Opcional. Remetente do aviso (padrão: `André Araújo Advogados <site@andrearaujoadvogados.com.br>`); o domínio precisa estar verificado no Resend |
 
 Sem `ADMIN_PASSWORD` ou `ADMIN_SESSION_SECRET`, o painel fica fechado: o login
 responde dizendo qual variável falta e nenhuma sessão é aceita. Só no
@@ -52,18 +56,20 @@ src/
       faq/                 FAQ consolidado (schema FAQPage)
       contato/             Formulário, canais, endereço e mapa
       politica-de-privacidade/
-    admin/                 Painel do blog (login, lista, novo, editar)
-    api/admin/             Login/logout, CRUD de posts e upload de imagem
+    admin/                 Painel: login, posts (lista, novo, editar) e mensagens
+    api/admin/             Login/logout, CRUD de posts, upload e exclusão de mensagens
+    api/contato/           Recebe o formulário de contato (público)
     layout.tsx             Raiz: fontes, metadata padrão
     not-found.tsx          404 customizada
     sitemap.ts / robots.ts SEO
   components/              Header, Footer, SiteChrome, AreaCard, TeamCard,
                            PostCard, GoogleReviews, StatCounter, Reveal,
                            ParallaxBackdrop, Photo, Markdown, ContactForm...
-                           admin/: AdminHeader, PostEditor, DeletePostButton
+                           admin/: AdminHeader, PostEditor, DeletePostButton,
+                           DeleteMessageButton
   data/                    TODO O CONTEÚDO EDITÁVEL (ver abaixo)
-  lib/                     blog.ts (Blob), auth.ts, admin-guard.ts, seo.ts,
-                           jsonld.ts, redirects.ts
+  lib/                     blog.ts e contato.ts (Blob), auth.ts, admin-guard.ts,
+                           seo.ts, jsonld.ts, redirects.ts
   proxy.ts                 Barreira de autenticação do /admin
 scripts/export-redirects.mjs  Gera os arquivos de redirects/ a partir do mapa
 redirects/                 Arquivos de redirect por plataforma (gerados)
@@ -100,7 +106,7 @@ Os textos das páginas institucionais (home, O Escritório) ficam nos próprios
 
 O blog é publicado pelo escritório em `/admin` (o endereço não aparece em
 lugar nenhum do site; é digitado). A senha é `ADMIN_PASSWORD`. O painel
-lista, cria, edita e exclui posts, com corpo em Markdown, pré-visualização e
+lista as mensagens do formulário de contato e lista, cria, edita e exclui posts, com corpo em Markdown, pré-visualização e
 upload de imagem de capa (JPG, PNG, WebP ou AVIF até 8 MB).
 
 Como funciona por baixo (`src/lib/blog.ts`): a fonte de verdade em produção
@@ -124,16 +130,29 @@ quando um integrante da equipe não tem foto.
 
 ## Formulário de contato
 
-Validação client-side em português com máscara de celular, estados de
-sucesso e erro. O envio ainda é um **stub** em
-`src/components/ContactForm.tsx` (função `submitContact`): mostra
-"Mensagem enviada", mas nada é enviado. Para ativar:
+Validação client-side em português com máscara de celular, e-mail opcional,
+estados de sucesso e erro e um campo oculto anti-spam (honeypot + tempo
+mínimo de preenchimento). O envio vai para `src/app/api/contato/route.ts`,
+que:
 
-1. **API própria:** crie `src/app/api/contato/route.ts` com um `POST` que
-   encaminhe por e-mail (Resend, SES) ou para o CRM, e faça `fetch` nela em
-   `submitContact`.
-2. **Serviço externo:** aponte `submitContact` para Formspree, Getform ou
-   similar.
+1. grava a mensagem como JSON no Vercel Blob (`contato/mensagens/`, um
+   arquivo por envio; privado se houver `CONTACT_BLOB_TOKEN`, senão no store
+   público com URL aleatória, que ninguém lista sem o token) e a exibe na aba **Mensagens** do painel `/admin`,
+   com links de WhatsApp, telefone e e-mail e botão de excluir;
+2. avisa o escritório por e-mail pela API do Resend, se `RESEND_API_KEY`
+   estiver definida (sem SDK, um POST simples em `src/lib/contato.ts`).
+
+Basta um dos dois dar certo para o visitante ver "Mensagem enviada". Sem
+Blob nem Resend (dev local), a mensagem é registrada no console.
+
+Para guardar as mensagens em store privado (recomendado, são dados
+pessoais): no Vercel, Storage → Create → Blob, marque acesso **privado**, e
+defina o token dele como `CONTACT_BLOB_TOKEN` no projeto (o store principal
+continua público, porque as imagens do blog precisam de URL pública).
+
+Para ativar o aviso por e-mail: crie a conta em resend.com, verifique o
+domínio `andrearaujoadvogados.com.br` (registros DNS que o Resend indica),
+gere uma chave e defina `RESEND_API_KEY` no ambiente Production do Vercel.
 
 ## Redirects 301 (site antigo → novo)
 
@@ -194,6 +213,7 @@ Buscar por `TODO` no código lista tudo. Resumo:
 - Marcos da história do escritório em `src/app/(site)/o-escritorio/page.tsx`
 - Revisão da política de privacidade pelo escritório
 - Coordenada exata do escritório no JSON-LD (`src/lib/jsonld.ts`)
-- Integração real do formulário de contato
+- Conta no Resend e `RESEND_API_KEY` para o aviso por e-mail do formulário
+  (as mensagens já ficam no painel `/admin`)
 - Migração dos 65 posts do blog antigo (hoje têm redirect; podem ser
   republicados pelo painel `/admin`)

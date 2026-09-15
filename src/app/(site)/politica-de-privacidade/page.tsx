@@ -33,9 +33,10 @@ export default function PrivacidadePage() {
             </h2>
             <p>
               Ao utilizar o formulário de contato, você nos informa nome,
-              telefone celular, assunto e mensagem. Esses dados são fornecidos
-              voluntariamente e utilizados exclusivamente para responder ao seu
-              contato.
+              telefone celular, assunto, mensagem e, se quiser, e-mail. Esses
+              dados são fornecidos voluntariamente, ficam guardados em área
+              restrita do escritório e são utilizados exclusivamente para
+              responder ao seu contato.
             </p>
           </section>
 
