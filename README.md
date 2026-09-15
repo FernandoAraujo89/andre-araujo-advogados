@@ -195,6 +195,12 @@ entrar nas métricas nem no rastreamento de links das campanhas.
    no ambiente Production do Vercel e publique de novo. O painel
    `/admin/mensagens` deixa de mostrar o aviso de "e-mail desativado".
 
+Estado atual (setembro de 2026): configurado pelo caminho OIDC. Provedor
+`oidc.vercel.com/fernando89-projects` e role `site-andre-araujo-ses-contato`
+(só `ses:SendEmail`) na conta que hospeda a identidade; `SES_ROLE_ARN` em
+Production. A conta SES tem acesso de produção, então o passo 2 não se
+aplica. Testado: o aviso chegou em contato@andrearaujoadvogados.com.br.
+
 Alternativa sem AWS: conta no resend.com, domínio verificado lá e
 `RESEND_API_KEY`.
 
@@ -257,8 +263,5 @@ Buscar por `TODO` no código lista tudo. Resumo:
 - Marcos da história do escritório em `src/app/(site)/o-escritorio/page.tsx`
 - Revisão da política de privacidade pelo escritório
 - Coordenada exata do escritório no JSON-LD (`src/lib/jsonld.ts`)
-- Credencial do SES (usuário IAM ou role OIDC) no Vercel para o aviso por
-  e-mail do formulário, e verificar `contato@` no SES enquanto a conta estiver
-  em sandbox (as mensagens já ficam no painel `/admin`)
 - Migração dos 65 posts do blog antigo (hoje têm redirect; podem ser
   republicados pelo painel `/admin`)
