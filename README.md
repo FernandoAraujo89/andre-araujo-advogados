@@ -29,9 +29,12 @@ Nenhuma é necessária para o site público. Elas servem ao painel `/admin`:
 | `ADMIN_SESSION_SECRET` | Assina o cookie de sessão (qualquer string longa e aleatória, ex.: `openssl rand -base64 48`) |
 | `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (store público), onde ficam os posts, as imagens de capa e, na falta do token abaixo, as mensagens do formulário |
 | `CONTACT_BLOB_TOKEN` | Opcional, recomendado. Token de um segundo store Blob, **privado**, só para as mensagens do formulário (dados pessoais) |
-| `RESEND_API_KEY` | Opcional. Chave do Resend para avisar o escritório por e-mail a cada mensagem do formulário |
+| `SES_ACCESS_KEY_ID` + `SES_SECRET_ACCESS_KEY` | Aviso por e-mail pelo Amazon SES, com chaves de um usuário IAM restrito a `ses:SendEmail` (ver abaixo) |
+| `SES_ROLE_ARN` | Alternativa às chaves: ARN de uma role assumida via OIDC do Vercel, sem segredo fixo |
+| `SES_REGION` | Opcional. Região do SES (padrão `us-east-2`, onde `mail.andrearaujoadvogados.com.br` está verificado) |
+| `RESEND_API_KEY` | Alternativa ao SES: chave do Resend |
 | `CONTACT_EMAIL_TO` | Opcional. Destinatário do aviso (padrão: contato@andrearaujoadvogados.com.br) |
-| `CONTACT_EMAIL_FROM` | Opcional. Remetente do aviso (padrão: `André Araújo Advogados <site@andrearaujoadvogados.com.br>`); o domínio precisa estar verificado no Resend |
+| `CONTACT_EMAIL_FROM` | Opcional. Remetente do aviso. Padrão no SES: `André Araújo Advogados <site@mail.andrearaujoadvogados.com.br>`; precisa ser uma identidade verificada |
 
 Sem `ADMIN_PASSWORD` ou `ADMIN_SESSION_SECRET`, o painel fica fechado: o login
 responde dizendo qual variável falta e nenhuma sessão é aceita. Só no
@@ -139,20 +142,61 @@ que:
    arquivo por envio; privado se houver `CONTACT_BLOB_TOKEN`, senão no store
    público com URL aleatória, que ninguém lista sem o token) e a exibe na aba **Mensagens** do painel `/admin`,
    com links de WhatsApp, telefone e e-mail e botão de excluir;
-2. avisa o escritório por e-mail pela API do Resend, se `RESEND_API_KEY`
-   estiver definida (sem SDK, um POST simples em `src/lib/contato.ts`).
+2. avisa o escritório por e-mail, pelo Amazon SES (variáveis `SES_*`) ou,
+   na falta dele, pelo Resend (`RESEND_API_KEY`); tudo em `src/lib/contato.ts`.
 
 Basta um dos dois dar certo para o visitante ver "Mensagem enviada". Sem
-Blob nem Resend (dev local), a mensagem é registrada no console.
+Blob nem e-mail (dev local), a mensagem é registrada no console.
 
 Para guardar as mensagens em store privado (recomendado, são dados
 pessoais): no Vercel, Storage → Create → Blob, marque acesso **privado**, e
 defina o token dele como `CONTACT_BLOB_TOKEN` no projeto (o store principal
 continua público, porque as imagens do blog precisam de URL pública).
 
-Para ativar o aviso por e-mail: crie a conta em resend.com, verifique o
-domínio `andrearaujoadvogados.com.br` (registros DNS que o Resend indica),
-gere uma chave e defina `RESEND_API_KEY` no ambiente Production do Vercel.
+### Aviso por e-mail pelo Amazon SES
+
+O SES é o mesmo do sistema de campanhas do escritório (projeto
+`andre_campanhas_home`): região `us-east-2`, identidade de domínio
+`mail.andrearaujoadvogados.com.br` com DKIM verificado. O aviso sai de
+`site@mail.andrearaujoadvogados.com.br`, sem Configuration Set, para não
+entrar nas métricas nem no rastreamento de links das campanhas.
+
+1. **Credencial.** Crie um usuário IAM só para o site (ex.: `site-contato`),
+   sem acesso ao console, com a política abaixo, e gere uma chave de acesso.
+   Troque `<CONTA>` pelo ID da conta que hospeda a identidade.
+
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [{
+       "Effect": "Allow",
+       "Action": ["ses:SendEmail"],
+       "Resource": ["arn:aws:ses:us-east-2:<CONTA>:identity/*"]
+     }]
+   }
+   ```
+
+   `identity/*` em vez de só o domínio: enquanto a conta estiver em sandbox,
+   o SES também autoriza a identidade do **destinatário**, e uma política
+   restrita ao remetente falha com `AccessDenied` apontando o destinatário.
+
+   Sem chave fixa: crie no IAM um provedor OIDC para o Vercel
+   (`https://oidc.vercel.com/<time>`, audience `https://vercel.com/<time>`),
+   uma role com a mesma política e confiança nesse provedor, e defina
+   `SES_ROLE_ARN` em vez das chaves.
+
+2. **Sandbox.** Enquanto a AWS não liberar produção para a conta, o SES só
+   entrega a identidades verificadas: verifique
+   `contato@andrearaujoadvogados.com.br` como identidade de e-mail em
+   `us-east-2` (o escritório recebe um link de confirmação). Depois da
+   liberação, isso deixa de ser necessário.
+
+3. Defina `SES_ACCESS_KEY_ID` e `SES_SECRET_ACCESS_KEY` (ou `SES_ROLE_ARN`)
+   no ambiente Production do Vercel e publique de novo. O painel
+   `/admin/mensagens` deixa de mostrar o aviso de "e-mail desativado".
+
+Alternativa sem AWS: conta no resend.com, domínio verificado lá e
+`RESEND_API_KEY`.
 
 ## Redirects 301 (site antigo → novo)
 
@@ -213,7 +257,8 @@ Buscar por `TODO` no código lista tudo. Resumo:
 - Marcos da história do escritório em `src/app/(site)/o-escritorio/page.tsx`
 - Revisão da política de privacidade pelo escritório
 - Coordenada exata do escritório no JSON-LD (`src/lib/jsonld.ts`)
-- Conta no Resend e `RESEND_API_KEY` para o aviso por e-mail do formulário
-  (as mensagens já ficam no painel `/admin`)
+- Credencial do SES (usuário IAM ou role OIDC) no Vercel para o aviso por
+  e-mail do formulário, e verificar `contato@` no SES enquanto a conta estiver
+  em sandbox (as mensagens já ficam no painel `/admin`)
 - Migração dos 65 posts do blog antigo (hoje têm redirect; podem ser
   republicados pelo painel `/admin`)

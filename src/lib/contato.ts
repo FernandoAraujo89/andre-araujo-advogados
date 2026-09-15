@@ -1,5 +1,7 @@
 import "server-only";
 import { put, list, get, del } from "@vercel/blob";
+import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
+import { awsCredentialsProvider } from "@vercel/functions/oidc";
 import { site } from "@/data/site";
 
 /**
@@ -7,8 +9,8 @@ import { site } from "@/data/site";
  *
  * Cada mensagem vira um JSON no Vercel Blob (`contato/mensagens/`), um
  * arquivo por envio, para dois envios simultâneos nunca se sobrescreverem.
- * O painel /admin lista e exclui as mensagens. Se houver RESEND_API_KEY, o
- * escritório também é avisado por e-mail a cada mensagem (ver notifyByEmail).
+ * O painel /admin lista e exclui as mensagens. Com o e-mail configurado (SES
+ * ou Resend, ver notifyByEmail), o escritório também é avisado a cada mensagem.
  *
  * Onde ficam: com CONTACT_BLOB_TOKEN (um store PRIVADO só para as mensagens)
  * os arquivos são privados, o ideal para dados pessoais. Sem ele, vão para o
@@ -158,9 +160,58 @@ export async function deleteMessage(id: string): Promise<boolean> {
   return true;
 }
 
-/** True quando o aviso por e-mail está ativo (RESEND_API_KEY definida). */
+/*
+ * ---------------------------------------------------------------------------
+ * Aviso por e-mail
+ *
+ * Provedor escolhido pelas variáveis de ambiente, nesta ordem:
+ *  1. Amazon SES  — SES_ROLE_ARN (OIDC do Vercel, sem chave fixa) ou
+ *                   SES_ACCESS_KEY_ID + SES_SECRET_ACCESS_KEY; região em
+ *                   SES_REGION (padrão us-east-2, onde a identidade
+ *                   mail.andrearaujoadvogados.com.br está verificada).
+ *  2. Resend      — RESEND_API_KEY.
+ * Sem nenhum, o aviso é pulado e a mensagem fica só no painel.
+ * ---------------------------------------------------------------------------
+ */
+
+type SesConfig = {
+  region: string;
+  credentials: NonNullable<ConstructorParameters<typeof SESv2Client>[0]>["credentials"];
+};
+
+function sesConfig(): SesConfig | null {
+  const region = process.env.SES_REGION || "us-east-2";
+  if (process.env.SES_ROLE_ARN) {
+    return {
+      region,
+      credentials: awsCredentialsProvider({
+        roleArn: process.env.SES_ROLE_ARN,
+        roleSessionName: "site-contato",
+      }),
+    };
+  }
+  if (process.env.SES_ACCESS_KEY_ID && process.env.SES_SECRET_ACCESS_KEY) {
+    return {
+      region,
+      credentials: {
+        accessKeyId: process.env.SES_ACCESS_KEY_ID,
+        secretAccessKey: process.env.SES_SECRET_ACCESS_KEY,
+      },
+    };
+  }
+  return null;
+}
+
+/** Qual provedor de e-mail está configurado, se algum. */
+export function emailProvider(): "ses" | "resend" | null {
+  if (sesConfig()) return "ses";
+  if (process.env.RESEND_API_KEY) return "resend";
+  return null;
+}
+
+/** True quando o aviso por e-mail está ativo. */
 export function emailEnabled(): boolean {
-  return Boolean(process.env.RESEND_API_KEY);
+  return emailProvider() !== null;
 }
 
 function escapeHtml(s: string): string {
@@ -171,60 +222,109 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-/**
- * Avisa o escritório por e-mail via API do Resend (sem SDK: um POST simples).
- * Remetente e destinatário vêm de CONTACT_EMAIL_FROM / CONTACT_EMAIL_TO; o
- * domínio do remetente precisa estar verificado no Resend. "skipped" quando
- * não há chave.
- */
-export async function notifyByEmail(
-  input: ContactInput
-): Promise<"sent" | "skipped" | "failed"> {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return "skipped";
+/** Conteúdo do aviso, igual para os dois provedores. */
+function buildEmail(input: ContactInput, from: string) {
   const to = process.env.CONTACT_EMAIL_TO || site.email;
-  const from =
-    process.env.CONTACT_EMAIL_FROM ||
-    `${site.name} <site@andrearaujoadvogados.com.br>`;
-
-  const linhas = [
+  const text = [
     `Nome: ${input.nome}`,
     `Celular: ${input.celular}`,
     `E-mail: ${input.email || "(não informado)"}`,
     `Assunto: ${input.assunto}`,
     "",
     input.mensagem,
-  ];
+  ].join("\n");
   const html = `<p><strong>Nome:</strong> ${escapeHtml(input.nome)}<br>
 <strong>Celular:</strong> ${escapeHtml(input.celular)}<br>
 <strong>E-mail:</strong> ${escapeHtml(input.email || "(não informado)")}<br>
 <strong>Assunto:</strong> ${escapeHtml(input.assunto)}</p>
 <p style="white-space:pre-wrap">${escapeHtml(input.mensagem)}</p>
 <p style="color:#666">Mensagem enviada pelo formulário do site. As mensagens também ficam no painel: ${site.url}/admin/mensagens</p>`;
+  return {
+    from,
+    to,
+    replyTo: input.email,
+    subject: `Contato pelo site: ${input.assunto} (${input.nome})`,
+    text,
+    html,
+  };
+}
 
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
+let sesClient: SESv2Client | undefined;
+
+/**
+ * Amazon SES v2. Sem ConfigurationSet de propósito: o do sistema de campanhas
+ * rastreia aberturas e cliques e reescreve links, e este aviso é transacional.
+ */
+async function sendViaSes(input: ContactInput, cfg: SesConfig): Promise<void> {
+  sesClient ??= new SESv2Client({
+    region: cfg.region,
+    credentials: cfg.credentials,
+  });
+  const m = buildEmail(
+    input,
+    process.env.CONTACT_EMAIL_FROM ||
+      `${site.name} <site@mail.andrearaujoadvogados.com.br>`
+  );
+  await sesClient.send(
+    new SendEmailCommand({
+      FromEmailAddress: m.from,
+      Destination: { ToAddresses: [m.to] },
+      ...(m.replyTo ? { ReplyToAddresses: [m.replyTo] } : {}),
+      Content: {
+        Simple: {
+          Subject: { Data: m.subject, Charset: "UTF-8" },
+          Body: {
+            Text: { Data: m.text, Charset: "UTF-8" },
+            Html: { Data: m.html, Charset: "UTF-8" },
+          },
+        },
       },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        ...(input.email ? { reply_to: input.email } : {}),
-        subject: `Contato pelo site: ${input.assunto} (${input.nome})`,
-        text: linhas.join("\n"),
-        html,
-      }),
-    });
-    if (!res.ok) {
-      console.error("Resend respondeu", res.status, await res.text());
-      return "failed";
-    }
+    })
+  );
+}
+
+/** Resend, pela API HTTP (sem SDK). O domínio do remetente precisa estar verificado lá. */
+async function sendViaResend(input: ContactInput, key: string): Promise<void> {
+  const m = buildEmail(
+    input,
+    process.env.CONTACT_EMAIL_FROM ||
+      `${site.name} <site@andrearaujoadvogados.com.br>`
+  );
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: m.from,
+      to: [m.to],
+      ...(m.replyTo ? { reply_to: m.replyTo } : {}),
+      subject: m.subject,
+      text: m.text,
+      html: m.html,
+    }),
+  });
+  if (!res.ok) {
+    throw new Error(`Resend respondeu ${res.status}: ${await res.text()}`);
+  }
+}
+
+/** Avisa o escritório por e-mail. "skipped" quando nenhum provedor está configurado. */
+export async function notifyByEmail(
+  input: ContactInput
+): Promise<"sent" | "skipped" | "failed"> {
+  const ses = sesConfig();
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!ses && !resendKey) return "skipped";
+  try {
+    if (ses) await sendViaSes(input, ses);
+    else await sendViaResend(input, resendKey!);
     return "sent";
   } catch (err) {
-    console.error("Falha ao enviar e-mail pelo Resend:", err);
+    const name = err instanceof Error ? err.name : "Erro";
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error(`Falha ao enviar o aviso por e-mail (${ses ? "SES" : "Resend"}): ${name}: ${detail}`);
     return "failed";
   }
 }

@@ -58,8 +58,8 @@ export default async function MensagensPage() {
       {blobConfigured && !emailEnabled() && (
         <p className="mt-6 rounded-md border border-line bg-paper-light px-5 py-4 text-base text-ink-soft">
           Aviso por e-mail desativado: as mensagens só aparecem aqui. Para
-          receber cada uma por e-mail, defina RESEND_API_KEY no Vercel (ver
-          README).
+          receber cada uma por e-mail, configure o Amazon SES (variáveis SES_*)
+          ou o Resend no Vercel (ver README).
         </p>
       )}
 
