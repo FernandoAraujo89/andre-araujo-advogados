@@ -97,6 +97,7 @@ Todo o conteúdo vive em `src/data/`; nenhum texto exige mexer em componente:
 | `site.ts` | Nome, telefones, e-mail, endereço (só aparece no Contato), redes sociais, horário, menu e barra de credibilidade da home |
 | `atuacao.ts` | Ordem e lista das 10 áreas de atuação exibidas ao cliente |
 | `areas.ts` | As 9 áreas cíveis (texto, listas, FAQ de cada área) |
+| `area-images.ts` | Foto de cada área exibida no card (slug → arquivo em `public/images/areas/`) |
 | `servidores.ts` | Hub e as 4 subpáginas do Direito do Servidor Público |
 | `team.ts` | Os 12 integrantes da equipe (nome, função, foto; OAB, bio e perfil só para advogados) |
 | `reviews.ts` | Nota, quantidade e avaliações do Google exibidas na home |
@@ -165,6 +166,13 @@ retratos quadrados da equipe em `public/equipe/<slug>.jpg`. O componente
 `Photo` (next/image com proporção fixa, CLS zero) é o padrão; as capas dos
 posts semente vêm do Unsplash, com crédito. `PhotoPlaceholder` só entra
 quando um integrante da equipe não tem foto.
+
+Cada uma das 10 áreas tem uma foto própria em `public/images/areas/<slug>.webp`
+(1200x800, imagens autorais geradas para o site: cena silenciosa de objetos e
+ambientes, luz natural quente, sem pessoas nem texto). No card elas aparecem em
+monocromático quente e só ganham cor no hover — o mapa slug → arquivo está em
+`src/data/area-images.ts`, e área sem entrada ali (landing page do /admin) fica
+com o card sem foto.
 
 ## Tipografia
 

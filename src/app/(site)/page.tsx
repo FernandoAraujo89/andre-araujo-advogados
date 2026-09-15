@@ -153,7 +153,11 @@ export default async function Home() {
                   i === areasDeAtuacao.length - 1 ? "lg:col-span-3" : ""
                 }`}
               >
-                <AreaCard area={area} index={i + 1} />
+                <AreaCard
+                  area={area}
+                  index={i + 1}
+                  wide={i === areasDeAtuacao.length - 1}
+                />
               </Reveal>
             ))}
           </div>

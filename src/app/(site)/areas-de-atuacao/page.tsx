@@ -36,7 +36,11 @@ export default async function AreasPage() {
               delay={(i % 3) * 0.08}
               className={`h-full ${i === last && lista.length % 3 === 1 ? "lg:col-span-3" : ""}`}
             >
-              <AreaCard area={area} index={i + 1} />
+              <AreaCard
+                area={area}
+                index={i + 1}
+                wide={i === last && lista.length % 3 === 1}
+              />
             </Reveal>
           ))}
         </div>
