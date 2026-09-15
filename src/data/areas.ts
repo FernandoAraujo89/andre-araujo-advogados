@@ -30,9 +30,9 @@ export const areas: Area[] = [
     tagline:
       "Orientação sobre tributos para empresas e pessoas físicas, do planejamento à defesa.",
     metaDescription:
-      "Atuação em direito tributário em Formiga, MG: planejamento, defesas administrativas e judiciais e recuperação de tributos.",
+      "Atuação em direito tributário em todo o Brasil: planejamento, defesas administrativas e judiciais e recuperação de tributos.",
     intro:
-      "A carga tributária brasileira é complexa e muda com frequência. O escritório orienta empresas e pessoas físicas de Formiga e região a compreender suas obrigações, evitar autuações e discutir cobranças indevidas.",
+      "A carga tributária brasileira é complexa e muda com frequência. O escritório orienta empresas e pessoas físicas a compreender suas obrigações, evitar autuações e discutir cobranças indevidas.",
     blocks: [
       {
         heading: "Como o escritório atua",
@@ -69,7 +69,7 @@ export const areas: Area[] = [
     tagline:
       "Assessoria a condomínios, síndicos e condôminos em cobranças, assembleias e convenções.",
     metaDescription:
-      "Assessoria em direito condominial em Formiga, MG: cobrança de taxas, assembleias, convenções e conflitos entre condôminos.",
+      "Assessoria em direito condominial em todo o Brasil: cobrança de taxas, assembleias, convenções e conflitos entre condôminos.",
     intro:
       "Condomínios reúnem interesses diversos e exigem regras claras. O escritório assessora síndicos, administradoras e condôminos na prevenção e na solução de conflitos condominiais.",
     blocks: [
@@ -86,7 +86,7 @@ export const areas: Area[] = [
       {
         heading: "Para quem é",
         intro:
-          "Síndicos, administradoras de condomínio e condôminos de edifícios residenciais e comerciais de Formiga e região.",
+          "Síndicos, administradoras de condomínio e condôminos de edifícios residenciais e comerciais.",
       },
     ],
     faq: [
@@ -103,9 +103,9 @@ export const areas: Area[] = [
     tagline:
       "Defesa dos seus direitos em compras, serviços, planos, bancos e cobranças indevidas.",
     metaDescription:
-      "Atuação em direito do consumidor em Formiga, MG: cobranças indevidas, negativação, vícios de produtos e serviços e contratos bancários.",
+      "Atuação em direito do consumidor em todo o Brasil: cobranças indevidas, negativação, vícios de produtos e serviços e contratos bancários.",
     intro:
-      "Relações de consumo fazem parte do dia a dia, e nem sempre fornecedores cumprem o que prometem. O escritório orienta consumidores de Formiga e região na defesa dos direitos previstos no Código de Defesa do Consumidor.",
+      "Relações de consumo fazem parte do dia a dia, e nem sempre fornecedores cumprem o que prometem. O escritório orienta consumidores na defesa dos direitos previstos no Código de Defesa do Consumidor.",
     blocks: [
       {
         heading: "Como o escritório atua",
@@ -137,7 +137,7 @@ export const areas: Area[] = [
     tagline:
       "Segurança jurídica na compra, venda, locação e regularização de imóveis.",
     metaDescription:
-      "Atuação em direito imobiliário em Formiga, MG: compra e venda, locação, usucapião, regularização e desapropriação.",
+      "Atuação em direito imobiliário em todo o Brasil: compra e venda, locação, usucapião, regularização e desapropriação.",
     intro:
       "O imóvel costuma ser o bem mais valioso de uma família ou empresa. O escritório acompanha negociações e resolve pendências para que cada operação imobiliária tenha segurança jurídica.",
     blocks: [
@@ -154,7 +154,7 @@ export const areas: Area[] = [
       {
         heading: "Para quem é",
         intro:
-          "Proprietários, compradores, locadores, locatários, construtoras e investidores de Formiga e região.",
+          "Proprietários, compradores, locadores, locatários, construtoras e investidores.",
       },
     ],
     faq: [
@@ -171,9 +171,9 @@ export const areas: Area[] = [
     tagline:
       "Suporte jurídico para a rotina e as decisões estratégicas da sua empresa.",
     metaDescription:
-      "Atuação em direito empresarial em Formiga, MG: contratos, sociedades, assessoria preventiva e contencioso empresarial.",
+      "Atuação em direito empresarial em todo o Brasil: contratos, sociedades, assessoria preventiva e contencioso empresarial.",
     intro:
-      "Pequenas e médias empresas precisam de suporte jurídico acessível, que acompanhe o negócio de perto. O escritório atua de forma preventiva e contenciosa ao lado de empresários de Formiga e região.",
+      "Pequenas e médias empresas precisam de suporte jurídico acessível, que acompanhe o negócio de perto. O escritório atua de forma preventiva e contenciosa ao lado de empresários de todo o Brasil.",
     blocks: [
       {
         heading: "Como o escritório atua",
@@ -205,7 +205,7 @@ export const areas: Area[] = [
     tagline:
       "Atuação para empregadores e trabalhadores em demandas e rotinas trabalhistas.",
     metaDescription:
-      "Atuação em direito trabalhista em Formiga, MG: defesa de empregadores, orientação a trabalhadores e rotinas trabalhistas.",
+      "Atuação em direito trabalhista em todo o Brasil: defesa de empregadores, orientação a trabalhadores e rotinas trabalhistas.",
     intro:
       "As relações de trabalho pedem equilíbrio entre a proteção do trabalhador e a segurança do empregador. O escritório atua nos dois lados da relação, sempre com orientação clara e realista.",
     blocks: [
@@ -239,7 +239,7 @@ export const areas: Area[] = [
     tagline:
       "Cobrança estratégica para transformar dívidas em recebimentos, com respeito ao devedor.",
     metaDescription:
-      "Recuperação de crédito em Formiga, MG: cobrança extrajudicial e judicial, execução de títulos e negociação de dívidas.",
+      "Recuperação de crédito em todo o Brasil: cobrança extrajudicial e judicial, execução de títulos e negociação de dívidas.",
     intro:
       "Inadimplência compromete o caixa de qualquer negócio. O escritório estrutura a cobrança de forma profissional, priorizando a negociação e recorrendo ao Judiciário quando necessário.",
     blocks: [
@@ -256,7 +256,7 @@ export const areas: Area[] = [
       {
         heading: "Para quem é",
         intro:
-          "Empresas, comércios, prestadores de serviço, condomínios e pessoas físicas com valores a receber em Formiga e região.",
+          "Empresas, comércios, prestadores de serviço, condomínios e pessoas físicas com valores a receber.",
       },
     ],
     faq: [
@@ -273,7 +273,7 @@ export const areas: Area[] = [
     tagline:
       "Inventário, partilha e planejamento sucessório para organizar a transmissão do patrimônio.",
     metaDescription:
-      "Direito das sucessões em Formiga, MG: inventário judicial e extrajudicial, partilha de bens, testamento e planejamento sucessório.",
+      "Direito das sucessões em todo o Brasil: inventário judicial e extrajudicial, partilha de bens, testamento e planejamento sucessório.",
     intro:
       "A transmissão do patrimônio após o falecimento segue regras próprias e prazos a observar. O escritório conduz inventários e partilhas e orienta famílias no planejamento sucessório, buscando reduzir conflitos e custos.",
     blocks: [
@@ -312,7 +312,7 @@ export const areas: Area[] = [
     tagline:
       "Divórcio, guarda, pensão e união estável conduzidos com técnica e sensibilidade.",
     metaDescription:
-      "Direito de família em Formiga, MG: divórcio, guarda de filhos, pensão alimentícia, união estável e partilha de bens.",
+      "Direito de família em todo o Brasil: divórcio, guarda de filhos, pensão alimentícia, união estável e partilha de bens.",
     intro:
       "Questões de família exigem cuidado técnico e humano. O escritório atua em divórcios, guarda, alimentos e reconhecimento de união, buscando soluções que preservem os vínculos e os direitos de cada parte.",
     blocks: [

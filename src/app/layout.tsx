@@ -20,7 +20,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "André Araújo Advogados | Advocacia em Formiga, MG",
+    default: "André Araújo Advogados | Advocacia em todo o Brasil",
     template: "%s | André Araújo Advogados",
   },
   description: site.description,

@@ -28,7 +28,7 @@ export function legalServiceJsonLd() {
       latitude: -20.4645,
       longitude: -45.4265,
     },
-    areaServed: "Formiga e região centro-oeste de Minas Gerais",
+    areaServed: { "@type": "Country", name: "Brasil" },
     sameAs: [
       site.social.facebook,
       site.social.instagram,

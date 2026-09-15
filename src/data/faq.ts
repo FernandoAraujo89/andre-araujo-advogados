@@ -19,9 +19,9 @@ const atendimento: AreaFaq[] = [
       "Você pode falar com o escritório pelo WhatsApp (37) 99860-7180, ligar para (37) 3322-5265 ou enviar o formulário da página de contato. Retornaremos para agendar o melhor horário.",
   },
   {
-    question: "O escritório atende apenas em Formiga?",
+    question: "O escritório atende clientes de outras cidades e estados?",
     answer:
-      "O escritório fica em Formiga, MG, e atende clientes de toda a região centro-oeste de Minas Gerais. Em muitos casos, o atendimento pode ser feito também de forma remota.",
+      "Sim. O escritório atende em todo o Brasil. As reuniões podem ser presenciais, na sede, ou remotas, por videochamada e WhatsApp, e o acompanhamento do caso é o mesmo nos dois formatos.",
   },
   {
     question: "A primeira conversa tem custo?",

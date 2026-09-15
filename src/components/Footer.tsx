@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { site, navMain, navSecondary } from "@/data/site";
-import { servidorPages } from "@/data/servidores";
+import { areasDeAtuacao } from "@/data/atuacao";
 import SocialLinks from "@/components/SocialLinks";
 
 export default function Footer() {
@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <footer className="bg-ink text-paper/80">
       <div className="mx-auto max-w-[1240px] px-5 py-20 lg:px-8 lg:py-24">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1fr_1fr]">
           <div>
             <Image
               src="/logo-horizontal.png"
@@ -22,8 +22,8 @@ export default function Footer() {
               className="h-16 w-auto"
             />
             <p className="mt-4 max-w-xs text-[0.9375rem] leading-relaxed">
-              Advocacia em Formiga, MG, com atendimento próximo a empresas e
-              famílias de toda a região.
+              Advocacia para pessoas, empresas e servidores públicos, com
+              atendimento presencial ou remoto em todo o Brasil.
             </p>
             <SocialLinks className="mt-6" />
           </div>
@@ -41,16 +41,13 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <nav aria-label="Links para servidores públicos">
-            <h2 className="text-[0.9375rem] font-medium text-gold">Direito do Servidor Público</h2>
+          <nav aria-label="Áreas de atuação">
+            <h2 className="text-[0.9375rem] font-medium text-gold">Áreas de Atuação</h2>
             <ul className="mt-5 space-y-3 text-[0.9375rem]">
-              {servidorPages.map((p) => (
-                <li key={p.slug}>
-                  <Link
-                    href={`/servidores-publicos/${p.slug}`}
-                    className="transition-colors hover:text-paper-light"
-                  >
-                    {p.name}
+              {areasDeAtuacao.map((a) => (
+                <li key={a.href}>
+                  <Link href={a.href} className="transition-colors hover:text-paper-light">
+                    {a.name}
                   </Link>
                 </li>
               ))}
@@ -61,15 +58,18 @@ export default function Footer() {
             <h2 className="text-[0.9375rem] font-medium text-gold">Contato</h2>
             <ul className="mt-5 space-y-4 text-[0.9375rem]">
               <li>
-                <span>
-                  {site.address.street}, {site.address.neighborhood}
-                  <br />
-                  {site.address.city}, {site.address.state}, CEP {site.address.zip}
-                </span>
-              </li>
-              <li>
                 <a href={site.phoneHref} className="transition-colors hover:text-paper-light">
                   {site.phone}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={site.whatsappHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-paper-light"
+                >
+                  WhatsApp {site.whatsapp}
                 </a>
               </li>
               <li>
@@ -80,6 +80,11 @@ export default function Footer() {
                   {emailLocal}@<wbr />
                   {emailDomain}
                 </a>
+              </li>
+              <li>
+                <Link href="/contato" className="transition-colors hover:text-paper-light">
+                  Endereço e mapa da sede
+                </Link>
               </li>
             </ul>
           </div>

@@ -35,7 +35,7 @@ export const team: TeamMember[] = [
     photo: "/equipe/jade-de-souza-rodrigues.jpg",
     oab: "OAB/MG", // TODO: confirmar número de inscrição
     // TODO: substituir pela bio real fornecida pelo escritório
-    bio: "Advogada do André Araújo Advogados, atua no atendimento aos clientes do escritório em Formiga e região.",
+    bio: "Advogada do André Araújo Advogados, atua no atendimento aos clientes do escritório em todo o Brasil.",
     hasProfile: true,
   },
   {
@@ -45,7 +45,7 @@ export const team: TeamMember[] = [
     photo: "/equipe/debora-silvino-dos-santos.jpg",
     oab: "OAB/MG", // TODO: confirmar número de inscrição
     // TODO: substituir pela bio real fornecida pelo escritório
-    bio: "Advogada do André Araújo Advogados, atua no atendimento aos clientes do escritório em Formiga e região.",
+    bio: "Advogada do André Araújo Advogados, atua no atendimento aos clientes do escritório em todo o Brasil.",
     hasProfile: true,
   },
   {

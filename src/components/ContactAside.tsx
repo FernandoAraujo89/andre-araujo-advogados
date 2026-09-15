@@ -11,8 +11,7 @@ export default function ContactAside() {
           Converse com o escritório
         </h2>
         <p className="mt-3 text-[0.9375rem] leading-relaxed">
-          Explique sua situação e entenda os caminhos possíveis. Atendimento em
-          Formiga e região.
+          Explique sua situação e entenda os caminhos possíveis. Atendimento presencial ou remoto, em todo o Brasil.
         </p>
         <div className="mt-6 flex flex-col gap-3">
           <a

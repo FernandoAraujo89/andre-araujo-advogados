@@ -1,15 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useInView, useReducedMotion } from "framer-motion";
 
 type StatCounterProps = {
-  /** Valor numérico a animar; null para itens textuais (ex.: "Formiga") */
+  /** Valor numérico a animar; null para itens textuais (ex.: "Brasil") */
   value: number | null;
   /** Texto exibido quando value é null */
   display?: string;
   suffix?: string;
   label: string;
+  /** Link opcional abaixo do rótulo (ex.: "Conheça a equipe") */
+  href?: string;
+  linkLabel?: string;
   /** Cores claras para uso sobre fundo escuro (ex.: hero) */
   dark?: boolean;
 };
@@ -22,7 +26,15 @@ function formatNumber(n: number): string {
  * Número da barra de credibilidade com contagem animada ao entrar na viewport.
  * Com prefers-reduced-motion, mostra o valor final direto.
  */
-export default function StatCounter({ value, display, suffix = "", label, dark = false }: StatCounterProps) {
+export default function StatCounter({
+  value,
+  display,
+  suffix = "",
+  label,
+  href,
+  linkLabel,
+  dark = false,
+}: StatCounterProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const reduceMotion = useReducedMotion();
@@ -63,6 +75,18 @@ export default function StatCounter({ value, display, suffix = "", label, dark =
       >
         {label}
       </p>
+      {href && linkLabel && (
+        <Link
+          href={href}
+          className={`mt-2 inline-block text-[0.9375rem] font-medium underline decoration-current/40 underline-offset-4 transition-colors ${
+            dark
+              ? "text-gold hover:text-paper-light"
+              : "text-accent-deep hover:text-accent"
+          }`}
+        >
+          {linkLabel}
+        </Link>
+      )}
     </div>
   );
 }

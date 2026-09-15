@@ -1,88 +1,139 @@
 # André Araújo Advogados — Site institucional
 
-Novo site do escritório André Araújo Advogados (Formiga, MG), substituindo o
-site em Wix. Visual editorial premium (referência: cadmus.io) adaptado ao
-universo jurídico, com sobriedade conforme o Provimento 205/2021 da OAB.
+Site do escritório André Araújo Advogados (sede em Formiga, MG, atendimento
+em todo o Brasil), que substitui o site antigo em Wix. Visual editorial
+(referência: cadmus.io) adaptado ao universo jurídico, com a sobriedade que o
+Provimento 205/2021 da OAB exige.
 
-**Stack:** Next.js 16 (App Router) · Tailwind CSS 4 · Framer Motion · lucide-react · TypeScript
+**Stack:** Next.js 16 (App Router, Turbopack) · React 19 · Tailwind CSS 4 ·
+Framer Motion · lucide-react · react-markdown · Vercel Blob · TypeScript
 
 ## Como rodar
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # build de produção
-npm start        # serve o build
+npm run dev              # http://localhost:3000
+npm run build            # build de produção
+npm start                # serve o build
+npm run lint             # ESLint
+npm run redirects:export # regenera redirects/ a partir de src/lib/redirects.ts
 ```
+
+### Variáveis de ambiente
+
+Nenhuma é necessária para o site público. Elas servem ao painel `/admin`:
+
+| Variável | Para quê |
+|---|---|
+| `ADMIN_PASSWORD` | Senha única do painel |
+| `ADMIN_SESSION_SECRET` | Assina o cookie de sessão (qualquer string longa e aleatória, ex.: `openssl rand -base64 48`) |
+| `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob, onde os posts e as imagens de capa ficam gravados |
+
+Sem `ADMIN_PASSWORD` ou `ADMIN_SESSION_SECRET`, o painel fica fechado: o login
+responde dizendo qual variável falta e nenhuma sessão é aceita. Só no
+`next dev` existe um segredo de fallback. Sem `BLOB_READ_WRITE_TOKEN`, o blog
+usa a semente de `src/data/posts.ts` e o painel entra em modo demonstração
+(nada é salvo). Localmente, coloque as variáveis num `.env.local` (ignorado
+pelo git).
 
 ## Estrutura de pastas
 
 ```
 src/
-  app/                       Rotas (App Router)
-    page.tsx                 Home
-    o-escritorio/            História, missão e valores
-    areas-de-atuacao/        Índice + [slug] das 7 áreas
-    equipe/                  Grid + [slug] dos 13 advogados
-    blog/                    Listagem com filtro + [slug] dos posts
-    servidores-publicos/     Hub + [slug] das 4 subpáginas de nicho
-    faq/                     FAQ consolidado (schema FAQPage)
-    contato/                 Formulário, canais e mapa
-    politica-de-privacidade/
-    not-found.tsx            404 customizada
-    sitemap.ts / robots.ts   SEO
-  components/                Header, Footer, Breadcrumbs, Button,
-                             SectionHeading, AreaCard, TeamCard, PostCard,
-                             FaqAccordion, WhatsAppFloat, ContactForm,
-                             StatCounter, Reveal, PhotoPlaceholder...
-  data/                      TODO O CONTEÚDO EDITÁVEL (ver abaixo)
-  lib/                       seo.ts, jsonld.ts, redirects.ts
-redirects/                   Arquivos de redirect por plataforma
+  app/
+    (site)/                Páginas públicas, todas com o mesmo chrome
+      layout.tsx           Header + rodapé + botão do WhatsApp (SiteChrome)
+      page.tsx             Home
+      areas-de-atuacao/    Índice das áreas + [slug] das 9 áreas cíveis
+      servidores-publicos/ Hub do Direito do Servidor Público + [slug] das 4 subpáginas
+      o-escritorio/        História, missão, valores e galeria de fotos
+      equipe/              Grid + [slug] dos advogados com perfil
+      blog/                Listagem com filtro + [slug] dos posts (dinâmicos)
+      faq/                 FAQ consolidado (schema FAQPage)
+      contato/             Formulário, canais, endereço e mapa
+      politica-de-privacidade/
+    admin/                 Painel do blog (login, lista, novo, editar)
+    api/admin/             Login/logout, CRUD de posts e upload de imagem
+    layout.tsx             Raiz: fontes, metadata padrão
+    not-found.tsx          404 customizada
+    sitemap.ts / robots.ts SEO
+  components/              Header, Footer, SiteChrome, AreaCard, TeamCard,
+                           PostCard, GoogleReviews, StatCounter, Reveal,
+                           ParallaxBackdrop, Photo, Markdown, ContactForm...
+                           admin/: AdminHeader, PostEditor, DeletePostButton
+  data/                    TODO O CONTEÚDO EDITÁVEL (ver abaixo)
+  lib/                     blog.ts (Blob), auth.ts, admin-guard.ts, seo.ts,
+                           jsonld.ts, redirects.ts
+  proxy.ts                 Barreira de autenticação do /admin
+scripts/export-redirects.mjs  Gera os arquivos de redirects/ a partir do mapa
+redirects/                 Arquivos de redirect por plataforma (gerados)
 ```
+
+## Navegação e áreas de atuação
+
+O site tem um menu único, no padrão dos escritórios de advocacia: **Áreas de
+Atuação** (submenu com todas as áreas), O Escritório, Equipe, Publicações e
+Contato. A lista de áreas que o cliente vê está em `src/data/atuacao.ts`: as
+9 áreas de `areas.ts` mais o Direito do Servidor Público, que tem hub e
+subpáginas próprias em `/servidores-publicos`. Home, menu, rodapé e o índice
+de áreas leem dessa lista.
 
 ## Onde trocar textos
 
-Todo o conteúdo vive em `src/data/` — nenhum texto exige mexer em componente:
+Todo o conteúdo vive em `src/data/`; nenhum texto exige mexer em componente:
 
 | Arquivo | Conteúdo |
 |---|---|
-| `site.ts` | Nome, telefones, e-mail, endereço, redes sociais, horário, números da barra de credibilidade |
-| `areas.ts` | As 7 áreas de atuação (texto, listas, FAQ de cada área) |
-| `team.ts` | Os 13 advogados (nome, OAB, bio, áreas) |
-| `posts.ts` | Posts do blog — para migrar os 65 posts do site antigo, adicione objetos `Post` ao array |
-| `servidores.ts` | Hub e as 4 páginas de servidores públicos |
+| `site.ts` | Nome, telefones, e-mail, endereço (só aparece no Contato), redes sociais, horário, menu e barra de credibilidade da home |
+| `atuacao.ts` | Ordem e lista das 10 áreas de atuação exibidas ao cliente |
+| `areas.ts` | As 9 áreas cíveis (texto, listas, FAQ de cada área) |
+| `servidores.ts` | Hub e as 4 subpáginas do Direito do Servidor Público |
+| `team.ts` | Os 12 integrantes da equipe (nome, função, foto; OAB, bio e perfil só para advogados) |
+| `reviews.ts` | Nota, quantidade e avaliações do Google exibidas na home |
+| `posts.ts` | Tipos, categorias e a semente de 6 posts (o blog em produção vem do Blob, ver abaixo) |
 | `faq.ts` | Perguntas gerais de atendimento (as demais vêm de areas/servidores) |
 
-## Onde trocar fotos
+Os textos das páginas institucionais (home, O Escritório) ficam nos próprios
+`page.tsx`, em constantes no topo do arquivo.
 
-Enquanto não há fotos reais, o componente `PhotoPlaceholder` reserva o espaço
-com a proporção correta (CLS zero) e uma etiqueta dizendo qual foto entra ali.
-Para trocar: coloque a foto em `public/images/` e substitua o
-`<PhotoPlaceholder ...>` por `<Image>` do `next/image` com `fill` ou
-`width/height`, mantendo a mesma proporção. Pontos com placeholder:
+## Blog e painel /admin
 
-As 12 fotos reais do escritório (migradas do site antigo em Wix) estão em
-`public/images/escritorio/` e já abastecem o hero e a galeria "O escritório,
-de perto" de `src/app/o-escritorio/page.tsx`. Pontos que ainda usam
-placeholder ou Unsplash:
+O blog é publicado pelo escritório em `/admin` (o endereço não aparece em
+lugar nenhum do site; é digitado). A senha é `ADMIN_PASSWORD`. O painel
+lista, cria, edita e exclui posts, com corpo em Markdown, pré-visualização e
+upload de imagem de capa (JPG, PNG, WebP ou AVIF até 8 MB).
 
-- Hero da home (`src/app/page.tsx`) — foto do escritório ou da equipe, 4:5
-- Cards da equipe (`src/components/TeamCard.tsx`) — retratos padronizados 4:5
-- Perfil do advogado (`src/app/equipe/[slug]/page.tsx`) — retrato 4:5
-- Capas de posts (`src/components/PostCard.tsx`) — 16:10
-- Logotipo real no Header e no Footer (hoje é um wordmark tipográfico)
+Como funciona por baixo (`src/lib/blog.ts`): a fonte de verdade em produção
+é um único JSON no Vercel Blob (`blog/posts.json`). Quando o Blob está vazio
+ou sem token, entra a semente de `src/data/posts.ts`; a primeira gravação
+migra a semente para o Blob. As páginas do blog, a home e o sitemap leem o
+Blob a cada requisição, então publicar reflete na hora.
+
+Segurança: sessão em cookie assinado (HMAC, 12 horas), checada no
+`proxy.ts` e de novo em cada rota e página do painel. O login não limita
+tentativas; a senha deve ser longa.
+
+## Fotos
+
+As fotos reais já estão no lugar: 12 fotos do escritório em
+`public/images/escritorio/` (hero da home, seção O Escritório e galeria) e
+retratos quadrados da equipe em `public/equipe/<slug>.jpg`. O componente
+`Photo` (next/image com proporção fixa, CLS zero) é o padrão; as capas dos
+posts semente vêm do Unsplash, com crédito. `PhotoPlaceholder` só entra
+quando um integrante da equipe não tem foto.
 
 ## Formulário de contato
 
 Validação client-side em português com máscara de celular, estados de
-sucesso e erro. O envio é um **stub** em
-`src/components/ContactForm.tsx` (função `submitContact`). Para ativar:
+sucesso e erro. O envio ainda é um **stub** em
+`src/components/ContactForm.tsx` (função `submitContact`): mostra
+"Mensagem enviada", mas nada é enviado. Para ativar:
 
 1. **API própria:** crie `src/app/api/contato/route.ts` com um `POST` que
    encaminhe por e-mail (Resend, SES) ou para o CRM, e faça `fetch` nela em
-   `submitContact`. (Indisponível com export estático.)
+   `submitContact`.
 2. **Serviço externo:** aponte `submitContact` para Formspree, Getform ou
-   similar — funciona também no export estático.
+   similar.
 
 ## Redirects 301 (site antigo → novo)
 
@@ -92,38 +143,57 @@ posts `/post/...` do blog antigo, com um curinga final `/post/*` → `/blog`.
 Depois de alterar o mapa, rode `npm run redirects:export` para regenerar os
 arquivos em `redirects/`.
 
-- **Vercel / deploy com servidor (recomendado):** já funciona — o
-  `next.config.ts` aplica os redirects no build. Nada a fazer.
-- **Netlify / Cloudflare Pages (export estático):** ative `output: 'export'`
-  no `next.config.ts` (e remova a função `redirects`, incompatível com
-  export), depois copie `redirects/_redirects` para a pasta `out/` publicada
-  (ou para `public/`).
-- **Vercel com export estático:** copie `redirects/vercel.json` para a raiz
-  como `vercel.json`.
-- **Outros hosts (Apache/Nginx):** gere as regras a partir de
-  `src/lib/redirects.ts` (RewriteRule/return 301), atentando para o
-  URL-encoding das origens acentuadas.
+- **Vercel (deploy atual):** já funciona; o `next.config.ts` aplica os
+  redirects no build. Nada a fazer.
+- **Netlify / Cloudflare Pages:** use `redirects/_redirects`.
+- **Vercel com export estático:** use `redirects/vercel.json` como
+  `vercel.json` na raiz.
 
-Depois de publicar, valide com `curl -I https://dominio/direitotribut%C3%A1rio`
+Atenção: o painel `/admin` e o blog dinâmico dependem de servidor (rotas de
+API e Blob), então o export estático (`output: 'export'`) só é viável se o
+painel for abandonado.
+
+Depois de apontar o domínio, valide com
+`curl -I https://www.andrearaujoadvogados.com.br/direitotribut%C3%A1rio`
 (deve responder `301` para `/areas-de-atuacao/direito-tributario`).
 
 ## SEO
 
-- Metadata única por página (title ≤ 60, description ≤ 155, padrão "em Formiga, MG"), Open Graph e canonical via `src/lib/seo.ts`
-- `sitemap.xml` e `robots.txt` gerados por `src/app/sitemap.ts` e `robots.ts`
-- JSON-LD `LegalService` na home e no contato; `FAQPage` no FAQ (`src/lib/jsonld.ts`)
+- Metadata única por página (title ≤ 60, description ≤ 155), Open Graph e
+  canonical via `src/lib/seo.ts`
+- `sitemap.xml` (inclui os posts do Blob) e `robots.txt` (bloqueia `/admin` e
+  `/api`) gerados por `src/app/sitemap.ts` e `robots.ts`
+- JSON-LD `LegalService` na home e no contato, `BlogPosting` nos posts e
+  `FAQPage` no FAQ (`src/lib/jsonld.ts`)
+
+## Deploy
+
+O site roda no Vercel (projeto `site-andre-araujo`, time
+`fernando89-projects`). **O Vercel não está ligado ao GitHub:** um `git push`
+não publica nada. Para publicar, com o CLI autenticado:
+
+```bash
+vercel --prod
+```
+
+As três variáveis de ambiente estão definidas no ambiente Production do
+Vercel. Enquanto o domínio `andrearaujoadvogados.com.br` não for apontado
+para o Vercel, o site novo responde só em `site-andre-araujo.vercel.app` e o
+domínio continua servido pelo Wix.
 
 ## Pendências (TODO) para o cliente
 
 Buscar por `TODO` no código lista tudo. Resumo:
 
-- Números de OAB de André e Sávio; dados completos (nome, OAB, bio, foto) dos outros 11 advogados
-- Valores reais da barra de credibilidade: anos de atuação e casos acompanhados (`src/data/site.ts`)
+- Número real de casos acompanhados na barra de credibilidade (hoje "1.000+",
+  placeholder) em `src/data/site.ts`
+- Número de OAB e bio da Jade e da Débora em `src/data/team.ts`
 - Horário de atendimento (`src/data/site.ts`)
 - URLs exatas de Facebook, LinkedIn e YouTube
-- Fotos reais da home e retratos da equipe (lista na seção acima) e logotipo em SVG
-- História do escritório (ano de fundação, marcos) em `src/app/o-escritorio/page.tsx`
+- Registro da sociedade na OAB/MG (rodapé)
+- Marcos da história do escritório em `src/app/(site)/o-escritorio/page.tsx`
 - Revisão da política de privacidade pelo escritório
-- Coordenada geográfica exata do escritório no JSON-LD (`src/lib/jsonld.ts`)
+- Coordenada exata do escritório no JSON-LD (`src/lib/jsonld.ts`)
 - Integração real do formulário de contato
-- Migração dos 65 posts do blog antigo para `src/data/posts.ts` (3 seeds usam títulos reais; datas marcadas com TODO)
+- Migração dos 65 posts do blog antigo (hoje têm redirect; podem ser
+  republicados pelo painel `/admin`)

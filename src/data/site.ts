@@ -11,7 +11,7 @@ export const site = {
   shortName: "André Araújo",
   url: "https://www.andrearaujoadvogados.com.br",
   description:
-    "Escritório de advocacia em Formiga, MG, com duas vertentes de atuação: Direito do Servidor Público e Direito Cível e Empresarial.",
+    "Escritório de advocacia com atendimento em todo o Brasil: direito cível, empresarial, tributário e do servidor público, para pessoas, empresas e servidores.",
 
   phone: "(37) 3322-5265",
   phoneHref: "tel:+553733225265",
@@ -22,6 +22,7 @@ export const site = {
   email: "contato@andrearaujoadvogados.com.br",
   emailHref: "mailto:contato@andrearaujoadvogados.com.br",
 
+  /** Exibido só na página de Contato (e nos dados estruturados para o Google). */
   address: {
     street: "Rua João Vaz, nº 2",
     neighborhood: "Centro",
@@ -45,20 +46,11 @@ export const site = {
 } as const;
 
 /**
- * O escritório se organiza em duas macro vertentes — elas abrem o menu
- * global. `shortLabel` é usado na barra desktop, onde o espaço é curto.
+ * Menu principal (header e rodapé). "Áreas de Atuação" abre um submenu com
+ * todas as áreas, listadas em src/data/atuacao.ts.
  */
 export const navMain = [
-  {
-    label: "Direito do Servidor Público",
-    shortLabel: "Servidor Público",
-    href: "/servidores-publicos",
-  },
-  {
-    label: "Direito Cível e Empresarial",
-    shortLabel: "Cível e Empresarial",
-    href: "/areas-de-atuacao",
-  },
+  { label: "Áreas de Atuação", href: "/areas-de-atuacao" },
   { label: "O Escritório", href: "/o-escritorio" },
   { label: "Equipe", href: "/equipe" },
   { label: "Publicações", href: "/blog" },
@@ -70,51 +62,20 @@ export const navSecondary = [
 ] as const;
 
 /**
- * As duas vertentes funcionam como dois "sites" que o usuário troca por um
- * seletor no canto. Cada mundo tem sua home, seu menu e seu tema (ver
- * data-world no globals.css). `civel` é o principal.
- */
-export const worlds = {
-  civel: {
-    label: "Direito Cível e Empresarial",
-    shortLabel: "Cível e Empresarial",
-    home: "/areas-de-atuacao",
-  },
-  servidor: {
-    label: "Direito do Servidor Público",
-    shortLabel: "Servidor Público",
-    home: "/servidores-publicos",
-  },
-} as const;
-
-export type World = keyof typeof worlds;
-
-/** Menu do mundo Cível e Empresarial (principal). */
-export const navCivel = [
-  { label: "Áreas de Atuação", href: "/areas-de-atuacao" },
-  { label: "O Escritório", href: "/o-escritorio" },
-  { label: "Equipe", href: "/equipe" },
-  { label: "Publicações", href: "/blog" },
-  { label: "Contato", href: "/contato" },
-] as const;
-
-/** Menu do mundo Servidor Público. */
-export const navServidor = [
-  { label: "Direitos do Servidor", href: "/servidores-publicos" },
-  { label: "O Escritório", href: "/o-escritorio" },
-  { label: "Equipe", href: "/equipe" },
-  { label: "Publicações", href: "/blog" },
-  { label: "Contato", href: "/contato" },
-] as const;
-
-/**
  * Barra de credibilidade da home.
  * TODO: confirmar o número real de casos acompanhados antes de publicar
- * (placeholder). Anos de história (7) e equipe (12) confirmados.
+ * (placeholder). Anos de história (7) confirmados.
  */
 export const stats = [
   { value: 7, suffix: "", label: "anos de história" },
   { value: 1000, suffix: "+", label: "casos acompanhados" }, // TODO: confirmar número real
-  { value: 12, suffix: "", label: "profissionais na equipe" },
-  { value: null, display: "Formiga", suffix: "", label: "e região, atendimento próximo" },
+  {
+    value: null,
+    display: "Equipe",
+    suffix: "",
+    label: "de profissionais qualificados",
+    href: "/equipe",
+    linkLabel: "Conheça a equipe",
+  },
+  { value: null, display: "Brasil", suffix: "", label: "atendimento em todo o país" },
 ] as const;

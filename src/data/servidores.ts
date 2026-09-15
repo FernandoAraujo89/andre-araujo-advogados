@@ -26,7 +26,7 @@ export type ServidorPage = {
 export const servidoresIntro = {
   title: "Direito do Servidor Público",
   description:
-    "A vertente do escritório dedicada a quem serve Minas Gerais. Atendemos servidores públicos estaduais, incluindo policiais penais, na análise de direitos da carreira, como férias-prêmio, progressões, adicional noturno e vale-transporte. Atendimento próximo, com linguagem clara e sem juridiquês.",
+    "A área do escritório dedicada a quem serve Minas Gerais. Atendemos servidores públicos estaduais, incluindo policiais penais, na análise de direitos da carreira, como férias-prêmio, progressões, adicional noturno e vale-transporte, em linguagem clara e com atendimento presencial ou remoto.",
 };
 
 export const servidorPages: ServidorPage[] = [
@@ -35,7 +35,7 @@ export const servidorPages: ServidorPage[] = [
     name: "Férias-Prêmio",
     shortLabel: "Férias-Prêmio",
     metaDescription:
-      "Orientação a servidores estaduais de MG sobre férias-prêmio: aquisição, gozo e conversão em indenização. Escritório em Formiga, MG.",
+      "Orientação a servidores estaduais de MG sobre férias-prêmio: aquisição, gozo e conversão em indenização.",
     headline: "Férias-prêmio do servidor estadual",
     problem: {
       heading: "O benefício que muitos servidores deixam para trás",
@@ -79,7 +79,7 @@ export const servidorPages: ServidorPage[] = [
     name: "Progressão e Promoção",
     shortLabel: "Progressão e Promoção",
     metaDescription:
-      "Orientação a servidores estaduais de MG sobre progressão e promoção na carreira: requisitos, atrasos e efeitos financeiros. Formiga, MG.",
+      "Orientação a servidores estaduais de MG sobre progressão e promoção na carreira: requisitos, atrasos e efeitos financeiros.",
     headline: "Progressão e promoção na carreira",
     problem: {
       heading: "Quando a carreira não anda como a lei prevê",
@@ -156,7 +156,7 @@ export const servidorPages: ServidorPage[] = [
     name: "Vale-Transporte",
     shortLabel: "Vale-Transporte",
     metaDescription:
-      "Orientação a servidores estaduais de MG sobre auxílio e vale-transporte: direito ao benefício e valores não pagos. Formiga, MG.",
+      "Orientação a servidores estaduais de MG sobre auxílio e vale-transporte: direito ao benefício e valores não pagos.",
     headline: "Vale-transporte e auxílio-transporte",
     problem: {
       heading: "Um direito de deslocamento que nem sempre chega",

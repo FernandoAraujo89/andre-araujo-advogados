@@ -2,16 +2,18 @@ import Link from "next/link";
 import type { Area } from "@/data/areas";
 
 type AreaCardProps = {
-  area: Pick<Area, "slug" | "name" | "tagline">;
+  /** `href` opcional para áreas fora de /areas-de-atuacao (ex.: servidor público) */
+  area: Pick<Area, "slug" | "name" | "tagline"> & { href?: string };
   /** Número editorial exibido no topo do card (01, 02…) */
   index?: number;
+  className?: string;
 };
 
-export default function AreaCard({ area, index }: AreaCardProps) {
+export default function AreaCard({ area, index, className = "" }: AreaCardProps) {
   return (
     <Link
-      href={`/areas-de-atuacao/${area.slug}`}
-      className="group flex h-full flex-col rounded-md border border-line bg-paper-light p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)]"
+      href={area.href ?? `/areas-de-atuacao/${area.slug}`}
+      className={`group flex h-full flex-col rounded-md border border-line bg-paper-light p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)] ${className}`}
     >
       {index !== undefined && (
         <p aria-hidden className="font-serif text-sm italic text-accent">
