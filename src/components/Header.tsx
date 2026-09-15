@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { site, navMain } from "@/data/site";
-import { areasDeAtuacao } from "@/data/atuacao";
+import type { AreaDeAtuacao } from "@/data/atuacao";
 
 const AREAS_HREF = "/areas-de-atuacao";
 
@@ -36,7 +36,7 @@ function Chevron({ className = "" }: { className?: string }) {
  * no menu mobile) e os demais itens são links diretos. O menu completo aparece
  * a partir de xl (1280px); abaixo disso usa o hambúrguer.
  */
-export default function Header() {
+export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -110,7 +110,7 @@ export default function Header() {
                     <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                       <div className="rounded-md border border-line bg-paper p-2 shadow-[0_18px_50px_rgba(22,34,44,0.14)]">
                         <ul className="grid w-[34rem] grid-cols-2 gap-0.5">
-                          {areasDeAtuacao.map((a) => (
+                          {areas.map((a) => (
                             <li key={a.href}>
                               <Link
                                 href={a.href}
@@ -263,7 +263,7 @@ export default function Header() {
                   </div>
                   {areasOpen && (
                     <ul className="mb-3 ml-1 flex flex-col gap-0.5 border-l border-line pl-4">
-                      {areasDeAtuacao.map((a) => (
+                      {areas.map((a) => (
                         <li key={a.href}>
                           <Link
                             href={a.href}

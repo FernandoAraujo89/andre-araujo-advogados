@@ -3,6 +3,7 @@ import { site } from "@/data/site";
 import { areas } from "@/data/areas";
 import { team } from "@/data/team";
 import { getAllPosts } from "@/lib/blog";
+import { getPublishedLandingPages } from "@/lib/landing";
 import { servidorPages } from "@/data/servidores";
 
 // Dinâmico: reflete os posts publicados no /admin a cada requisição.
@@ -10,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllPosts();
+  const landing = await getPublishedLandingPages();
 
   const staticPaths = [
     "",
@@ -51,6 +53,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: p.updatedAt ?? p.date,
       changeFrequency: "monthly" as const,
       priority: 0.6,
+    })),
+    ...landing.map((p) => ({
+      url: `${site.url}/areas-de-atuacao/${p.slug}`,
+      lastModified: p.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
     })),
   ];
 }

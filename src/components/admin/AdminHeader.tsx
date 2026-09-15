@@ -30,6 +30,12 @@ export default function AdminHeader() {
               Posts
             </Link>
             <Link
+              href="/admin/landing"
+              className="font-medium text-ink-soft transition-colors hover:text-wine-deep"
+            >
+              Landing pages
+            </Link>
+            <Link
               href="/admin/mensagens"
               className="font-medium text-ink-soft transition-colors hover:text-wine-deep"
             >

@@ -51,7 +51,7 @@ export default async function MensagensPage() {
         <p className="mt-6 rounded-md border border-line bg-paper-light px-5 py-4 text-base text-ink-soft">
           As mensagens estão no store principal do Blob, com endereço
           aleatório. Para guardá-las num store privado, crie um store Blob
-          privado no Vercel e defina CONTACT_BLOB_TOKEN (ver README).
+          privado no Vercel e defina CONTACT_BLOB_READ_WRITE_TOKEN (ver README).
         </p>
       )}
 
@@ -79,6 +79,9 @@ export default async function MensagensPage() {
                   <p className="font-medium text-ink">{m.nome}</p>
                   <p className="mt-1 text-sm text-ink-soft">
                     <span className="text-wine">{m.assunto}</span>
+                    {m.origem && (
+                      <span className="text-ink-soft"> · via página {m.origem}</span>
+                    )}
                     {" · "}
                     <time dateTime={m.receivedAt}>{formatDateTime(m.receivedAt)}</time>
                   </p>

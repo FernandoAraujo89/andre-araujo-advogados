@@ -12,8 +12,9 @@ import { site } from "@/data/site";
  * O painel /admin lista e exclui as mensagens. Com o e-mail configurado (SES
  * ou Resend, ver notifyByEmail), o escritório também é avisado a cada mensagem.
  *
- * Onde ficam: com CONTACT_BLOB_TOKEN (um store PRIVADO só para as mensagens)
- * os arquivos são privados, o ideal para dados pessoais. Sem ele, vão para o
+ * Onde ficam: com CONTACT_BLOB_READ_WRITE_TOKEN (o store PRIVADO do painel, que
+ * também guarda as landing pages) os arquivos são privados, o ideal para
+ * dados pessoais. Sem ele, vão para o
  * store principal (público, o mesmo do blog), com sufixo aleatório na URL:
  * ninguém lista nem adivinha o endereço sem o token, e o site nunca o exibe.
  */
@@ -24,6 +25,8 @@ export type ContactInput = {
   email?: string;
   assunto: string;
   mensagem: string;
+  /** Slug da landing page de origem, quando o envio veio de uma campanha */
+  origem?: string;
 };
 
 export type ContactMessage = ContactInput & {
@@ -37,8 +40,8 @@ const PREFIX = "contato/mensagens/";
 type Storage = { token: string; access: "public" | "private" };
 
 function storage(): Storage | null {
-  if (process.env.CONTACT_BLOB_TOKEN) {
-    return { token: process.env.CONTACT_BLOB_TOKEN, access: "private" };
+  if (process.env.CONTACT_BLOB_READ_WRITE_TOKEN) {
+    return { token: process.env.CONTACT_BLOB_READ_WRITE_TOKEN, access: "private" };
   }
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     return { token: process.env.BLOB_READ_WRITE_TOKEN, access: "public" };
@@ -51,7 +54,7 @@ export function storageEnabled(): boolean {
   return storage() !== null;
 }
 
-/** True quando as mensagens ficam num store privado (CONTACT_BLOB_TOKEN). */
+/** True quando as mensagens ficam num store privado (CONTACT_BLOB_READ_WRITE_TOKEN). */
 export function storageIsPrivate(): boolean {
   return storage()?.access === "private";
 }
@@ -72,6 +75,7 @@ export function parseContactInput(
   const email = str(b.email, 120);
   const assunto = str(b.assunto, 80);
   const mensagem = str(b.mensagem, 3000);
+  const origem = str(b.origem, 80);
 
   if (nome.length < 3) return { ok: false, error: "Informe seu nome completo." };
   if (celular.replace(/\D/g, "").length < 10)
@@ -84,7 +88,14 @@ export function parseContactInput(
 
   return {
     ok: true,
-    value: { nome, celular, email: email || undefined, assunto, mensagem },
+    value: {
+      nome,
+      celular,
+      email: email || undefined,
+      assunto,
+      mensagem,
+      origem: origem || undefined,
+    },
   };
 }
 
@@ -230,13 +241,15 @@ function buildEmail(input: ContactInput, from: string) {
     `Celular: ${input.celular}`,
     `E-mail: ${input.email || "(não informado)"}`,
     `Assunto: ${input.assunto}`,
+    ...(input.origem ? [`Origem: página ${input.origem}`] : []),
     "",
     input.mensagem,
   ].join("\n");
   const html = `<p><strong>Nome:</strong> ${escapeHtml(input.nome)}<br>
 <strong>Celular:</strong> ${escapeHtml(input.celular)}<br>
 <strong>E-mail:</strong> ${escapeHtml(input.email || "(não informado)")}<br>
-<strong>Assunto:</strong> ${escapeHtml(input.assunto)}</p>
+<strong>Assunto:</strong> ${escapeHtml(input.assunto)}${input.origem ? `<br>
+<strong>Origem:</strong> página ${escapeHtml(input.origem)}` : ""}</p>
 <p style="white-space:pre-wrap">${escapeHtml(input.mensagem)}</p>
 <p style="color:#666">Mensagem enviada pelo formulário do site. As mensagens também ficam no painel: ${site.url}/admin/mensagens</p>`;
   return {

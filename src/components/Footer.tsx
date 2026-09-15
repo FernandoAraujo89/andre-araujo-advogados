@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { site, navMain, navSecondary } from "@/data/site";
-import { areasDeAtuacao } from "@/data/atuacao";
+import type { AreaDeAtuacao } from "@/data/atuacao";
 import SocialLinks from "@/components/SocialLinks";
 
-export default function Footer() {
+export default function Footer({ areas }: { areas: AreaDeAtuacao[] }) {
   // Quebra o e-mail só após o "@" (via <wbr>), evitando cortes no meio
   // do domínio na coluna estreita do rodapé.
   const [emailLocal, emailDomain] = site.email.split("@");
@@ -44,7 +44,7 @@ export default function Footer() {
           <nav aria-label="Áreas de atuação">
             <h2 className="text-[0.9375rem] font-medium text-gold">Áreas de Atuação</h2>
             <ul className="mt-5 space-y-3 text-[0.9375rem]">
-              {areasDeAtuacao.map((a) => (
+              {areas.map((a) => (
                 <li key={a.href}>
                   <Link href={a.href} className="transition-colors hover:text-paper-light">
                     {a.name}

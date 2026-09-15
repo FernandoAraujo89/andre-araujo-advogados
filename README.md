@@ -28,7 +28,7 @@ Nenhuma é necessária para o site público. Elas servem ao painel `/admin`:
 | `ADMIN_PASSWORD` | Senha única do painel |
 | `ADMIN_SESSION_SECRET` | Assina o cookie de sessão (qualquer string longa e aleatória, ex.: `openssl rand -base64 48`) |
 | `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (store público), onde ficam os posts, as imagens de capa e, na falta do token abaixo, as mensagens do formulário |
-| `CONTACT_BLOB_TOKEN` | Opcional, recomendado. Token de um segundo store Blob, **privado**, só para as mensagens do formulário (dados pessoais) |
+| `CONTACT_BLOB_READ_WRITE_TOKEN` | Token do segundo store Blob, **privado** (`andre-araujo-contato`): mensagens do formulário (dados pessoais) e o JSON das landing pages |
 | `SES_ACCESS_KEY_ID` + `SES_SECRET_ACCESS_KEY` | Aviso por e-mail pelo Amazon SES, com chaves de um usuário IAM restrito a `ses:SendEmail` (ver abaixo) |
 | `SES_ROLE_ARN` | Alternativa às chaves: ARN de uma role assumida via OIDC do Vercel, sem segredo fixo |
 | `SES_REGION` | Opcional. Região do SES (padrão `us-east-2`, onde `mail.andrearaujoadvogados.com.br` está verificado) |
@@ -122,6 +122,40 @@ Segurança: sessão em cookie assinado (HMAC, 12 horas), checada no
 `proxy.ts` e de novo em cada rota e página do painel. O login não limita
 tentativas; a senha deve ser longa.
 
+## Landing pages de campanha
+
+O escritório cria páginas de campanha (tráfego pago) em `/admin/landing`,
+sem mexer em código. Cada página segue um template do setor: topo com
+título, subtítulo, botão do WhatsApp (mensagem pré-preenchida) e imagem ou
+vídeo do YouTube; seções reordenáveis (texto com imagem, lista de itens,
+passo a passo, cards de diferenciais, sobre o escritório, avaliações do
+Google, perguntas frequentes com schema FAQPage, chamada para o WhatsApp); e
+fechamento com o formulário de contato já marcado com o nome da página. As
+mensagens desse formulário chegam ao painel com a origem (slug da página).
+
+- Publicadas, entram em `/areas-de-atuacao/<slug>` e na lista de áreas
+  (dropdown do menu, sanfona no celular, índice de áreas, rodapé e sitemap),
+  depois das 10 áreas fixas. A home mantém só as fixas.
+- Rascunhos ficam fora do ar; a pré-visualização com o chrome do site fica em
+  `/admin/preview/<slug>` (só logado).
+- Dados num JSON no store **privado** do painel (o mesmo das mensagens,
+  `CONTACT_BLOB_READ_WRITE_TOKEN`; `src/lib/landing.ts`), para rascunhos não
+  terem URL pública. O arquivo nunca é sobrescrito: cada gravação cria
+  `landing/pages-<n>.json` e apaga as anteriores, e a leitura pega a mais
+  nova. Motivo, medido em teste: sobrescrever o mesmo caminho faz a leitura
+  devolver a versão antiga por segundos (store privado) ou minutos (CDN do
+  store público, mesmo com query de cache-busting); com arquivo novo,
+  publicar e despublicar refletem na hora. O blog ainda sobrescreve
+  `blog/posts.json` e por isso pode demorar até um minuto para refletir.
+  Sem o token privado, cai no store público. As imagens enviadas pelo editor
+  continuam no store público, porque precisam de URL.
+- Tipos e modelo inicial em `src/data/landing.ts`; template público em
+  `src/components/landing/LandingPageView.tsx`; editor em
+  `src/components/admin/LandingEditor.tsx`. Slugs das áreas fixas e das
+  rotas do site são reservados.
+- Salvar revalida a própria página e o layout raiz (o menu está em todas as
+  páginas).
+
 ## Fotos
 
 As fotos reais já estão no lugar: 12 fotos do escritório em
@@ -139,7 +173,7 @@ mínimo de preenchimento). O envio vai para `src/app/api/contato/route.ts`,
 que:
 
 1. grava a mensagem como JSON no Vercel Blob (`contato/mensagens/`, um
-   arquivo por envio; privado se houver `CONTACT_BLOB_TOKEN`, senão no store
+   arquivo por envio; privado se houver `CONTACT_BLOB_READ_WRITE_TOKEN`, senão no store
    público com URL aleatória, que ninguém lista sem o token) e a exibe na aba **Mensagens** do painel `/admin`,
    com links de WhatsApp, telefone e e-mail e botão de excluir;
 2. avisa o escritório por e-mail, pelo Amazon SES (variáveis `SES_*`) ou,
@@ -148,10 +182,14 @@ que:
 Basta um dos dois dar certo para o visitante ver "Mensagem enviada". Sem
 Blob nem e-mail (dev local), a mensagem é registrada no console.
 
-Para guardar as mensagens em store privado (recomendado, são dados
-pessoais): no Vercel, Storage → Create → Blob, marque acesso **privado**, e
-defina o token dele como `CONTACT_BLOB_TOKEN` no projeto (o store principal
-continua público, porque as imagens do blog precisam de URL pública).
+As mensagens ficam num store Blob **privado** só delas (recomendado, são
+dados pessoais): `andre-araujo-contato`, conectado ao projeto com o prefixo
+`CONTACT_BLOB`, que gera a variável `CONTACT_BLOB_READ_WRITE_TOKEN`. O store
+principal (`andre-araujo-blog`) continua público, porque as imagens do blog
+precisam de URL pública. Para recriar: `vercel blob create-store <nome>
+--access private` e, na conexão ao projeto, use um prefixo diferente de
+`BLOB` para não colidir com o token do blog (o CLI não expõe o prefixo; a
+API de conexão do store aceita `envVarPrefix`).
 
 ### Aviso por e-mail pelo Amazon SES
 

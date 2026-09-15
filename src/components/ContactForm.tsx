@@ -9,6 +9,13 @@ type Errors = Partial<
   Record<"nome" | "celular" | "email" | "assunto" | "mensagem", string>
 >;
 
+type Props = {
+  /** Assunto já selecionado (ex.: o nome de uma landing page) */
+  assuntoInicial?: string;
+  /** Identificador da página de origem, gravado junto com a mensagem */
+  origem?: string;
+};
+
 /** Máscara de celular brasileiro: (99) 99999-9999 */
 function maskPhone(value: string): string {
   const digits = value.replace(/\D/g, "").slice(0, 11);
@@ -31,6 +38,7 @@ async function submitContact(data: {
   email: string;
   assunto: string;
   mensagem: string;
+  origem?: string;
   site: string;
   elapsed: number;
 }): Promise<void> {
@@ -48,17 +56,25 @@ async function submitContact(data: {
 const inputCls =
   "w-full rounded-md border border-line bg-paper-light px-5 py-3.5 text-ink placeholder:text-ink-soft/50 focus:border-accent focus:outline-none";
 
-export default function ContactForm() {
+export default function ContactForm({ assuntoInicial, origem }: Props = {}) {
   const [nome, setNome] = useState("");
   const [celular, setCelular] = useState("");
   const [email, setEmail] = useState("");
-  const [assunto, setAssunto] = useState("");
+  const [assunto, setAssunto] = useState(assuntoInicial ?? "");
   const [mensagem, setMensagem] = useState("");
   const [site, setSite] = useState("");
   const [startedAt] = useState(() => Date.now());
   const [errors, setErrors] = useState<Errors>({});
   const [state, setState] = useState<FormState>("idle");
   const [serverError, setServerError] = useState("");
+
+  // O assunto inicial (nome da landing page) entra na lista se não for uma área fixa.
+  const assuntos = [
+    ...(assuntoInicial && !areasDeAtuacao.some((a) => a.name === assuntoInicial)
+      ? [assuntoInicial]
+      : []),
+    ...areasDeAtuacao.map((a) => a.name),
+  ];
 
   function validate(): boolean {
     const next: Errors = {};
@@ -94,6 +110,7 @@ export default function ContactForm() {
         email: email.trim(),
         assunto,
         mensagem: mensagem.trim(),
+        origem,
         site,
         elapsed: Date.now() - startedAt,
       });
@@ -208,9 +225,9 @@ export default function ContactForm() {
           className={inputCls}
         >
           <option value="">Escolha um assunto</option>
-          {areasDeAtuacao.map((a) => (
-            <option key={a.slug} value={a.name}>
-              {a.name}
+          {assuntos.map((name) => (
+            <option key={name} value={name}>
+              {name}
             </option>
           ))}
           <option value="Outro">Outro assunto</option>
