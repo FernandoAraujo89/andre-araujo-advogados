@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import Button from "@/components/Button";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
@@ -55,78 +56,79 @@ export default async function Home() {
     <>
       <JsonLd data={legalServiceJsonLd()} />
 
-      {/* 1. Hero — fundo azul-tinta, ocupa a viewport; a barra de
-          credibilidade fica no rodapé do próprio hero */}
-      <section className="flex min-h-svh flex-col bg-ink px-5 pb-8 pt-28 md:px-10 xl:px-16 lg:pb-10 lg:pt-32">
-        <div className="mx-auto flex w-full max-w-[1240px] flex-1 items-center">
-          <div className="grid w-full items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
-            <Reveal>
-              {/* Corpo e margens do hero não crescem como nas outras seções
-                  (nada de text-display): título, texto e botões precisam caber
-                  na viewport junto com a barra de números, inclusive em 1366x768 */}
-              <h1 className="text-balance text-[clamp(2.5rem,4.5vw,4.25rem)] leading-[1.05] tracking-[-0.035em] text-paper-light">
-                Advocacia especializada, com atendimento{" "}
-                <em className="text-gold">em todo o Brasil</em>
-              </h1>
-              <p className="mt-6 max-w-xl text-lg text-pretty text-paper/75">
-                Direito cível, empresarial, tributário e do servidor público.
-                O escritório atende pessoas, empresas e servidores de forma
-                presencial ou remota, com a mesma atenção em cada caso.
-              </p>
-              <div className="mt-9 flex flex-wrap gap-4">
-                <Button href={site.whatsappHref} external variant="light" size="lg">
-                  Falar no WhatsApp
-                </Button>
-                <Button href="/areas-de-atuacao" variant="ghost-light" size="lg">
-                  Ver áreas de atuação
-                </Button>
-              </div>
-            </Reveal>
-            <Reveal delay={0.15} className="hidden lg:block">
-              <div className="relative">
-                <div
-                  aria-hidden
-                  className="absolute -bottom-5 -right-5 h-full w-full rounded-md bg-gold/25"
-                />
-                <Photo
-                  src="/images/escritorio/fachada.jpg"
-                  alt="Fachada do escritório André Araújo Advogados, com a placa e o logotipo"
-                  ratio="4/5"
-                  preload
-                  sizes="(max-width: 1024px) 0px, 45vw"
-                  className="max-h-[calc(100svh-20rem)]"
-                  objectPosition="60% center"
-                />
-              </div>
-            </Reveal>
-          </div>
+      {/* 1. Hero — composição editorial em duas metades: o texto com respiro
+          à esquerda e a foto da sede ocupando a altura toda à direita, até a
+          borda da tela. A barra de números fica na dobra seguinte. */}
+      <section className="bg-ink @container lg:grid lg:min-h-svh lg:grid-cols-[7fr_5fr]">
+        {/* No desktop, o recuo esquerdo acompanha a borda do conteúdo das
+            seções abaixo (container de 1240px centralizado) */}
+        <div className="flex items-center px-5 pb-20 pt-36 md:px-10 md:pb-24 md:pt-44 lg:pb-24 lg:pr-16 lg:pt-40 xl:pl-[max(4rem,calc((100cqw_-_1240px)/2))] xl:pr-24">
+          <Reveal className="w-full">
+            {/* Escala própria (e não text-display): no desktop a coluna de
+                texto ocupa ~58% da tela, então o corpo acompanha a coluna
+                para "com atendimento" não quebrar em duas linhas */}
+            <h1 className="text-balance text-[2.5rem] leading-[1.05] tracking-[-0.035em] text-paper-light sm:text-[3.25rem] md:text-[3.75rem] lg:text-[clamp(3.875rem,0.8rem+4.8vw,5.25rem)]">
+              Advocacia especializada, com atendimento{" "}
+              <em className="text-gold">em todo o Brasil</em>
+            </h1>
+            <p className="mt-10 max-w-lg text-lg text-pretty text-paper/70 lg:mt-12">
+              Direito cível, empresarial, tributário e do servidor público.
+              O escritório atende pessoas, empresas e servidores de forma
+              presencial ou remota, com a mesma atenção em cada caso.
+            </p>
+            <div className="mt-12 flex flex-wrap gap-4 lg:mt-16">
+              <Button href={site.whatsappHref} external variant="light" size="lg">
+                Falar no WhatsApp
+              </Button>
+              <Button href="/areas-de-atuacao" variant="ghost-light" size="lg">
+                Ver áreas de atuação
+              </Button>
+            </div>
+          </Reveal>
         </div>
 
-        {/* Barra de credibilidade — dentro da viewport do hero */}
-        <div
-          aria-label="Números do escritório"
-          className="mx-auto w-full max-w-[1240px] border-t border-paper/15 pt-8 lg:pt-10"
-        >
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-paper/15 lg:[&>*]:px-10 lg:[&>*:first-child]:pl-0">
-            {stats.map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 0.08}>
-                <StatCounter
-                  value={"display" in stat ? null : stat.value}
-                  display={"display" in stat ? stat.display : undefined}
-                  suffix={stat.suffix}
-                  label={stat.label}
-                  href={"href" in stat ? stat.href : undefined}
-                  linkLabel={"linkLabel" in stat ? stat.linkLabel : undefined}
-                  dark
-                />
-              </Reveal>
-            ))}
-          </div>
+        <div className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/11] lg:aspect-auto">
+          <Image
+            src="/images/escritorio/fachada.jpg"
+            alt="Fachada do escritório André Araújo Advogados, com a placa e o logotipo"
+            fill
+            preload
+            sizes="(max-width: 1024px) 100vw, 42vw"
+            className="object-cover motion-safe:animate-hero-zoom"
+            style={{ objectPosition: "55% 42%" }}
+          />
+          {/* Véu: funde a borda da foto no azul-tinta e dá contraste à legenda */}
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[linear-gradient(to_top,rgb(22_34_44/0.7)_0%,transparent_40%)] lg:bg-[linear-gradient(to_right,rgb(22_34_44/0.55)_0%,transparent_28%),linear-gradient(to_top,rgb(22_34_44/0.7)_0%,transparent_35%)]"
+          />
+          <p className="absolute bottom-7 left-5 flex items-center gap-3 text-sm font-medium uppercase tracking-[0.18em] text-paper/90 md:left-10 lg:bottom-12 lg:left-14">
+            <span aria-hidden className="h-px w-10 bg-gold" />
+            Sede em Formiga, MG
+          </p>
         </div>
       </section>
 
-      {/* 2. Áreas de atuação — o cliente escolhe o caminho do seu caso */}
-      <section className="border-b border-line bg-paper-light px-5 py-24 md:px-10 xl:px-16 lg:py-44">
+      {/* 2. Números — na dobra seguinte, com respiro próprio */}
+      <section aria-label="Números do escritório" className="px-5 md:px-10 xl:px-16">
+        <div className="mx-auto grid max-w-[1240px] gap-12 py-20 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-line lg:py-28 lg:[&>*]:px-10 lg:[&>*:first-child]:pl-0">
+          {stats.map((stat, i) => (
+            <Reveal key={stat.label} delay={i * 0.08}>
+              <StatCounter
+                value={"display" in stat ? null : stat.value}
+                display={"display" in stat ? stat.display : undefined}
+                suffix={stat.suffix}
+                label={stat.label}
+                href={"href" in stat ? stat.href : undefined}
+                linkLabel={"linkLabel" in stat ? stat.linkLabel : undefined}
+              />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. Áreas de atuação — o cliente escolhe o caminho do seu caso */}
+      <section className="border-y border-line bg-paper-light px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
@@ -158,7 +160,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 3. Por que o André Araújo Advogados — portal para O Escritório:
+      {/* 4. Por que o André Araújo Advogados — portal para O Escritório:
           foto da sede em multiply escuro com parallax no scroll */}
       <section className="relative isolate overflow-hidden bg-ink px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <ParallaxBackdrop src="/images/escritorio/sala-de-reunioes.jpg" />
@@ -227,7 +229,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 4. Equipe — André em destaque com resumo do currículo */}
+      {/* 5. Equipe — André em destaque com resumo do currículo */}
       <section className="px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
@@ -275,10 +277,10 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 5. Avaliações do Google — prova social */}
+      {/* 6. Avaliações do Google — prova social */}
       <GoogleReviews />
 
-      {/* 6. Blog — fundo em tom claro do acento (accent-mist) */}
+      {/* 7. Blog — fundo em tom claro do acento (accent-mist) */}
       <section className="border-y border-line bg-accent-mist px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
@@ -305,7 +307,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 7. Contato — canais diretos; endereço e mapa só na página de Contato */}
+      {/* 8. Contato — canais diretos; endereço e mapa só na página de Contato */}
       <section className="px-5 pb-28 pt-24 md:px-10 xl:px-16 lg:pb-48 lg:pt-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>

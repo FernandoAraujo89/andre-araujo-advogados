@@ -302,8 +302,13 @@ O site roda no Vercel (projeto `site-andre-araujo`, time
 não publica nada. Para publicar, com o CLI autenticado:
 
 ```bash
-vercel --prod
+vercel --prod --force
 ```
+
+O `--force` publica sem o cache de build do deploy anterior. Sem ele, o
+build restaurou um CSS compilado antigo (em 15/09/2026 o site foi ao ar com o
+HTML novo e os tokens de fonte do tema anterior). Se algum estilo parecer
+desatualizado no ar, é essa a primeira coisa a conferir.
 
 As três variáveis de ambiente estão definidas no ambiente Production do
 Vercel. Enquanto o domínio `andrearaujoadvogados.com.br` não for apontado

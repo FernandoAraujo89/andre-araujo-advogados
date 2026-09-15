@@ -64,6 +64,18 @@
   --text-card--line-height: 1.2;
   --text-card--letter-spacing: -0.015em;
 
+  /* Entrada da foto do hero: aproximação lenta, quase imperceptível */
+  --animate-hero-zoom: hero-zoom 2.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.08);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
   /* Raios — cantos discretos, quase retos, como na referência editorial */
   --radius-card: 0.375rem; /* 6px — cards e fotos */
   --radius-card-sm: 0.25rem; /* 4px — botões, chips e inputs */
