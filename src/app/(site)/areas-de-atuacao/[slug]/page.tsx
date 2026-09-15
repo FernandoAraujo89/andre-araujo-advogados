@@ -58,7 +58,7 @@ export default async function AreaPage({ params }: Props) {
   const outras = areas.filter((a) => a.slug !== area.slug).slice(0, 3);
 
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs
           items={[
@@ -75,15 +75,15 @@ export default async function AreaPage({ params }: Props) {
           />
         </Reveal>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_360px]">
-          <div className="space-y-14">
+        <div className="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-[1fr_360px] lg:gap-20">
+          <div className="space-y-16 lg:space-y-20">
             {area.blocks.map((block) => (
               <Reveal key={block.heading}>
-                <h2 className="font-serif text-2xl font-medium text-ink lg:text-3xl">
+                <h2 className="text-title text-ink">
                   {block.heading}
                 </h2>
                 {block.intro && (
-                  <p className="mt-4 max-w-2xl text-lg text-ink-soft">
+                  <p className="mt-5 max-w-2xl text-lg text-ink-soft">
                     {block.intro}
                   </p>
                 )}
@@ -101,10 +101,10 @@ export default async function AreaPage({ params }: Props) {
 
             {area.faq.length > 0 && (
               <Reveal>
-                <h2 className="font-serif text-2xl font-medium text-ink lg:text-3xl">
+                <h2 className="text-title text-ink">
                   Perguntas frequentes
                 </h2>
-                <div className="mt-6">
+                <div className="mt-8">
                   <FaqAccordion items={area.faq} />
                 </div>
               </Reveal>
@@ -114,11 +114,11 @@ export default async function AreaPage({ params }: Props) {
           <ContactAside />
         </div>
 
-        <div className="mt-24">
+        <div className="mt-28 lg:mt-44">
           <Reveal>
             <SectionHeading title="Veja também" />
           </Reveal>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-8">
             {outras.map((a, i) => (
               <Reveal key={a.slug} delay={i * 0.08} className="h-full">
                 <AreaCard area={a} />

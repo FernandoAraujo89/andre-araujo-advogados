@@ -12,12 +12,12 @@ export default function Markdown({ children }: { children: string }) {
         remarkPlugins={[remarkGfm]}
         components={{
           h2: ({ children }) => (
-            <h2 className="mt-12 font-serif text-2xl font-medium text-ink lg:text-3xl">
+            <h2 className="mt-14 text-title text-ink">
               {children}
             </h2>
           ),
           h3: ({ children }) => (
-            <h3 className="mt-8 font-serif text-xl font-medium text-ink">
+            <h3 className="mt-10 text-card text-ink">
               {children}
             </h3>
           ),
@@ -48,7 +48,7 @@ export default function Markdown({ children }: { children: string }) {
           ),
           li: ({ children }) => <li className="pl-1">{children}</li>,
           blockquote: ({ children }) => (
-            <blockquote className="border-l-2 border-accent pl-5 font-serif text-xl italic text-ink">
+            <blockquote className="border-l-2 border-accent pl-6 font-serif text-2xl italic leading-snug text-ink">
               {children}
             </blockquote>
           ),

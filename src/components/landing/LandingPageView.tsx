@@ -25,7 +25,7 @@ function whatsappHref(message: string): string {
 }
 
 const container = "mx-auto max-w-[1240px]";
-const band = "px-5 py-20 lg:px-8 lg:py-28";
+const band = "px-5 py-20 md:px-10 xl:px-16 lg:py-40";
 
 function Check() {
   return (
@@ -68,7 +68,7 @@ function Section({
         <section className={`${band} ${bg}`}>
           <div
             className={`${container} grid gap-12 ${
-              section.image ? "lg:grid-cols-[1.1fr_1fr] lg:items-center" : ""
+              section.image ? "lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20" : ""
             }`}
           >
             <Reveal>
@@ -98,10 +98,10 @@ function Section({
             <Reveal>
               <SectionHeading title={section.title} description={section.intro} />
             </Reveal>
-            <ul className="mt-10 grid gap-4 md:grid-cols-2">
+            <ul className="mt-12 grid gap-4 md:grid-cols-2 lg:mt-16">
               {section.items.map((item, i) => (
                 <Reveal key={i} delay={(i % 2) * 0.08}>
-                  <li className="flex gap-3 rounded-md border border-line bg-paper-light p-5 text-[1.0625rem] text-ink">
+                  <li className="flex gap-3 rounded-md border border-line bg-paper-light p-6 text-[1.0625rem] text-ink">
                     <Check />
                     <span>{item}</span>
                   </li>
@@ -119,16 +119,16 @@ function Section({
             <Reveal>
               <SectionHeading title={section.title} description={section.intro} />
             </Reveal>
-            <div className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-x-12 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
               {section.items.map((item, i) => (
                 <Reveal key={i} delay={i * 0.08}>
-                  <p aria-hidden className="font-serif text-sm italic text-accent">
+                  <p aria-hidden className="font-serif text-lg italic text-accent">
                     {String(i + 1).padStart(2, "0")}
                   </p>
-                  <h3 className="mt-4 border-t border-line pt-4 font-serif text-xl font-medium text-ink">
+                  <h3 className="mt-4 border-t border-line pt-5 text-card text-ink">
                     {item.title}
                   </h3>
-                  <p className="mt-3 text-[0.9375rem] text-ink-soft">{item.text}</p>
+                  <p className="mt-4 text-[0.9375rem] text-ink-soft">{item.text}</p>
                 </Reveal>
               ))}
             </div>
@@ -143,12 +143,12 @@ function Section({
             <Reveal>
               <SectionHeading title={section.title} description={section.intro} />
             </Reveal>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-8">
               {section.items.map((item, i) => (
                 <Reveal key={i} delay={(i % 3) * 0.08} className="h-full">
-                  <div className="h-full rounded-md border border-line bg-paper-light p-8">
-                    <h3 className="font-serif text-xl font-medium text-ink">{item.title}</h3>
-                    <p className="mt-3 text-[0.9375rem] text-ink-soft">{item.text}</p>
+                  <div className="h-full rounded-md border border-line bg-paper-light p-8 lg:p-10">
+                    <h3 className="text-card text-ink">{item.title}</h3>
+                    <p className="mt-4 text-[0.9375rem] text-ink-soft">{item.text}</p>
                   </div>
                 </Reveal>
               ))}
@@ -165,7 +165,7 @@ function Section({
       };
       return (
         <section className={`${band} ${bg}`}>
-          <div className={`${container} grid items-center gap-10 lg:grid-cols-[380px_1fr] lg:gap-16`}>
+          <div className={`${container} grid items-center gap-12 lg:grid-cols-[380px_1fr] lg:gap-24`}>
             <Reveal>
               {image.src && (
                 <Photo
@@ -178,7 +178,7 @@ function Section({
             </Reveal>
             <Reveal delay={0.1}>
               <SectionHeading title={section.title} />
-              <div className="mt-6 max-w-2xl">
+              <div className="mt-8 max-w-2xl">
                 <Markdown>{section.text}</Markdown>
               </div>
             </Reveal>
@@ -194,7 +194,7 @@ function Section({
       return (
         <section className={`${band} ${bg}`}>
           <JsonLd data={faqPageJsonLd(section.items)} />
-          <div className={`${container} grid gap-12 lg:grid-cols-[1fr_1.4fr]`}>
+          <div className={`${container} grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20`}>
             <Reveal>
               <SectionHeading title={section.title} />
             </Reveal>
@@ -207,16 +207,16 @@ function Section({
 
     case "cta":
       return (
-        <section className="bg-accent-surface px-5 py-20 text-center lg:px-8 lg:py-28">
+        <section className="bg-accent-surface px-5 py-20 text-center md:px-10 xl:px-16 lg:py-40">
           <div className={container}>
             <Reveal>
-              <h2 className="text-balance mx-auto max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.1] text-paper-light">
+              <h2 className="text-balance mx-auto max-w-4xl text-heading text-paper-light">
                 {section.title}
               </h2>
               {section.text && (
-                <p className="mx-auto mt-5 max-w-2xl text-lg text-paper/85">{section.text}</p>
+                <p className="mx-auto mt-6 max-w-2xl text-lg text-paper/85 lg:mt-8">{section.text}</p>
               )}
-              <div className="mt-9">
+              <div className="mt-12">
                 <Button href={wa} external variant="light" size="lg">
                   Falar no WhatsApp
                 </Button>
@@ -248,7 +248,7 @@ export default function LandingPageView({
       )}
 
       {/* Hero — fundo azul-tinta, como a home */}
-      <section className="bg-ink px-5 pb-16 pt-28 lg:px-8 lg:pb-24 lg:pt-32">
+      <section className="bg-ink px-5 pb-16 pt-28 md:px-10 xl:px-16 lg:pb-32 lg:pt-40">
         <div className={container}>
           <Breadcrumbs
             items={[
@@ -258,23 +258,25 @@ export default function LandingPageView({
             light
           />
           <div
-            className={`grid items-center gap-10 ${
-              hasMedia ? "lg:grid-cols-[1.1fr_1fr]" : ""
+            className={`grid items-center gap-12 ${
+              hasMedia ? "lg:grid-cols-[1.15fr_1fr] lg:gap-20" : ""
             }`}
           >
             <Reveal>
               {page.hero.eyebrow && (
-                <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-gold">
+                <p className="mb-6 text-sm font-medium uppercase tracking-[0.18em] text-gold">
                   {page.hero.eyebrow}
                 </p>
               )}
-              <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-paper-light">
+              {/* Mesmo corpo do hero da home (teto de 68px): o título vem do
+                  painel e pode ser longo */}
+              <h1 className="text-balance text-[clamp(2.5rem,4.5vw,4.25rem)] leading-[1.05] tracking-[-0.035em] text-paper-light">
                 {page.hero.title}
               </h1>
-              <p className="mt-6 max-w-xl text-lg text-pretty text-paper/75">
+              <p className="mt-8 max-w-xl text-lg text-pretty text-paper/75">
                 {page.hero.subtitle}
               </p>
-              <div className="mt-9 flex flex-wrap gap-4">
+              <div className="mt-10 flex flex-wrap gap-4">
                 <Button href={wa} external variant="light" size="lg">
                   {page.hero.ctaLabel}
                 </Button>
@@ -318,12 +320,12 @@ export default function LandingPageView({
       ))}
 
       {/* Fechamento — formulário com o assunto já marcado */}
-      <section id="contato" className="px-5 pb-28 pt-20 lg:px-8 lg:pb-36 lg:pt-28">
+      <section id="contato" className="px-5 pb-28 pt-20 md:px-10 xl:px-16 lg:pb-48 lg:pt-40">
         <div className={container}>
           <Reveal>
             <SectionHeading title={page.fechamento.title} description={page.fechamento.text} />
           </Reveal>
-          <div className="mt-12 grid gap-12 lg:grid-cols-2">
+          <div className="mt-12 grid gap-12 lg:mt-16 lg:grid-cols-2 lg:gap-24">
             {page.fechamento.formulario ? (
               <Reveal>
                 <ContactForm assuntoInicial={page.name} origem={page.slug} />
@@ -336,7 +338,7 @@ export default function LandingPageView({
               </Reveal>
             )}
             <Reveal delay={0.1}>
-              <ul className="space-y-6 text-ink">
+              <ul className="space-y-8 text-ink">
                 <li>
                   <p className="label">WhatsApp</p>
                   <a

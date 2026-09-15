@@ -36,7 +36,7 @@ export default async function ServidorSubPage({ params }: Props) {
   const outras = servidorPages.filter((p) => p.slug !== page.slug);
 
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs
           items={[
@@ -50,14 +50,14 @@ export default async function ServidorSubPage({ params }: Props) {
           <SectionHeading as="h1" title={page.headline} />
         </Reveal>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_360px]">
-          <div className="space-y-14">
+        <div className="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-[1fr_360px] lg:gap-20">
+          <div className="space-y-16 lg:space-y-20">
             {/* O problema */}
             <Reveal>
-              <h2 className="font-serif text-2xl font-medium text-ink lg:text-3xl">
+              <h2 className="text-title text-ink">
                 {page.problem.heading}
               </h2>
-              <div className="mt-4 max-w-2xl space-y-5">
+              <div className="mt-5 max-w-2xl space-y-5">
                 {page.problem.paragraphs.map((p, i) => (
                   <p key={i} className="text-lg text-ink-soft">
                     {p}
@@ -68,10 +68,10 @@ export default async function ServidorSubPage({ params }: Props) {
 
             {/* Como o escritório atua */}
             <Reveal>
-              <h2 className="font-serif text-2xl font-medium text-ink lg:text-3xl">
+              <h2 className="text-title text-ink">
                 {page.how.heading}
               </h2>
-              <div className="mt-4 max-w-2xl space-y-5">
+              <div className="mt-5 max-w-2xl space-y-5">
                 {page.how.paragraphs.map((p, i) => (
                   <p key={i} className="text-lg text-ink-soft">
                     {p}
@@ -89,10 +89,10 @@ export default async function ServidorSubPage({ params }: Props) {
 
             {/* FAQ */}
             <Reveal>
-              <h2 className="font-serif text-2xl font-medium text-ink lg:text-3xl">
+              <h2 className="text-title text-ink">
                 Perguntas frequentes
               </h2>
-              <div className="mt-6">
+              <div className="mt-8">
                 <FaqAccordion items={page.faq} />
               </div>
             </Reveal>
@@ -102,11 +102,11 @@ export default async function ServidorSubPage({ params }: Props) {
         </div>
 
         {/* Outros temas do hub */}
-        <div className="mt-24">
+        <div className="mt-28 lg:mt-44">
           <Reveal>
             <SectionHeading title="Também para servidores" />
           </Reveal>
-          <ul className="mt-8 flex flex-wrap gap-3">
+          <ul className="mt-10 flex flex-wrap gap-3 lg:mt-12">
             {outras.map((p) => (
               <li key={p.slug}>
                 <Link

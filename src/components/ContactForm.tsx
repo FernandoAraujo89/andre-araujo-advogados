@@ -127,7 +127,7 @@ export default function ContactForm({ assuntoInicial, origem }: Props = {}) {
         role="status"
         className="flex flex-col items-start gap-4 rounded-md border border-line bg-paper-light p-8"
       >
-        <h3 className="font-serif text-2xl font-medium text-ink">
+        <h3 className="text-card text-ink">
           Mensagem enviada
         </h3>
         <p className="text-ink-soft">

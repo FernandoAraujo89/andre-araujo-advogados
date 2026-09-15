@@ -23,7 +23,7 @@ export default function ServidoresPage() {
   const allFaq = servidorPages.flatMap((p) => p.faq).slice(0, 6);
 
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs
           items={[
@@ -39,22 +39,22 @@ export default function ServidoresPage() {
           />
         </Reveal>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_360px]">
+        <div className="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-[1fr_360px] lg:gap-20">
           <div>
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid gap-6 sm:grid-cols-2 lg:gap-8">
               {servidorPages.map((p, i) => (
                 <Reveal key={p.slug} delay={(i % 2) * 0.08} className="h-full">
                   <Link
                     href={`/servidores-publicos/${p.slug}`}
-                    className="group flex h-full flex-col rounded-md border border-line bg-paper-light p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)]"
+                    className="group flex h-full flex-col rounded-md border border-line bg-paper-light p-8 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)] lg:p-10"
                   >
-                    <h2 className="font-serif text-xl font-medium text-ink">
+                    <h2 className="text-card text-ink">
                       {p.name}
                     </h2>
-                    <p className="mt-3 flex-1 text-[0.9375rem] text-ink-soft">
+                    <p className="mt-4 flex-1 text-[0.9375rem] text-ink-soft">
                       {p.problem.paragraphs[0].slice(0, 120)}...
                     </p>
-                    <span className="mt-6 text-[0.9375rem] font-medium text-accent-deep">
+                    <span className="mt-8 text-[0.9375rem] font-medium text-accent-deep">
                       Saiba mais
                     </span>
                   </Link>
@@ -63,10 +63,10 @@ export default function ServidoresPage() {
             </div>
 
             <Reveal>
-              <h2 className="mt-16 font-serif text-2xl font-medium text-ink lg:text-3xl">
+              <h2 className="mt-20 text-title text-ink lg:mt-28">
                 Perguntas frequentes
               </h2>
-              <div className="mt-6">
+              <div className="mt-8">
                 <FaqAccordion items={allFaq} />
               </div>
             </Reveal>

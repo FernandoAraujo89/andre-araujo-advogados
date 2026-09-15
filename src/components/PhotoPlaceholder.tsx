@@ -30,7 +30,7 @@ export default function PhotoPlaceholder({
       style={{ aspectRatio: ratio }}
     >
       {initials ? (
-        <span className="select-none font-serif text-[clamp(3rem,8vw,5rem)] font-medium text-accent/70">
+        <span className="select-none font-serif text-[clamp(3rem,8vw,5rem)] italic text-accent/70">
           {initials}
         </span>
       ) : (

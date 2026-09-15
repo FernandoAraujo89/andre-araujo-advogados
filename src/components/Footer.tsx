@@ -10,9 +10,9 @@ export default function Footer({ areas }: { areas: AreaDeAtuacao[] }) {
   const [emailLocal, emailDomain] = site.email.split("@");
 
   return (
-    <footer className="bg-ink text-paper/80">
-      <div className="mx-auto max-w-[1240px] px-5 py-20 lg:px-8 lg:py-24">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1fr_1fr]">
+    <footer className="bg-ink px-5 text-paper/80 md:px-10 xl:px-16">
+      <div className="mx-auto max-w-[1240px] py-20 lg:py-32">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1fr_1fr] xl:gap-16">
           <div>
             <Image
               src="/logo-horizontal.png"
@@ -90,7 +90,7 @@ export default function Footer({ areas }: { areas: AreaDeAtuacao[] }) {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-paper/15 pt-8 text-base text-paper/60 md:flex-row md:items-center md:justify-between">
+        <div className="mt-16 flex flex-col gap-3 border-t border-paper/15 pt-8 text-base text-paper/60 md:flex-row md:items-center md:justify-between lg:mt-24">
           <p>
             © {new Date().getFullYear()} {site.name}. Todos os direitos
             reservados.

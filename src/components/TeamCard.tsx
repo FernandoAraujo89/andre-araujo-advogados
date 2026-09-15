@@ -27,7 +27,7 @@ export default function TeamCard({ member }: TeamCardProps) {
         />
       )}
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="font-serif text-lg font-medium leading-snug text-ink">
+        <h3 className="text-xl leading-snug tracking-[-0.01em] text-ink">
           {member.name}
         </h3>
         <p className="mt-1 flex-1 text-base text-ink-soft">

@@ -40,13 +40,13 @@ export default async function LawyerPage({ params }: Props) {
     .filter((a) => a !== undefined);
 
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs
           items={[{ label: "Equipe", href: "/equipe" }, { label: lawyer.name }]}
         />
 
-        <div className="grid gap-12 lg:grid-cols-[380px_1fr]">
+        <div className="grid gap-12 lg:grid-cols-[380px_1fr] lg:gap-24">
           <Reveal>
             {lawyer.photo ? (
               <Photo
@@ -66,16 +66,16 @@ export default async function LawyerPage({ params }: Props) {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <h1 className="font-serif text-[clamp(2.25rem,4.5vw,3.5rem)] font-medium leading-[1.1] text-ink">
+            <h1 className="text-balance text-heading text-ink">
               {lawyer.name}
             </h1>
-            <p className="mt-3 text-ink-soft">
+            <p className="mt-4 text-ink-soft">
               {[lawyer.role, lawyer.oab].filter(Boolean).join(", ")}
             </p>
-            <p className="mt-8 max-w-2xl text-lg text-ink-soft">{lawyer.bio}</p>
+            <p className="mt-10 max-w-2xl text-lg text-ink-soft">{lawyer.bio}</p>
 
             {lawyerAreas.length > 0 && (
-              <div className="mt-10">
+              <div className="mt-12">
                 <h2 className="text-base font-medium text-ink-soft">
                   Áreas em que atua
                 </h2>
@@ -94,7 +94,7 @@ export default async function LawyerPage({ params }: Props) {
               </div>
             )}
 
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-12 flex flex-wrap gap-4">
               <Button href={site.whatsappHref} external size="lg">
                 Falar no WhatsApp
               </Button>

@@ -36,25 +36,29 @@ const canais = [
 
 export default function ContatoPage() {
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <JsonLd data={legalServiceJsonLd()} />
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs items={[{ label: "Contato" }]} />
         <Reveal>
           <SectionHeading
             as="h1"
-            title="Vamos conversar sobre o seu caso"
+            title={
+              <>
+                Vamos conversar <em>sobre o seu caso</em>
+              </>
+            }
             description="Envie sua mensagem pelo formulário ou fale direto pelos nossos canais. Retornamos o quanto antes."
           />
         </Reveal>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-2">
+        <div className="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-2 lg:gap-24">
           <Reveal>
             <ContactForm />
           </Reveal>
 
           <Reveal delay={0.1}>
-            <ul className="space-y-6">
+            <ul className="space-y-8">
               {canais.map(({ label, value, href, external }) => (
                 <li key={label}>
                   <p className="label">{label}</p>
@@ -83,7 +87,7 @@ export default function ContatoPage() {
         </div>
 
         <Reveal>
-          <div className="mt-16 overflow-hidden rounded-md border border-line">
+          <div className="mt-20 overflow-hidden rounded-md border border-line lg:mt-28">
             <iframe
               title="Mapa do escritório André Araújo Advogados em Formiga, MG"
               src={`https://www.google.com/maps?q=${encodeURIComponent(site.mapsQuery)}&output=embed`}

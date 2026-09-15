@@ -36,9 +36,33 @@
   --color-accent-surface-deep: #0d1319;
   --color-accent-mist: #efe7d1; /* dourado claro */
 
-  /* Tipografia (variáveis injetadas pelo next/font em layout.tsx) */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  /*
+   * Tipografia (variáveis injetadas pelo next/font em layout.tsx).
+   * Linguagem da referência august-debouzy.com: títulos em sans no peso
+   * regular (400), grandes e com tracking negativo; a serifa entra só em
+   * itálico, como acento em palavras-chave (<em> dentro de títulos).
+   */
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+
+  /*
+   * Escala dos títulos — cada token já traz entrelinha e tracking (quanto
+   * maior o corpo, mais fechado). Fluida entre 375px e 1440px de viewport.
+   * Uso: text-display (h1), text-heading (h2 de seção), text-title
+   * (subtítulos de conteúdo) e text-card (títulos de card).
+   */
+  --text-display: clamp(2.75rem, 1.87rem + 3.76vw, 5.25rem); /* 44 → 84px */
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.035em;
+  --text-heading: clamp(2.25rem, 1.72rem + 2.25vw, 3.75rem); /* 36 → 60px */
+  --text-heading--line-height: 1.08;
+  --text-heading--letter-spacing: -0.03em;
+  --text-title: clamp(1.75rem, 1.49rem + 1.13vw, 2.5rem); /* 28 → 40px */
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.02em;
+  --text-card: clamp(1.375rem, 1.24rem + 0.56vw, 1.75rem); /* 22 → 28px */
+  --text-card--line-height: 1.2;
+  --text-card--letter-spacing: -0.015em;
 
   /* Raios — cantos discretos, quase retos, como na referência editorial */
   --radius-card: 0.375rem; /* 6px — cards e fotos */
@@ -67,6 +91,20 @@ body {
   font-size: 1.0625rem; /* 17px */
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Acento editorial — "Le droit et l'audace": o trecho em <em> dentro de um
+ * título vira Instrument Serif itálico, no mesmo corpo do título. Fica na
+ * camada base para que utilities (cor, por exemplo) continuem valendo.
+ */
+@layer base {
+  :is(h1, h2, h3) em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
 }
 
 /*

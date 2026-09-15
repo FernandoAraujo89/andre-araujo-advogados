@@ -451,7 +451,7 @@ export default function LandingEditor({ mode, initial }: Props) {
     <form onSubmit={(e) => { e.preventDefault(); save(page.status); }} className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-3xl font-medium text-ink">
+          <h1 className="text-3xl tracking-[-0.02em] text-ink">
             {mode === "create" ? "Nova landing page" : "Editar landing page"}
           </h1>
           <p className="mt-1 text-base text-ink-soft">
@@ -569,7 +569,7 @@ export default function LandingEditor({ mode, initial }: Props) {
           <div key={s.id} className="rounded-md border border-line p-4">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <p className="font-medium text-ink">
-                <span className="mr-2 font-serif text-sm italic text-wine">{String(i + 1).padStart(2, "0")}</span>
+                <span className="mr-2 font-serif text-sm font-normal italic text-wine">{String(i + 1).padStart(2, "0")}</span>
                 {sectionLabels[s.type]}
               </p>
               <div className="flex items-center gap-2">

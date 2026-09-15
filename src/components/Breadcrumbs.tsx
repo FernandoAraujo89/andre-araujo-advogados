@@ -25,7 +25,7 @@ export default function Breadcrumbs({ items, light = false }: BreadcrumbsProps) 
   return (
     <nav
       aria-label="Trilha de navegação"
-      className={`mb-10 ${light ? "text-paper/70" : ""}`}
+      className={`mb-12 lg:mb-16 ${light ? "text-paper/70" : ""}`}
     >
       <ol className="flex flex-wrap items-center gap-1.5 text-base text-ink-soft">
         {crumbs.map((crumb, i) => {

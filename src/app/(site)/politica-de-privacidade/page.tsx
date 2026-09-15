@@ -17,7 +17,7 @@ export const metadata: Metadata = pageMetadata({
  */
 export default function PrivacidadePage() {
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <div className="mx-auto max-w-3xl">
         <Breadcrumbs items={[{ label: "Política de Privacidade" }]} />
         <SectionHeading
@@ -26,9 +26,9 @@ export default function PrivacidadePage() {
           description="Como o André Araújo Advogados trata os dados pessoais informados neste site, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018)."
         />
 
-        <div className="mt-12 space-y-10 text-lg text-ink-soft">
+        <div className="mt-16 space-y-12 text-lg text-ink-soft lg:mt-20">
           <section>
-            <h2 className="mb-3 font-serif text-2xl font-medium text-ink">
+            <h2 className="mb-4 text-card text-ink">
               Dados que coletamos
             </h2>
             <p>
@@ -41,7 +41,7 @@ export default function PrivacidadePage() {
           </section>
 
           <section>
-            <h2 className="mb-3 font-serif text-2xl font-medium text-ink">
+            <h2 className="mb-4 text-card text-ink">
               Como usamos os dados
             </h2>
             <p>
@@ -53,7 +53,7 @@ export default function PrivacidadePage() {
           </section>
 
           <section>
-            <h2 className="mb-3 font-serif text-2xl font-medium text-ink">
+            <h2 className="mb-4 text-card text-ink">
               Armazenamento e segurança
             </h2>
             <p>
@@ -66,7 +66,7 @@ export default function PrivacidadePage() {
           </section>
 
           <section>
-            <h2 className="mb-3 font-serif text-2xl font-medium text-ink">
+            <h2 className="mb-4 text-card text-ink">
               Seus direitos
             </h2>
             <p>
@@ -78,7 +78,7 @@ export default function PrivacidadePage() {
           </section>
 
           <section>
-            <h2 className="mb-3 font-serif text-2xl font-medium text-ink">
+            <h2 className="mb-4 text-card text-ink">
               Cookies e serviços de terceiros
             </h2>
             <p>
@@ -89,7 +89,7 @@ export default function PrivacidadePage() {
           </section>
 
           <section>
-            <h2 className="mb-3 font-serif text-2xl font-medium text-ink">
+            <h2 className="mb-4 text-card text-ink">
               Contato
             </h2>
             <p>

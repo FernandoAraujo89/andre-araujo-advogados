@@ -146,17 +146,17 @@ export default function OEscritorioPage() {
   return (
     <>
       {/* 1. Hero — papel */}
-      <section className="px-5 pb-24 pt-36 lg:px-8">
+      <section className="px-5 pb-24 pt-36 md:px-10 xl:px-16 lg:pb-44 lg:pt-48">
         <div className="mx-auto max-w-[1240px]">
           <Breadcrumbs items={[{ label: "O Escritório" }]} />
 
-          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
             <Reveal>
-              <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-ink">
+              <h1 className="text-balance text-display text-ink">
                 Advocacia com endereço,{" "}
-                <em className="italic text-accent">rosto e história</em>
+                <em className="text-accent">rosto e história</em>
               </h1>
-              <p className="mt-6 max-w-xl text-lg text-pretty text-ink-soft">
+              <p className="mt-8 max-w-lg text-lg text-pretty text-ink-soft">
                 O André Araújo Advogados nasceu em Minas Gerais com a convicção
                 de que a boa advocacia se faz com técnica e com vínculo:
                 conhecer o cliente e o contexto de cada caso.
@@ -176,14 +176,20 @@ export default function OEscritorioPage() {
       </section>
 
       {/* 2. História — faixa paper-light, como a seção de áreas da home */}
-      <section className="border-y border-line bg-paper-light px-5 py-24 lg:px-8 lg:py-32">
+      <section className="border-y border-line bg-paper-light px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
-          <div className="grid gap-12 lg:grid-cols-2">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-24">
             <Reveal>
-              <SectionHeading title="De Minas Gerais para todo o Brasil" />
+              <SectionHeading
+                title={
+                  <>
+                    De Minas Gerais <em>para todo o Brasil</em>
+                  </>
+                }
+              />
             </Reveal>
             <Reveal delay={0.1}>
-              <div className="space-y-5 text-lg text-ink-soft">
+              <div className="space-y-6 text-lg text-ink-soft">
                 {/* TODO: revisar marcos da história com o cliente */}
                 <p>
                   Há sete anos, André Augusto de Araújo fundou o escritório em
@@ -206,17 +212,19 @@ export default function OEscritorioPage() {
       </section>
 
       {/* 3. Missão — faixa vinho, citação centrada */}
-      <section className="bg-accent-surface px-5 py-24 lg:px-8 lg:py-32">
+      <section className="bg-accent-surface px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <figure className="mx-auto max-w-4xl text-center">
-              <blockquote className="text-balance font-serif text-[clamp(1.5rem,3vw,2.25rem)] font-normal leading-[1.35] text-paper-light">
+              {/* Declaração em serifa itálica, como "De la complexité à la
+                  décision." na referência */}
+              <blockquote className="text-balance font-serif text-[clamp(1.75rem,1.4rem+1.5vw,2.75rem)] italic leading-[1.2] tracking-[-0.01em] text-paper-light">
                 “Prestar serviços jurídicos que ultrapassem a esfera da
                 excelência profissional, mediante a valorização dos laços
                 criados com os clientes, a fim de desenvolver parcerias
                 consistentes e perduráveis.”
               </blockquote>
-              <figcaption className="mt-6 text-base text-paper/85">
+              <figcaption className="mt-8 text-base text-paper/85 lg:mt-10">
                 Missão do escritório
               </figcaption>
             </figure>
@@ -225,19 +233,27 @@ export default function OEscritorioPage() {
       </section>
 
       {/* 4. Valores — papel */}
-      <section className="px-5 py-24 lg:px-8 lg:py-32">
+      <section className="px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <SectionHeading title="O que orienta a nossa prática" />
+            <SectionHeading
+              title={
+                <>
+                  O que orienta <em>a nossa prática</em>
+                </>
+              }
+            />
           </Reveal>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {/* 4 colunas só a partir de xl: em 1024px o card fica estreito
+              demais para palavras longas como "Transparência" */}
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:mt-24 lg:gap-8 xl:grid-cols-4">
             {valores.map((v, i) => (
               <Reveal key={v.title} delay={i * 0.08} className="h-full">
-                <div className="h-full rounded-md border border-line bg-paper-light p-8">
-                  <h3 className="font-serif text-xl font-medium text-ink">
+                <div className="h-full rounded-md border border-line bg-paper-light p-8 lg:p-10">
+                  <h3 className="text-card text-ink">
                     {v.title}
                   </h3>
-                  <p className="mt-3 text-[0.9375rem] text-ink-soft">{v.text}</p>
+                  <p className="mt-4 text-[0.9375rem] text-ink-soft">{v.text}</p>
                 </div>
               </Reveal>
             ))}
@@ -246,13 +262,13 @@ export default function OEscritorioPage() {
       </section>
 
       {/* 5. Galeria — faixa escura; as fotos falam por si, sem legendas */}
-      <section className="bg-ink px-5 py-24 lg:px-8 lg:py-32">
+      <section className="bg-ink px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <SectionHeading dark title="A sede" />
           </Reveal>
 
-          <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8">
+          <div className="mt-16 grid grid-cols-1 gap-6 lg:mt-24 lg:grid-cols-12 lg:gap-8">
             {fotos.map((foto) => (
               <Reveal key={foto.src} delay={foto.delay} className={foto.span}>
                 <Photo
@@ -269,17 +285,17 @@ export default function OEscritorioPage() {
       </section>
 
       {/* 6. CTA — faixa rosada entre a galeria escura e o rodapé escuro */}
-      <section className="bg-accent-mist px-5 py-24 text-center lg:px-8 lg:py-32">
+      <section className="bg-accent-mist px-5 py-24 text-center md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
-            <h2 className="text-balance mx-auto max-w-2xl font-serif text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.1] text-ink">
-              Conheça o escritório de perto
+            <h2 className="text-balance mx-auto max-w-4xl text-heading text-ink">
+              Conheça o escritório <em>de perto</em>
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-ink-soft">
+            <p className="mx-auto mt-6 max-w-xl text-lg text-ink-soft lg:mt-8">
               Agende um atendimento e converse com a nossa equipe sobre o seu
               caso.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-12 flex flex-wrap justify-center gap-4">
               <Button href={site.whatsappHref} external size="lg">
                 Falar no WhatsApp
               </Button>

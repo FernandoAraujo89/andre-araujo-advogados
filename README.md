@@ -2,7 +2,8 @@
 
 Site do escritório André Araújo Advogados (sede em Formiga, MG, atendimento
 em todo o Brasil), que substitui o site antigo em Wix. Visual editorial
-(referência: cadmus.io) adaptado ao universo jurídico, com a sobriedade que o
+(referência: cadmus.io; tipografia e espaços vazios inspirados em
+august-debouzy.com) adaptado ao universo jurídico, com a sobriedade que o
 Provimento 205/2021 da OAB exige.
 
 **Stack:** Next.js 16 (App Router, Turbopack) · React 19 · Tailwind CSS 4 ·
@@ -164,6 +165,27 @@ retratos quadrados da equipe em `public/equipe/<slug>.jpg`. O componente
 `Photo` (next/image com proporção fixa, CLS zero) é o padrão; as capas dos
 posts semente vêm do Unsplash, com crédito. `PhotoPlaceholder` só entra
 quando um integrante da equipe não tem foto.
+
+## Tipografia
+
+Linguagem da referência august-debouzy.com: títulos grandes em sans no peso
+regular, com tracking negativo; palavras-chave em serifa itálica; muito
+espaço em branco entre as seções.
+
+- **Fontes:** Instrument Sans (texto e títulos) + Instrument Serif itálico
+  (acentos), carregadas em `src/app/layout.tsx` via `next/font/google`
+  (auto-hospedadas, licença OFL). São os equivalentes livres mais próximos
+  das fontes da referência, Akzidenz-Grotesk e Ivyora Display, que são
+  comerciais.
+- **Escala:** tokens `text-display` (h1), `text-heading` (h2 de seção),
+  `text-title` e `text-card` em `src/app/globals.css`. Cada token já traz
+  tamanho, entrelinha e tracking.
+- **Acento em itálico:** envolva o trecho em `<em>` dentro do título, por
+  exemplo `<SectionHeading title={<>Quem conduz <em>o seu caso</em></>} />`.
+  O estilo vem do `globals.css`.
+- **Usar as fontes originais:** depois de licenciar Akzidenz-Grotesk
+  (Berthold) e Ivyora Display (Ivy Foundry, disponível no Adobe Fonts),
+  aponte os tokens `--font-sans` e `--font-serif` do `globals.css` para elas.
 
 ## Formulário de contato
 

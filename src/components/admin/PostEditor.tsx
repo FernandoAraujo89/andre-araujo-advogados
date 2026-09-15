@@ -120,7 +120,7 @@ export default function PostEditor({ mode, initial }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="font-serif text-3xl font-medium text-ink">
+        <h1 className="text-3xl tracking-[-0.02em] text-ink">
           {mode === "create" ? "Novo post" : "Editar post"}
         </h1>
         <div className="flex items-center gap-3">

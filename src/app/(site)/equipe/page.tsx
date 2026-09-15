@@ -16,13 +16,17 @@ export const metadata: Metadata = pageMetadata({
 
 export default function EquipePage() {
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs items={[{ label: "Equipe" }]} />
         <Reveal>
           <SectionHeading
             as="h1"
-            title="As pessoas por trás de cada caso"
+            title={
+              <>
+                As pessoas <em>por trás de cada caso</em>
+              </>
+            }
             description="Uma equipe de profissionais qualificados (advocacia, controladoria jurídica, estágio e atendimento) liderada pelo sócio fundador André Augusto de Araújo."
           />
         </Reveal>
@@ -33,10 +37,10 @@ export default function EquipePage() {
             ratio="16/9"
             sizes="(max-width: 1304px) 100vw, 1240px"
             objectPosition="center 35%"
-            className="mt-12"
+            className="mt-16 lg:mt-24"
           />
         </Reveal>
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4 lg:gap-8">
           {team.map((member, i) => (
             <Reveal key={member.slug} delay={(i % 4) * 0.06} className="h-full">
               <TeamCard member={member} />

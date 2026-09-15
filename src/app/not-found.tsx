@@ -10,21 +10,21 @@ import { navMain } from "@/data/site";
 export default function NotFound() {
   return (
     <SiteChrome>
-      <div className="px-5 pb-28 pt-44 lg:px-8 lg:pb-36">
+      <div className="px-5 pb-28 pt-44 md:px-10 xl:px-16 lg:pb-48 lg:pt-56">
         <div className="mx-auto max-w-[1240px] text-center">
-          <h1 className="mx-auto max-w-2xl font-serif text-[clamp(2.5rem,5vw,4rem)] font-medium leading-[1.1] text-ink">
-            Esta página não foi encontrada
+          <h1 className="text-balance mx-auto max-w-4xl text-display text-ink">
+            Esta página <em>não foi encontrada</em>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg text-ink-soft">
+          <p className="mx-auto mt-8 max-w-xl text-lg text-ink-soft">
             O endereço pode ter mudado com o novo site. Veja abaixo os caminhos
             mais procurados ou volte para a página inicial.
           </p>
-          <div className="mt-9">
+          <div className="mt-12">
             <Button href="/" size="lg">
               Ir para a página inicial
             </Button>
           </div>
-          <ul className="mt-10 flex flex-wrap justify-center gap-3">
+          <ul className="mt-12 flex flex-wrap justify-center gap-3">
             {navMain.map((item) => (
               <li key={item.href}>
                 <Link

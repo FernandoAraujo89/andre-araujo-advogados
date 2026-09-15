@@ -37,11 +37,11 @@ export default function AdminLoginPage() {
     <div className="flex min-h-svh items-center justify-center px-5">
       <div className="w-full max-w-sm">
         <div className="text-center">
-          <p className="font-serif text-2xl font-semibold text-ink">
+          <p className="text-2xl tracking-[-0.02em] text-ink">
             André Araújo{" "}
-            <span className="font-normal text-wine">Advogados</span>
+            <span className="font-serif italic text-wine">Advogados</span>
           </p>
-          <h1 className="mt-6 font-serif text-xl font-medium text-ink">
+          <h1 className="mt-6 text-xl tracking-[-0.01em] text-ink">
             Painel de conteúdo
           </h1>
           <p className="mt-2 text-base text-ink-soft">

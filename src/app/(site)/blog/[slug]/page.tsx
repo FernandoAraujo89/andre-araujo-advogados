@@ -48,25 +48,25 @@ export default async function PostPage({ params }: Props) {
     .slice(0, 3);
 
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <JsonLd data={articleJsonLd(post)} />
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs
           items={[{ label: "Blog", href: "/blog" }, { label: post.title }]}
         />
 
-        <div className="grid gap-12 lg:grid-cols-[1fr_360px]">
+        <div className="grid gap-12 lg:grid-cols-[1fr_360px] lg:gap-20">
           <article>
             <Reveal>
-              <p className="label mb-3 text-accent">{post.category}</p>
-              <h1 className="max-w-3xl font-serif text-[clamp(2.25rem,4.5vw,3.5rem)] font-medium leading-[1.1] text-ink">
+              <p className="label mb-4 text-accent">{post.category}</p>
+              <h1 className="max-w-3xl text-balance text-heading text-ink">
                 {post.title}
               </h1>
-              <time dateTime={post.date} className="mt-5 block text-ink-soft">
+              <time dateTime={post.date} className="mt-6 block text-ink-soft">
                 {formatDate(post.date)}
               </time>
               {post.image && (
-                <div className="mt-8">
+                <div className="mt-10 lg:mt-12">
                   <Photo
                     src={post.image.src}
                     alt={post.image.alt}
@@ -80,12 +80,12 @@ export default async function PostPage({ params }: Props) {
               )}
             </Reveal>
 
-            <div className="mt-10 max-w-3xl">
+            <div className="mt-12 max-w-3xl lg:mt-14">
               <Markdown>{post.body}</Markdown>
             </div>
 
             <Reveal>
-              <p className="mt-12 max-w-3xl rounded-md border border-line bg-paper-light p-6 text-base text-ink-soft">
+              <p className="mt-14 max-w-3xl rounded-md border border-line bg-paper-light p-6 text-base text-ink-soft lg:p-8">
                 Este conteúdo tem caráter informativo e não substitui a análise
                 do seu caso concreto. Para orientação específica, fale com o
                 escritório.
@@ -97,11 +97,11 @@ export default async function PostPage({ params }: Props) {
         </div>
 
         {related.length > 0 && (
-          <div className="mt-24">
+          <div className="mt-28 lg:mt-44">
             <Reveal>
               <SectionHeading title="Artigos relacionados" />
             </Reveal>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-12 grid gap-6 md:grid-cols-3 lg:mt-16 lg:gap-8">
               {related.map((p, i) => (
                 <Reveal key={p.slug} delay={i * 0.08} className="h-full">
                   <PostCard post={p} />

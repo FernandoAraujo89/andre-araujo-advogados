@@ -6,14 +6,14 @@ import { site } from "@/data/site";
 export default function ContactAside() {
   return (
     <aside className="lg:sticky lg:top-28">
-      <div className="rounded-md bg-ink p-8 text-paper/85">
-        <h2 className="font-serif text-2xl font-medium text-paper-light">
-          Converse com o escritório
+      <div className="rounded-md bg-ink p-8 text-paper/85 lg:p-10">
+        <h2 className="text-card text-paper-light">
+          Converse com <em className="whitespace-nowrap">o escritório</em>
         </h2>
-        <p className="mt-3 text-[0.9375rem] leading-relaxed">
+        <p className="mt-4 text-[0.9375rem] leading-relaxed">
           Explique sua situação e entenda os caminhos possíveis. Atendimento presencial ou remoto, em todo o Brasil.
         </p>
-        <div className="mt-6 flex flex-col gap-3">
+        <div className="mt-8 flex flex-col gap-3">
           <a
             href={site.whatsappHref}
             target="_blank"

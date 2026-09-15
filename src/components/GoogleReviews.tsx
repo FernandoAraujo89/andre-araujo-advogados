@@ -55,7 +55,7 @@ export default function GoogleReviews() {
   return (
     <section
       aria-labelledby="avaliacoes-titulo"
-      className="border-y border-line bg-paper-light px-5 py-24 lg:px-8 lg:py-32"
+      className="border-y border-line bg-paper-light px-5 py-24 md:px-10 xl:px-16 lg:py-44"
     >
       <div className="mx-auto max-w-[1240px]">
         {/* Cabeçalho: título + resumo da nota do Google */}
@@ -63,7 +63,11 @@ export default function GoogleReviews() {
           <Reveal>
             <div id="avaliacoes-titulo">
               <SectionHeading
-                title="O que dizem nossos clientes"
+                title={
+                  <>
+                    O que dizem <em>nossos clientes</em>
+                  </>
+                }
                 description="Avaliações reais publicadas no Google por quem foi atendido pelo escritório."
               />
             </div>
@@ -71,7 +75,7 @@ export default function GoogleReviews() {
 
           <Reveal delay={0.1}>
             <div className="flex items-center gap-5 rounded-md border border-line bg-paper px-6 py-5">
-              <span className="font-serif text-[3.25rem] font-medium leading-none text-ink">
+              <span className="text-[3.25rem] leading-none tracking-[-0.04em] text-ink">
                 {rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
               </span>
               <span aria-hidden className="h-12 w-px bg-line" />
@@ -87,11 +91,11 @@ export default function GoogleReviews() {
         </div>
 
         {/* Cards das avaliações */}
-        <ul className="mt-14 grid gap-6 md:grid-cols-3">
+        <ul className="mt-16 grid gap-6 md:grid-cols-3 lg:mt-24 lg:gap-8">
           {reviews.map((review, i) => (
             <Reveal key={review.name} delay={i * 0.08} className="h-full">
               <li className="h-full">
-                <figure className="flex h-full flex-col rounded-md border border-line bg-paper p-8">
+                <figure className="flex h-full flex-col rounded-md border border-line bg-paper p-8 lg:p-10">
                   <Stars rating={review.rating} />
                   <blockquote className="mt-5 flex-1 text-pretty text-[1.0625rem] leading-relaxed text-ink-soft">
                     {review.text}
@@ -119,7 +123,7 @@ export default function GoogleReviews() {
         </ul>
 
         <Reveal>
-          <div className="mt-10">
+          <div className="mt-12">
             <a
               href={url}
               target="_blank"

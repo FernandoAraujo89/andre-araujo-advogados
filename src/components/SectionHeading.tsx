@@ -1,5 +1,8 @@
+import type { ReactNode } from "react";
+
 type SectionHeadingProps = {
-  title: string;
+  /** Aceita <em> para o acento em serifa itálica (ver globals.css) */
+  title: ReactNode;
   description?: string;
   align?: "left" | "center";
   as?: "h1" | "h2";
@@ -13,23 +16,25 @@ export default function SectionHeading({
   as: Tag = "h2",
   dark = false,
 }: SectionHeadingProps) {
-  const alignCls = align === "center" ? "text-center mx-auto" : "";
-  const titleSize =
-    Tag === "h1"
-      ? "text-[clamp(2.75rem,6vw,4.75rem)]"
-      : "text-[clamp(2rem,4vw,3rem)]";
+  const center = align === "center";
+  // Título largo e texto de apoio estreito: o contraste de medidas abre o
+  // espaço vazio ao redor, como na referência editorial.
+  const titleCls =
+    Tag === "h1" ? "max-w-5xl text-display" : "max-w-4xl text-heading";
   return (
-    <div className={`max-w-3xl ${alignCls}`}>
+    <div className={center ? "text-center" : ""}>
       <Tag
-        className={`text-balance font-serif font-medium leading-[1.1] tracking-[-0.01em] ${titleSize} ${
-          dark ? "text-paper-light" : "text-ink"
-        }`}
+        className={`text-balance ${titleCls} ${
+          center ? "mx-auto" : ""
+        } ${dark ? "text-paper-light" : "text-ink"}`}
       >
         {title}
       </Tag>
       {description && (
         <p
-          className={`mt-5 text-lg text-pretty ${dark ? "text-paper/75" : "text-ink-soft"}`}
+          className={`mt-6 max-w-2xl text-lg text-pretty lg:mt-8 ${
+            center ? "mx-auto" : ""
+          } ${dark ? "text-paper/75" : "text-ink-soft"}`}
         >
           {description}
         </p>

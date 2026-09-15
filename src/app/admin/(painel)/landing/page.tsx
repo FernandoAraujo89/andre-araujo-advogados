@@ -11,7 +11,7 @@ export default async function LandingListPage() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-3xl font-medium text-ink">Landing pages</h1>
+          <h1 className="text-3xl tracking-[-0.02em] text-ink">Landing pages</h1>
           <p className="mt-1 text-base text-ink-soft">
             Páginas de campanha em /areas-de-atuacao. As publicadas entram no menu
             de áreas, no índice de áreas e no rodapé.

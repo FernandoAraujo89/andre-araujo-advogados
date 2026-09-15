@@ -11,7 +11,7 @@ export default async function AdminDashboard() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-3xl font-medium text-ink">Posts</h1>
+          <h1 className="text-3xl tracking-[-0.02em] text-ink">Posts</h1>
           <p className="mt-1 text-base text-ink-soft">
             {posts.length} {posts.length === 1 ? "artigo" : "artigos"} no blog.
           </p>

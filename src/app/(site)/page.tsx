@@ -57,13 +57,16 @@ export default async function Home() {
 
       {/* 1. Hero — fundo azul-tinta, ocupa a viewport; a barra de
           credibilidade fica no rodapé do próprio hero */}
-      <section className="flex min-h-svh flex-col bg-ink px-5 pb-8 pt-28 lg:px-8 lg:pb-10 lg:pt-32">
+      <section className="flex min-h-svh flex-col bg-ink px-5 pb-8 pt-28 md:px-10 xl:px-16 lg:pb-10 lg:pt-32">
         <div className="mx-auto flex w-full max-w-[1240px] flex-1 items-center">
-          <div className="grid w-full items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+          <div className="grid w-full items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-20">
             <Reveal>
-              <h1 className="text-balance font-serif text-[clamp(2.5rem,4.5vw,4.25rem)] font-medium leading-[1.05] tracking-[-0.015em] text-paper-light">
+              {/* Corpo e margens do hero não crescem como nas outras seções
+                  (nada de text-display): título, texto e botões precisam caber
+                  na viewport junto com a barra de números, inclusive em 1366x768 */}
+              <h1 className="text-balance text-[clamp(2.5rem,4.5vw,4.25rem)] leading-[1.05] tracking-[-0.035em] text-paper-light">
                 Advocacia especializada, com atendimento{" "}
-                <em className="italic text-gold">em todo o Brasil</em>
+                <em className="text-gold">em todo o Brasil</em>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-pretty text-paper/75">
                 Direito cível, empresarial, tributário e do servidor público.
@@ -123,7 +126,7 @@ export default async function Home() {
       </section>
 
       {/* 2. Áreas de atuação — o cliente escolhe o caminho do seu caso */}
-      <section className="border-b border-line bg-paper-light px-5 py-24 lg:px-8 lg:py-32">
+      <section className="border-b border-line bg-paper-light px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
@@ -139,7 +142,7 @@ export default async function Home() {
               </Link>
             </div>
           </Reveal>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:mt-24 lg:grid-cols-3 lg:gap-8">
             {areasDeAtuacao.map((area, i) => (
               <Reveal
                 key={area.slug}
@@ -157,34 +160,41 @@ export default async function Home() {
 
       {/* 3. Por que o André Araújo Advogados — portal para O Escritório:
           foto da sede em multiply escuro com parallax no scroll */}
-      <section className="relative isolate overflow-hidden bg-ink px-5 py-24 lg:px-8 lg:py-32">
+      <section className="relative isolate overflow-hidden bg-ink px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <ParallaxBackdrop src="/images/escritorio/sala-de-reunioes.jpg" />
 
         <div className="relative z-10 mx-auto max-w-[1240px]">
           <Reveal>
-            <p className="mb-4 text-sm font-medium uppercase tracking-[0.18em] text-gold">
+            <p className="mb-6 text-sm font-medium uppercase tracking-[0.18em] text-gold">
               O escritório
             </p>
-            <SectionHeading dark title="Advocacia de confiança, do jeito que deveria ser" />
+            <SectionHeading
+              dark
+              title={
+                <>
+                  Advocacia de confiança, <em>do jeito que deveria ser</em>
+                </>
+              }
+            />
           </Reveal>
-          <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-16 grid gap-x-12 gap-y-14 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4">
             {diferenciais.map(({ title, text }, i) => (
               <Reveal key={title} delay={i * 0.08}>
                 <p
                   aria-hidden
-                  className="font-serif text-sm italic text-paper/50"
+                  className="font-serif text-lg italic text-paper/50"
                 >
                   {String(i + 1).padStart(2, "0")}
                 </p>
-                <h3 className="mt-4 border-t border-paper/25 pt-4 font-serif text-xl font-medium text-paper-light">
+                <h3 className="mt-4 border-t border-paper/25 pt-5 text-card text-paper-light">
                   {title}
                 </h3>
-                <p className="mt-3 text-[0.9375rem] text-paper/80">{text}</p>
+                <p className="mt-4 text-[0.9375rem] text-paper/80">{text}</p>
               </Reveal>
             ))}
           </div>
           <Reveal>
-            <div className="mt-16 flex flex-col items-start gap-6 border-t border-paper/15 pt-10 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-16 flex flex-col items-start gap-6 border-t border-paper/15 pt-10 sm:flex-row sm:items-center sm:justify-between lg:mt-24 lg:pt-12">
               <p className="max-w-md text-lg text-pretty text-paper/85">
                 Conheça nossa história, a estrutura e a equipe. Veja as fotos da
                 sede.
@@ -218,15 +228,19 @@ export default async function Home() {
       </section>
 
       {/* 4. Equipe — André em destaque com resumo do currículo */}
-      <section className="px-5 py-24 lg:px-8 lg:py-32">
+      <section className="px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <SectionHeading
-              title="Quem conduz o seu caso"
+              title={
+                <>
+                  Quem conduz <em>o seu caso</em>
+                </>
+              }
               description="O escritório é liderado pelo sócio fundador André Augusto de Araújo, à frente de uma equipe de profissionais qualificados em advocacia, controladoria jurídica e atendimento."
             />
           </Reveal>
-          <div className="mt-14 grid items-center gap-10 lg:grid-cols-[380px_1fr] lg:gap-16">
+          <div className="mt-16 grid items-center gap-12 lg:mt-24 lg:grid-cols-[380px_1fr] lg:gap-24">
             <Reveal>
               <Photo
                 src={andre.photo!}
@@ -236,13 +250,13 @@ export default async function Home() {
               />
             </Reveal>
             <Reveal delay={0.1}>
-              <h3 className="font-serif text-2xl font-medium text-ink lg:text-3xl">
+              <h3 className="text-title text-ink">
                 {andre.name}
               </h3>
-              <p className="mt-2 text-ink-soft">
+              <p className="mt-3 text-ink-soft">
                 {andre.role}, {andre.oab}
               </p>
-              <p className="mt-6 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-soft">
+              <p className="mt-8 max-w-2xl text-[1.0625rem] leading-relaxed text-ink-soft">
                 Graduado em Direito pelo UNIFOR-MG, com pós-graduações em
                 Direito Empresarial e Advocacia Empresarial e em Direito
                 Tributário (Anhanguera Uniderp) e em Advocacia Tributária
@@ -251,7 +265,7 @@ export default async function Home() {
                 consultiva e contenciosa nas áreas cível, empresarial,
                 trabalhista e tributária.
               </p>
-              <div className="mt-8">
+              <div className="mt-10">
                 <Button href="/equipe" variant="secondary">
                   Conheça toda a equipe
                 </Button>
@@ -265,17 +279,23 @@ export default async function Home() {
       <GoogleReviews />
 
       {/* 6. Blog — fundo em tom claro do acento (accent-mist) */}
-      <section className="border-y border-line bg-accent-mist px-5 py-24 lg:px-8 lg:py-32">
+      <section className="border-y border-line bg-accent-mist px-5 py-24 md:px-10 xl:px-16 lg:py-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-6">
-              <SectionHeading title="Informação jurídica em linguagem clara" />
+              <SectionHeading
+                title={
+                  <>
+                    Informação jurídica <em>em linguagem clara</em>
+                  </>
+                }
+              />
               <Button href="/blog" variant="secondary">
                 Ver todos os artigos
               </Button>
             </div>
           </Reveal>
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-16 grid gap-6 md:grid-cols-3 lg:mt-24 lg:gap-8">
             {recentPosts.map((post, i) => (
               <Reveal key={post.slug} delay={i * 0.08} className="h-full">
                 <PostCard post={post} />
@@ -286,20 +306,24 @@ export default async function Home() {
       </section>
 
       {/* 7. Contato — canais diretos; endereço e mapa só na página de Contato */}
-      <section className="px-5 pb-28 pt-24 lg:px-8 lg:pb-36 lg:pt-32">
+      <section className="px-5 pb-28 pt-24 md:px-10 xl:px-16 lg:pb-48 lg:pt-44">
         <div className="mx-auto max-w-[1240px]">
           <Reveal>
             <SectionHeading
-              title="Vamos conversar sobre o seu caso"
+              title={
+                <>
+                  Vamos conversar <em>sobre o seu caso</em>
+                </>
+              }
               description="Envie sua mensagem ou fale direto pelos nossos canais. Retornamos o quanto antes."
             />
           </Reveal>
-          <div className="mt-14 grid gap-12 lg:grid-cols-2">
+          <div className="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-2 lg:gap-24">
             <Reveal>
               <ContactForm />
             </Reveal>
             <Reveal delay={0.1}>
-              <ul className="space-y-6 text-ink">
+              <ul className="space-y-8 text-ink">
                 <li>
                   <p className="label">Telefone</p>
                   <a href={site.phoneHref} className="mt-1 inline-block text-lg font-medium hover:text-accent-deep">

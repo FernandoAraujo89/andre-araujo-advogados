@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 import { legacyRedirects } from "./src/lib/redirects";
 
 const nextConfig: NextConfig = {
+  // Fixa a raiz do projeto: um package-lock.json solto numa pasta acima
+  // (ex.: ~/package-lock.json) faz o Turbopack inferir a raiz errada e o dev
+  // quebra com "Could not find the module ... in the React Client Manifest".
+  turbopack: {
+    root: __dirname,
+  },
   images: {
     remotePatterns: [
       {

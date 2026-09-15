@@ -30,7 +30,7 @@ export default async function MensagensPage() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-3xl font-medium text-ink">Mensagens</h1>
+          <h1 className="text-3xl tracking-[-0.02em] text-ink">Mensagens</h1>
           <p className="mt-1 text-base text-ink-soft">
             {mensagens.length}{" "}
             {mensagens.length === 1 ? "mensagem recebida" : "mensagens recebidas"}{" "}

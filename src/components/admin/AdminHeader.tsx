@@ -19,8 +19,8 @@ export default function AdminHeader() {
     <header className="border-b border-line bg-paper-light">
       <div className="mx-auto flex h-16 max-w-[1080px] items-center justify-between px-5">
         <div className="flex items-center gap-6">
-          <Link href="/admin" className="font-serif text-lg font-semibold text-ink">
-            Painel <span className="font-normal text-wine">· Conteúdo</span>
+          <Link href="/admin" className="text-lg tracking-[-0.01em] text-ink">
+            Painel <span className="font-serif italic text-wine">· Conteúdo</span>
           </Link>
           <nav aria-label="Seções do painel" className="flex items-center gap-4 text-base">
             <Link

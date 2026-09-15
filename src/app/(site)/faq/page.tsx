@@ -19,7 +19,7 @@ export default function FaqPage() {
   const allItems = faqGroups.flatMap((g) => g.items);
 
   return (
-    <div className="px-5 pb-28 pt-36 lg:px-8 lg:pb-36">
+    <div className="px-5 pb-28 pt-36 md:px-10 xl:px-16 lg:pb-48 lg:pt-48">
       <JsonLd data={faqPageJsonLd(allItems)} />
       <div className="mx-auto max-w-[1240px]">
         <Breadcrumbs items={[{ label: "Perguntas Frequentes" }]} />
@@ -31,10 +31,10 @@ export default function FaqPage() {
           />
         </Reveal>
 
-        <div className="mx-auto mt-14 max-w-3xl space-y-14">
+        <div className="mx-auto mt-16 max-w-3xl space-y-16 lg:mt-24 lg:space-y-20">
           {faqGroups.map((group) => (
             <Reveal key={group.theme}>
-              <h2 className="mb-5 font-serif text-2xl font-medium text-ink">
+              <h2 className="mb-6 text-title text-ink">
                 {group.theme}
               </h2>
               <FaqAccordion items={group.items} />

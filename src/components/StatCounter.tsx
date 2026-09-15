@@ -61,7 +61,7 @@ export default function StatCounter({
   return (
     <div ref={ref}>
       <p
-        className={`font-serif text-[clamp(2.5rem,4.5vw,3.75rem)] font-medium leading-none ${
+        className={`text-[clamp(2.75rem,-0.25rem+4.5vw,3.75rem)] leading-none tracking-[-0.04em] ${
           dark ? "text-paper-light" : "text-ink"
         }`}
       >

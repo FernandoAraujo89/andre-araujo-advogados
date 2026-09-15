@@ -1,19 +1,28 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Instrument_Sans, Instrument_Serif } from "next/font/google";
 import { site } from "@/data/site";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+/*
+ * Par tipográfico inspirado em august-debouzy.com, que usa Akzidenz-Grotesk
+ * (sans) + Ivyora Display itálico (serifa) — ambas comerciais. Os
+ * equivalentes livres (OFL) mais próximos em proporção e desenho são a
+ * família-irmã Instrument: Sans para texto e títulos, Serif só em itálico,
+ * como acento. Ver os tokens em globals.css.
+ */
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+// Só o itálico: a serifa nunca aparece em redondo, e assim evitamos
+// pré-carregar um arquivo de fonte que ninguém usa.
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: "400",
+  style: "italic",
   display: "swap",
 });
 
@@ -43,7 +52,7 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       data-scroll-behavior="smooth"
-      className={`${fraunces.variable} ${inter.variable}`}
+      className={`${instrumentSans.variable} ${instrumentSerif.variable}`}
     >
       <body>{children}</body>
     </html>
