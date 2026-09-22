@@ -39,9 +39,17 @@ export async function POST(request: Request) {
     );
   }
 
+  // Pasta de destino no Blob. Lista fechada: o caminho vem do cliente e não
+  // pode virar um prefixo qualquer (nem escapar para fora com "..").
+  const PASTAS: Record<string, string> = {
+    blog: "blog/images",
+    equipe: "equipe/fotos",
+  };
+  const pasta = PASTAS[String(form?.get("pasta") ?? "blog")] ?? PASTAS.blog;
+
   const ext = file.name.includes(".") ? file.name.split(".").pop() : "jpg";
   const base = slugify(file.name.replace(/\.[^.]+$/, "")) || "imagem";
-  const pathname = `blog/images/${base}-${Date.now()}.${ext}`;
+  const pathname = `${pasta}/${base}-${Date.now()}.${ext}`;
 
   try {
     const blob = await put(pathname, file, {

@@ -99,7 +99,7 @@ Todo o conteúdo vive em `src/data/`; nenhum texto exige mexer em componente:
 | `areas.ts` | As 9 áreas cíveis (texto, listas, FAQ de cada área) |
 | `area-images.ts` | Foto de cada área exibida no card (slug → arquivo em `public/images/areas/`) |
 | `servidores.ts` | Hub e as 4 subpáginas do Direito do Servidor Público |
-| `team.ts` | Os 12 integrantes da equipe (nome, função, foto; OAB, bio e perfil só para advogados) |
+| `team.ts` | Semente da equipe (nome, cargo, setor, ramal, foto; OAB, bio e perfil próprio para advogados). A partir da primeira alteração em /admin → Equipe, vale o que está no Blob |
 | `reviews.ts` | Nota, quantidade e avaliações do Google exibidas na home |
 | `posts.ts` | Tipos, categorias e a semente de 6 posts (o blog em produção vem do Blob, ver abaixo) |
 | `faq.ts` | Perguntas gerais de atendimento (as demais vêm de areas/servidores) |
@@ -157,6 +157,26 @@ mensagens desse formulário chegam ao painel com a origem (slug da página).
   rotas do site são reservados.
 - Salvar revalida a própria página e o layout raiz (o menu está em todas as
   páginas).
+
+## Equipe (/admin → Equipe)
+
+A página /equipe é gerenciada pelo escritório, com CRUD completo: incluir,
+editar, remover e reordenar (setas ↑ ↓ na lista). Mesmo desenho do blog e das
+landing pages — JSON versionado no Vercel Blob (`src/lib/equipe.ts`), com
+`src/data/team.ts` de semente enquanto ninguém salvar nada.
+
+- **Setor** (Cível, Escala, Controladoria…) agrupa as pessoas na página
+  pública. Quem fica sem setor aparece no fim, sem título de grupo.
+- **Ramal** é dado interno: aparece só na lista do painel, **nunca no site**.
+- **Página própria** (`/equipe/<slug>`) exige minibiografia — o painel recusa
+  publicar um perfil vazio. As áreas marcadas viram links na página do perfil.
+- Sem foto, o card mostra as iniciais (`PhotoPlaceholder`); o upload envia
+  para `equipe/fotos/` no Blob.
+- A ordem da lista no painel é a ordem do site.
+
+Quem tinha perfil publicado e sai da equipe deixa uma URL órfã: acrescente uma
+regra em `perfisAposentados`, em `src/lib/redirects.ts`, para o link antigo
+cair em /equipe em vez de 404.
 
 ## Fotos
 
@@ -319,9 +339,30 @@ HTML novo e os tokens de fonte do tema anterior). Se algum estilo parecer
 desatualizado no ar, é essa a primeira coisa a conferir.
 
 As três variáveis de ambiente estão definidas no ambiente Production do
-Vercel. Enquanto o domínio `andrearaujoadvogados.com.br` não for apontado
-para o Vercel, o site novo responde só em `site-andre-araujo.vercel.app` e o
-domínio continua servido pelo Wix.
+Vercel.
+
+## Domínio e DNS
+
+Desde 22/09/2026 o site responde em `https://www.andrearaujoadvogados.com.br`
+(o Wix saiu do caminho). O apex redireciona 308 para o `www`, que é a URL
+canônica do código (`site.url` em `src/data/site.ts`).
+
+**A zona DNS fica na HostGator** (`ns728`/`ns729.hostgator.com.br`), não no
+Registro.br nem no Vercel — o Registro.br guarda só a delegação. Editor de
+Zona do cPanel:
+
+| Registro | Valor | Para quê |
+|---|---|---|
+| `@` A | `216.198.79.1` e `64.29.17.1` | site (Vercel) |
+| `www` CNAME | `99971f92bd8e2cff.vercel-dns-017.com.` | site (Vercel, valor específico deste projeto) |
+| `MX` | `0 mail.andrearaujoadvogados.com.br` | **e-mail do escritório (HostGator)** |
+| `mail`, `webmail`, `cpanel`, `autodiscover` A | `108.179.193.163` | e-mail e painel (HostGator) |
+| `TXT` | `v=spf1 a mx include:websitewelcome.com ~all` | autenticação de envio |
+| `campanhas` CNAME | CloudFront | painel de campanhas (outro projeto, AWS) |
+
+**Nunca apontar os nameservers para o Vercel.** Isso substitui a zona inteira
+e derruba junto o e-mail do escritório, o webmail e o subdomínio de campanhas.
+Mudança de hospedagem do site se faz trocando só os registros `@` e `www`.
 
 ## Pendências (TODO) para o cliente
 

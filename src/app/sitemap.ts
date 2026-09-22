@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/data/site";
 import { areas } from "@/data/areas";
-import { team } from "@/data/team";
+import { getTeam } from "@/lib/equipe";
 import { getAllPosts } from "@/lib/blog";
 import { getPublishedLandingPages } from "@/lib/landing";
 import { servidorPages } from "@/data/servidores";
@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllPosts();
+  const team = await getTeam();
   const landing = await getPublishedLandingPages();
 
   const staticPaths = [

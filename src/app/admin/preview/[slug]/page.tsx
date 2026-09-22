@@ -3,6 +3,7 @@ import SiteChrome from "@/components/SiteChrome";
 import LandingPageView from "@/components/landing/LandingPageView";
 import { isAdmin } from "@/lib/admin-guard";
 import { getLandingPage } from "@/lib/landing";
+import { getFounder } from "@/lib/equipe";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,7 +22,7 @@ export default async function PreviewLandingPage({ params }: Props) {
   if (!page) notFound();
   return (
     <SiteChrome>
-      <LandingPageView page={page} preview />
+      <LandingPageView page={page} preview founder={await getFounder()} />
     </SiteChrome>
   );
 }

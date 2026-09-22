@@ -6,7 +6,8 @@ import Reveal from "@/components/Reveal";
 import Button from "@/components/Button";
 import Photo from "@/components/Photo";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
-import { team, getLawyer, initialsOf } from "@/data/team";
+import { initialsOf } from "@/data/team";
+import { getTeamProfile } from "@/lib/equipe";
 import { getArea } from "@/data/areas";
 import { site } from "@/data/site";
 import { pageMetadata } from "@/lib/seo";
@@ -15,13 +16,13 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return team.filter((m) => m.hasProfile).map((m) => ({ slug: m.slug }));
-}
+// Lê do Blob a cada requisição, como o blog: alterar um perfil no painel
+// reflete no ar na hora, inclusive quem passa a ter (ou deixa de ter) página.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const lawyer = getLawyer(slug);
+  const lawyer = await getTeamProfile(slug);
   if (!lawyer) return {};
   return pageMetadata({
     title: lawyer.name,
@@ -32,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LawyerPage({ params }: Props) {
   const { slug } = await params;
-  const lawyer = getLawyer(slug);
+  const lawyer = await getTeamProfile(slug);
   if (!lawyer) notFound();
 
   const lawyerAreas = (lawyer.areas ?? [])

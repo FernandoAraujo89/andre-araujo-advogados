@@ -9,6 +9,7 @@ import SectionHeading from "@/components/SectionHeading";
 import LandingPageView from "@/components/landing/LandingPageView";
 import { areas, getArea } from "@/data/areas";
 import { getLandingPage } from "@/lib/landing";
+import { getFounder } from "@/lib/equipe";
 import { pageMetadata } from "@/lib/seo";
 
 type Props = {
@@ -52,7 +53,7 @@ export default async function AreaPage({ params }: Props) {
   if (!area) {
     const page = await getLandingPage(slug);
     if (!page || page.status !== "publicada") notFound();
-    return <LandingPageView page={page} />;
+    return <LandingPageView page={page} founder={await getFounder()} />;
   }
 
   const outras = areas.filter((a) => a.slug !== area.slug).slice(0, 3);

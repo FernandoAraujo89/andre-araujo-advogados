@@ -86,6 +86,7 @@
     { "source": "/post/antigo-dono-que-n%C3%A3o-comunicou-venda-de-ve%C3%ADculo-responde-por-eventuais-infra%C3%A7%C3%B5es", "destination": "/blog", "permanent": true },
     { "source": "/post/por-que-%C3%A9-melhor-resolver-um-conflito-de-forma-amig%C3%A1vel", "destination": "/blog", "permanent": true },
     { "source": "/post/tribunal-de-justi%C3%A7a-do-estado-de-minas-gerais-mant%C3%A9m-decis%C3%B5es-que-determinam-%C3%A0-cemig-que-execute-obr", "destination": "/blog", "permanent": true },
+    { "source": "/equipe/debora-silvino-dos-santos", "destination": "/equipe", "permanent": true },
     { "source": "/post/:path*", "destination": "/blog", "permanent": true }
   ]
 }

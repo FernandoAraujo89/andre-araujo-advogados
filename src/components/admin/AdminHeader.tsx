@@ -36,6 +36,12 @@ export default function AdminHeader() {
               Landing pages
             </Link>
             <Link
+              href="/admin/equipe"
+              className="font-medium text-ink-soft transition-colors hover:text-wine-deep"
+            >
+              Equipe
+            </Link>
+            <Link
               href="/admin/mensagens"
               className="font-medium text-ink-soft transition-colors hover:text-wine-deep"
             >

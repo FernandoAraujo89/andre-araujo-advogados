@@ -10,7 +10,7 @@ import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { youtubeId, type LandingPage, type LpSection } from "@/data/landing";
 import { site } from "@/data/site";
-import { team } from "@/data/team";
+import { founderOf, team, type TeamMember } from "@/data/team";
 import { faqPageJsonLd } from "@/lib/jsonld";
 
 /**
@@ -53,10 +53,12 @@ function Section({
   section,
   index,
   wa,
+  founder,
 }: {
   section: LpSection;
   index: number;
   wa: string;
+  founder: TeamMember;
 }) {
   // Faixas alternadas: papel e papel-claro. CTA e avaliações têm cor própria.
   const alt = index % 2 === 1;
@@ -158,7 +160,7 @@ function Section({
       );
 
     case "sobre": {
-      const [andre] = team;
+      const andre = founder;
       const image = section.image ?? {
         src: andre.photo ?? "",
         alt: `Foto de ${andre.name}`,
@@ -231,9 +233,13 @@ function Section({
 export default function LandingPageView({
   page,
   preview = false,
+  /** Sócio fundador (foto e nome do bloco "sobre"). Vem da equipe salva no
+   *  painel; a semente é só o fallback de quem renderiza sem passar nada. */
+  founder = founderOf(team),
 }: {
   page: LandingPage;
   preview?: boolean;
+  founder?: TeamMember;
 }) {
   const wa = whatsappHref(page.hero.whatsappMessage);
   const video = page.hero.videoUrl ? youtubeId(page.hero.videoUrl) : null;
@@ -316,7 +322,13 @@ export default function LandingPageView({
       </section>
 
       {page.sections.map((section, i) => (
-        <Section key={section.id} section={section} index={i} wa={wa} />
+        <Section
+          key={section.id}
+          section={section}
+          index={i}
+          wa={wa}
+          founder={founder}
+        />
       ))}
 
       {/* Fechamento — formulário com o assunto já marcado */}

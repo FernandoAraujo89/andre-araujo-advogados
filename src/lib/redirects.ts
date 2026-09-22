@@ -139,9 +139,20 @@ const legacyPosts: Redirect[] = [
   { source: "/post/tribunal-de-justiça-do-estado-de-minas-gerais-mantém-decisões-que-determinam-à-cemig-que-execute-obr", destination: "/blog" },
 ];
 
+/**
+ * Perfis do site NOVO que deixaram de existir. A equipe é gerenciada em
+ * /admin → Equipe; quando alguém com perfil publicado sai, a URL some, e sem
+ * regra aqui ela viraria 404 para quem tem o link ou para o Google.
+ */
+const perfisAposentados: Redirect[] = [
+  // Débora Silvino dos Santos deixou o escritório (equipe atualizada 22/09/2026)
+  { source: "/equipe/debora-silvino-dos-santos", destination: "/equipe" },
+];
+
 export const legacyRedirects: Redirect[] = [
   ...legacyPages,
   ...legacyPosts,
+  ...perfisAposentados,
   // Qualquer outro /post/... (URL fora do sitemap, variação de slug) cai na
   // listagem do blog em vez de 404. Fica por último: a primeira regra que
   // casar é a aplicada.

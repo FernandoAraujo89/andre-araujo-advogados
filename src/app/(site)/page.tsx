@@ -14,7 +14,8 @@ import Photo from "@/components/Photo";
 import JsonLd from "@/components/JsonLd";
 import { site, stats } from "@/data/site";
 import { areasDeAtuacao } from "@/data/atuacao";
-import { team } from "@/data/team";
+import { founderOf } from "@/data/team";
+import { getTeam } from "@/lib/equipe";
 import { getAllPosts } from "@/lib/blog";
 import { legalServiceJsonLd } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/seo";
@@ -49,7 +50,7 @@ const diferenciais = [
 ];
 
 export default async function Home() {
-  const [andre] = team;
+  const andre = founderOf(await getTeam());
   const recentPosts = (await getAllPosts()).slice(0, 3);
 
   return (
