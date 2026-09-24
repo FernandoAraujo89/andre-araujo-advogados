@@ -14,6 +14,7 @@ import {
   type LpSection,
   type LpSectionType,
 } from "@/data/landing";
+import { prepararImagem } from "@/lib/imagem-cliente";
 
 type Props = {
   mode: "create" | "edit";
@@ -30,7 +31,7 @@ const smallBtn =
 /** Envia a imagem pela mesma rota do blog e devolve a URL pública. */
 async function uploadImage(file: File): Promise<string> {
   const form = new FormData();
-  form.append("file", file);
+  form.append("file", await prepararImagem(file));
   const res = await fetch("/api/admin/upload", { method: "POST", body: form });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data.url) throw new Error(data.error || "Falha no upload da imagem.");

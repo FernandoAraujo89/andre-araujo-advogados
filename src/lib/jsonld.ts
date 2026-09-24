@@ -49,7 +49,11 @@ export function articleJsonLd(post: Post) {
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt,
-    ...(post.image ? { image: [post.image.src] } : {}),
+    // Imagens guardadas no banco têm URL relativa (/imagens/<id>); o JSON-LD
+    // pede absoluta.
+    ...(post.image
+      ? { image: [new URL(post.image.src, site.url).href] }
+      : {}),
     datePublished: post.date,
     dateModified: post.updatedAt ?? post.date,
     articleSection: post.category,

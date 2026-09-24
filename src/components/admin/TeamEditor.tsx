@@ -7,6 +7,7 @@ import Image from "next/image";
 import { slugify } from "@/data/posts";
 import { SETORES, initialsOf, type TeamMember } from "@/data/team";
 import { areas } from "@/data/areas";
+import { prepararImagem } from "@/lib/imagem-cliente";
 
 type Props = {
   mode: "create" | "edit";
@@ -59,7 +60,7 @@ export default function TeamEditor({ mode, initial, setoresEmUso = [] }: Props) 
     setError("");
     try {
       const form = new FormData();
-      form.append("file", file);
+      form.append("file", await prepararImagem(file));
       form.append("pasta", "equipe");
       const res = await fetch("/api/admin/upload", { method: "POST", body: form });
       const data = await res.json().catch(() => ({}));

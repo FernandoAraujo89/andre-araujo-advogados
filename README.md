@@ -213,6 +213,24 @@ retratos quadrados da equipe em `public/equipe/<slug>.jpg`. O componente
 posts semente vêm do Unsplash, com crédito. `PhotoPlaceholder` só entra
 quando um integrante da equipe não tem foto.
 
+### Upload pelo painel
+
+O upload (`src/app/api/admin/upload/route.ts`) recebe capas de posts, fotos
+da equipe e imagens das landing pages:
+
+- **No navegador**, antes de enviar, a foto é reduzida a 1600px no maior
+  lado e recomprimida (`src/lib/imagem-cliente.ts`): foto de celular de 6 MB
+  vira algumas centenas de KB, e as funções da Vercel recusam requisições
+  acima de 4,5 MB.
+- **No servidor**, o `sharp` corrige a orientação, limita a 1600px de novo e
+  grava em WebP (`src/lib/imagens.ts`).
+- **Destino:** o Vercel Blob (store público `andre-araujo-blog`, URL de
+  CDN). Se o Blob não responder — em 23/09/2026 a cota mensal do plano Hobby
+  estourou e bloqueou os stores até o ciclo virar —, a imagem vai para a
+  tabela `images` do Neon e é servida por `/imagens/<id>`
+  (`src/app/imagens/[id]/route.ts`) com cache de um ano. As duas formas de
+  URL convivem; nada precisa ser migrado quando o Blob volta.
+
 Cada uma das 10 áreas tem uma foto própria em `public/images/areas/<slug>.webp`
 (1200x800, imagens autorais geradas para o site: cena silenciosa de objetos e
 ambientes, luz natural quente, sem pessoas nem texto). No card elas aparecem em

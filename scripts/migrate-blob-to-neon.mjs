@@ -6,12 +6,15 @@
  *   npm run db:migrate            lê o Blob; se um store não responder, usa a
  *                                 semente de src/data/* e avisa no console
  *   npm run db:migrate -- --seed  ignora o Blob e grava só as sementes
+ *   npm run db:migrate -- --keep-after=2026-09-24T11:30:00Z
+ *                                 não sobrescreve linhas que o painel editou
+ *                                 no Neon depois desse instante
  *
- * ATENÇÃO: o que vier do Blob SOBRESCREVE a linha de mesmo slug no banco. Se
- * o painel já tiver sido usado sobre o Neon, confira antes o que está em cada
- * lugar. Como o site lê o banco por um cache (tags "posts", "equipe" e
- * "landing"), depois de migrar com o site já no ar salve qualquer item no
- * painel ou publique de novo (`vercel --prod --force`) para ele atualizar.
+ * ATENÇÃO: sem --keep-after, o que vier do Blob SOBRESCREVE a linha de mesmo
+ * slug no banco. Como o site lê o banco por um cache (tags "posts", "equipe"
+ * e "landing"), depois de migrar com o site já no ar salve qualquer item no
+ * painel, rode `vercel cache dangerously-delete --tag posts,equipe,landing`
+ * ou publique de novo (`vercel --prod --force`) para ele atualizar.
  *
  * Tokens: BLOB_READ_WRITE_TOKEN (store público, onde estava blog/posts.json) e
  * CONTACT_BLOB_READ_WRITE_TOKEN (store privado do painel: equipe, landing pages
@@ -31,6 +34,17 @@ if (!url) {
 }
 const sql = neon(url);
 const seedOnly = process.argv.includes("--seed");
+
+// --keep-after=<ISO>: linhas com updated_at posterior ao instante ficam como
+// estão (edições feitas no painel sobre o Neon valem mais que o Blob antigo).
+const keepAfter =
+  process.argv.find((a) => a.startsWith("--keep-after="))?.slice("--keep-after=".length) ?? null;
+if (keepAfter && Number.isNaN(Date.parse(keepAfter))) {
+  console.error(`--keep-after inválido: ${keepAfter} (use ISO 8601, ex.: 2026-09-24T11:30:00Z)`);
+  process.exit(1);
+}
+const keepClause = (table) => (keepAfter ? ` where ${table}.updated_at < $` : "");
+const withKeep = (params) => (keepAfter ? [...params, keepAfter] : params);
 
 const publicStore = process.env.BLOB_READ_WRITE_TOKEN
   ? { token: process.env.BLOB_READ_WRITE_TOKEN, access: "public" }
@@ -70,6 +84,12 @@ async function load(label, store, reader, seed) {
       );
     }
   }
+  // Com --keep-after o banco já foi semeado antes: regravar a semente só
+  // serviria para ressuscitar quem o painel removeu desde então.
+  if (seed && keepAfter) {
+    console.warn(`${label}: sem Blob, e a semente já está no banco; nada gravado.`);
+    return { rows: [], source: "semente já aplicada" };
+  }
   if (seed) return { rows: seed, source: "semente" };
   return { rows: [], source: "nada" };
 }
@@ -84,14 +104,17 @@ const summary = [];
     (store) => readJson(store, "blog/posts.json"),
     SEED_POSTS
   );
+  let written = 0;
   for (const post of rows) {
-    await sql.query(
+    const r = await sql.query(
       `insert into posts (slug, data) values ($1, $2::jsonb)
-       on conflict (slug) do update set data = excluded.data, updated_at = now()`,
-      [post.slug, JSON.stringify(post)]
+       on conflict (slug) do update set data = excluded.data, updated_at = now()${keepClause("posts")}${keepAfter ? "3" : ""}
+       returning slug`,
+      withKeep([post.slug, JSON.stringify(post)])
     );
+    written += r.length;
   }
-  summary.push(["posts", rows.length, source]);
+  summary.push(["posts", rows.length, source, written]);
 }
 
 // 2. Equipe — JSON versionado no store do painel; a posição é a ordem do array.
@@ -102,15 +125,18 @@ const summary = [];
     (store) => readNewest(store, "equipe/membros-"),
     SEED_TEAM
   );
+  let written = 0;
   for (const [position, member] of rows.entries()) {
-    await sql.query(
+    const r = await sql.query(
       `insert into team_members (slug, position, data) values ($1, $2, $3::jsonb)
        on conflict (slug) do update
-         set position = excluded.position, data = excluded.data, updated_at = now()`,
-      [member.slug, position, JSON.stringify(member)]
+         set position = excluded.position, data = excluded.data, updated_at = now()${keepClause("team_members")}${keepAfter ? "4" : ""}
+       returning slug`,
+      withKeep([member.slug, position, JSON.stringify(member)])
     );
+    written += r.length;
   }
-  summary.push(["team_members", rows.length, source]);
+  summary.push(["team_members", rows.length, source, written]);
 }
 
 // 3. Landing pages — JSON versionado no store do painel; não têm semente.
@@ -121,14 +147,17 @@ const summary = [];
     (store) => readNewest(store, "landing/pages-"),
     null
   );
+  let written = 0;
   for (const page of rows) {
-    await sql.query(
+    const r = await sql.query(
       `insert into landing_pages (slug, data) values ($1, $2::jsonb)
-       on conflict (slug) do update set data = excluded.data, updated_at = now()`,
-      [page.slug, JSON.stringify(page)]
+       on conflict (slug) do update set data = excluded.data, updated_at = now()${keepClause("landing_pages")}${keepAfter ? "3" : ""}
+       returning slug`,
+      withKeep([page.slug, JSON.stringify(page)])
     );
+    written += r.length;
   }
-  summary.push(["landing_pages", rows.length, source]);
+  summary.push(["landing_pages", rows.length, source, written]);
 }
 
 // 4. Mensagens — um arquivo por envio; nunca sobrescreve (a mensagem não muda).
@@ -151,19 +180,27 @@ const summary = [];
     },
     null
   );
+  let written = 0;
   for (const message of rows) {
-    await sql.query(
+    const r = await sql.query(
       `insert into contact_messages (id, data, created_at) values ($1, $2::jsonb, $3)
-       on conflict (id) do nothing`,
+       on conflict (id) do nothing returning id`,
       [message.id, JSON.stringify(message), message.receivedAt ?? new Date().toISOString()]
     );
+    written += r.length;
   }
-  summary.push(["contact_messages", rows.length, source]);
+  summary.push(["contact_messages", rows.length, source, written]);
 }
 
 console.log("\nMigração concluída:");
-for (const [table, count, source] of summary) {
-  console.log(`  ${table.padEnd(18)} ${String(count).padStart(4)} registros  (origem: ${source})`);
+for (const [table, count, source, written] of summary) {
+  const kept = count - written;
+  console.log(
+    `  ${table.padEnd(18)} ${String(count).padStart(4)} lidos, ${String(written).padStart(4)} gravados${kept > 0 ? `, ${kept} preservados no banco` : ""}  (origem: ${source})`
+  );
+}
+if (keepAfter) {
+  console.log(`\nLinhas editadas no painel depois de ${keepAfter} foram mantidas como estavam.`);
 }
 if (summary.some(([, , source]) => source === "semente")) {
   console.log(
