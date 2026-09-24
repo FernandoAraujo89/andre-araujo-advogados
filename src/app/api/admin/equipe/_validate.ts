@@ -1,6 +1,7 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { areas } from "@/data/areas";
 import type { TeamMemberInput } from "@/data/team";
+import { EQUIPE_TAG } from "@/lib/equipe";
 
 /**
  * Valida e normaliza o integrante enviado pelo editor do painel. Devolve
@@ -96,9 +97,11 @@ export function parseOrder(raw: unknown): { ok: true; value: string[] } | Fail {
 
 /**
  * A equipe aparece na página /equipe, nas páginas de perfil, no bloco "sobre"
- * da home e das landing pages, e no sitemap.
+ * da home e das landing pages, e no sitemap. A tag vence primeiro (`expire: 0`)
+ * para a próxima visita já ler o banco, sem servir o conteúdo velho.
  */
 export function revalidateEquipe(slugs: string[] = []) {
+  revalidateTag(EQUIPE_TAG, { expire: 0 });
   revalidatePath("/");
   revalidatePath("/equipe");
   revalidatePath("/sitemap.xml");

@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
+import { dbEnabled } from "@/lib/db";
 import { formatDate } from "@/data/posts";
 import DeletePostButton from "@/components/admin/DeletePostButton";
 
 export default async function AdminDashboard() {
   const posts = await getAllPosts();
-  const blobConfigured = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  const dbConfigured = dbEnabled();
 
   return (
     <div>
@@ -24,12 +25,12 @@ export default async function AdminDashboard() {
         </Link>
       </div>
 
-      {!blobConfigured && (
+      {!dbConfigured && (
         <p className="mt-6 rounded-md border border-wine/30 bg-wine-mist px-5 py-4 text-base text-wine-deep">
-          <strong>Modo demonstração:</strong> o Vercel Blob ainda não está
-          configurado, então o que você criar aqui não será salvo. Ative o
-          Storage → Blob no painel do Vercel e defina a variável
-          BLOB_READ_WRITE_TOKEN para publicar de verdade.
+          <strong>Modo demonstração:</strong> o banco de dados ainda não está
+          configurado, então o que você criar aqui não será salvo. No Vercel,
+          conecte o Neon ao projeto (Storage → Connect Project) para a variável
+          DATABASE_URL existir e publicar de verdade.
         </p>
       )}
 

@@ -1,6 +1,6 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { categories, type Category, type Post } from "@/data/posts";
-import type { PostInput } from "@/lib/blog";
+import { POSTS_TAG, type PostInput } from "@/lib/blog";
 
 /** Valida e normaliza o corpo enviado pelo editor. Devolve erro legível. */
 export function parsePostInput(
@@ -62,8 +62,14 @@ export function parsePostInput(
   };
 }
 
-/** Revalida todas as páginas afetadas por uma mudança no blog. */
+/**
+ * Revalida todas as páginas afetadas por uma mudança no blog. Primeiro vence o
+ * cache dos dados (tag): com `expire: 0`, quem abrir o site em seguida já lê o
+ * banco de novo em vez de receber o conteúdo velho enquanto a revalidação
+ * corre por trás (que é o que o perfil "max" faria).
+ */
 export function revalidateBlog(slugs: string[]) {
+  revalidateTag(POSTS_TAG, { expire: 0 });
   revalidatePath("/");
   revalidatePath("/blog");
   revalidatePath("/sitemap.xml");

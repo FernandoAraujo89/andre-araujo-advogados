@@ -15,10 +15,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/equipe",
 });
 
-// Lê a equipe do Blob a cada requisição: incluir, editar, remover ou reordenar
-// no painel reflete no ar na hora. Segue SSR (SEO completo).
-export const dynamic = "force-dynamic";
-
+// Página estática: gerada no build a partir do banco e regenerada quando o
+// painel inclui, edita, remove ou reordena alguém (revalidateEquipe).
 export default async function EquipePage() {
   const grupos = groupBySetor(await getTeam());
 

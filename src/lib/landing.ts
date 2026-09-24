@@ -1,65 +1,49 @@
 import "server-only";
 import { cache } from "react";
-import { put, get, list, del } from "@vercel/blob";
+import { unstable_cache } from "next/cache";
 import { areas } from "@/data/areas";
 import { slugify } from "@/data/posts";
 import type { LandingPage, LandingPageInput } from "@/data/landing";
+import { dbEnabled, json, requireDb, sql } from "@/lib/db";
 
 /**
- * Camada de dados das landing pages: um único JSON no Vercel Blob com todas
- * as páginas, lido a cada render e gravado por inteiro a cada alteração no
- * painel (mesmo desenho do blog, src/lib/blog.ts).
+ * Camada de dados das landing pages: a tabela `landing_pages` no Neon, uma
+ * linha por página com o objeto inteiro em `data` (jsonb). Mesmo desenho do
+ * blog (src/lib/blog.ts). Não há semente: sem banco, não há landing pages.
  *
- * Duas diferenças, aprendidas testando:
- *
- * 1. O arquivo nunca é sobrescrito. Cada gravação cria `landing/pages-<n>.json`
- *    com um número crescente e apaga as versões anteriores; a leitura lista o
- *    prefixo e pega a mais nova. Sobrescrever o mesmo caminho faz a leitura
- *    devolver a versão anterior por segundos (store privado) ou minutos (CDN
- *    do store público), e "publicar" não refletiria na hora.
- * 2. Fica de preferência no store PRIVADO do painel (o mesmo das mensagens,
- *    CONTACT_BLOB_READ_WRITE_TOKEN), para rascunhos não terem URL pública.
- *    Sem ele, cai no store público. As imagens continuam públicas.
+ * Rascunhos ficam só no banco, sem URL pública; as imagens continuam no Blob.
  */
 
-const PREFIX = "landing/pages-";
+export const LANDING_TAG = "landing";
 
-type Store = { token: string; access: "public" | "private" };
-
-function storage(): Store | null {
-  if (process.env.CONTACT_BLOB_READ_WRITE_TOKEN) {
-    return { token: process.env.CONTACT_BLOB_READ_WRITE_TOKEN, access: "private" };
-  }
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    return { token: process.env.BLOB_READ_WRITE_TOKEN, access: "public" };
-  }
-  return null;
-}
+type Row = { data: LandingPage };
+type Db = ReturnType<typeof sql>;
 
 /** True quando há onde guardar as páginas. */
 export function landingStorageEnabled(): boolean {
-  return storage() !== null;
+  return dbEnabled();
 }
 
-async function readFromBlob(store: Store): Promise<LandingPage[] | null> {
-  const { blobs } = await list({ prefix: PREFIX, token: store.token, limit: 100 });
-  if (blobs.length === 0) return null;
-  const newest = [...blobs].sort((a, b) => (a.pathname < b.pathname ? 1 : -1))[0];
-  const res = await get(newest.pathname, { access: store.access, token: store.token });
-  if (!res) return null;
-  const data = JSON.parse(await new Response(res.stream).text()) as LandingPage[];
-  return Array.isArray(data) ? data : [];
+async function readAll(db: Db): Promise<LandingPage[]> {
+  const rows = (await db.query(
+    "select data from landing_pages order by data->>'updatedAt' desc, slug"
+  )) as Row[];
+  return rows.map((r) => r.data);
 }
+
+/** As páginas do banco, em cache até o painel salvar (ou por 1 dia). */
+const readAllCached = unstable_cache(() => readAll(sql()), ["landing-all"], {
+  tags: [LANDING_TAG],
+  revalidate: 86400,
+});
 
 /** Todas as páginas (rascunhos inclusive), da mais recente para a mais antiga. */
 export const getAllLandingPages = cache(async (): Promise<LandingPage[]> => {
-  const store = storage();
-  if (!store) return [];
+  if (!dbEnabled()) return [];
   try {
-    const pages = (await readFromBlob(store)) ?? [];
-    return [...pages].sort((a, b) => (a.updatedAt < b.updatedAt ? 1 : -1));
+    return await readAllCached();
   } catch (err) {
-    console.error("Falha ao ler landing pages do Blob:", err);
+    console.error("Falha ao ler landing pages do banco:", err);
     return [];
   }
 });
@@ -75,31 +59,6 @@ export async function getPublishedLandingPages(): Promise<LandingPage[]> {
 export async function getLandingPage(slug: string): Promise<LandingPage | undefined> {
   const pages = await getAllLandingPages();
   return pages.find((p) => p.slug === slug);
-}
-
-async function persist(pages: LandingPage[]): Promise<void> {
-  const store = storage();
-  if (!store) {
-    throw new Error(
-      "Vercel Blob não configurado. Ative o Storage → Blob no painel do Vercel e defina BLOB_READ_WRITE_TOKEN."
-    );
-  }
-  // Nome crescente e ordenável como texto (14 dígitos cobrem séculos).
-  const pathname = `${PREFIX}${String(Date.now()).padStart(14, "0")}.json`;
-  await put(pathname, JSON.stringify(pages, null, 2), {
-    access: store.access,
-    token: store.token,
-    contentType: "application/json",
-    addRandomSuffix: false,
-  });
-  // Apaga as versões anteriores (melhor esforço: a leitura já pega a mais nova).
-  try {
-    const { blobs } = await list({ prefix: PREFIX, token: store.token, limit: 100 });
-    const old = blobs.filter((b) => b.pathname !== pathname);
-    if (old.length > 0) await del(old.map((b) => b.url), { token: store.token });
-  } catch (err) {
-    console.error("Falha ao apagar versões antigas das landing pages:", err);
-  }
 }
 
 /** Slugs que uma landing page não pode usar: áreas fixas e rotas do site. */
@@ -118,14 +77,21 @@ const RESERVED = new Set([
 ]);
 
 /** Gera um slug único (acrescenta -2, -3… se já existir, ignorando `exceptSlug`). */
-function uniqueSlug(base: string, pages: LandingPage[], exceptSlug?: string): string {
+function uniqueSlug(base: string, taken: string[], exceptSlug?: string): string {
   const root = slugify(base) || "pagina";
   let candidate = root;
   let n = 2;
-  const taken = (s: string) =>
-    RESERVED.has(s) || pages.some((p) => p.slug === s && p.slug !== exceptSlug);
-  while (taken(candidate)) candidate = `${root}-${n++}`;
+  const isTaken = (s: string) =>
+    RESERVED.has(s) || taken.some((t) => t === s && t !== exceptSlug);
+  while (isTaken(candidate)) candidate = `${root}-${n++}`;
   return candidate;
+}
+
+async function existingSlugs(db: Db): Promise<string[]> {
+  const rows = (await db.query("select slug from landing_pages")) as {
+    slug: string;
+  }[];
+  return rows.map((r) => r.slug);
 }
 
 function today(): string {
@@ -134,10 +100,13 @@ function today(): string {
 
 /** Cria uma página e devolve o registro salvo (com slug definitivo). */
 export async function createLandingPage(input: LandingPageInput): Promise<LandingPage> {
-  const pages = await getAllLandingPages();
-  const slug = uniqueSlug(input.slug || input.name, pages);
+  const db = requireDb();
+  const slug = uniqueSlug(input.slug || input.name, await existingSlugs(db));
   const page: LandingPage = { ...input, slug, createdAt: today(), updatedAt: today() };
-  await persist([page, ...pages]);
+  await db.query("insert into landing_pages (slug, data) values ($1, $2::jsonb)", [
+    slug,
+    json(page),
+  ]);
   return page;
 }
 
@@ -146,27 +115,35 @@ export async function updateLandingPage(
   originalSlug: string,
   input: LandingPageInput
 ): Promise<LandingPage | null> {
-  const pages = await getAllLandingPages();
-  const idx = pages.findIndex((p) => p.slug === originalSlug);
-  if (idx === -1) return null;
-  const slug = uniqueSlug(input.slug || input.name, pages, originalSlug);
+  const db = requireDb();
+  const rows = (await db.query("select data from landing_pages where slug = $1", [
+    originalSlug,
+  ])) as Row[];
+  if (rows.length === 0) return null;
+  const slug = uniqueSlug(
+    input.slug || input.name,
+    await existingSlugs(db),
+    originalSlug
+  );
   const updated: LandingPage = {
-    ...pages[idx],
+    ...rows[0].data,
     ...input,
     slug,
     updatedAt: today(),
   };
-  const next = [...pages];
-  next[idx] = updated;
-  await persist(next);
+  await db.query(
+    "update landing_pages set slug = $2, data = $3::jsonb, updated_at = now() where slug = $1",
+    [originalSlug, slug, json(updated)]
+  );
   return updated;
 }
 
 /** Remove a página. Devolve true se algo foi removido. */
 export async function deleteLandingPage(slug: string): Promise<boolean> {
-  const pages = await getAllLandingPages();
-  const next = pages.filter((p) => p.slug !== slug);
-  if (next.length === pages.length) return false;
-  await persist(next);
-  return true;
+  const db = requireDb();
+  const rows = await db.query(
+    "delete from landing_pages where slug = $1 returning slug",
+    [slug]
+  );
+  return rows.length > 0;
 }

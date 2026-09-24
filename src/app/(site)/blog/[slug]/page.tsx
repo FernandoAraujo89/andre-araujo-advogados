@@ -17,10 +17,15 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-// Renderização dinâmica: o post é lido do Blob a cada requisição, então
-// publicar, editar ou excluir reflete no ar na hora e sempre correto.
-// Continua SSR (HTML completo para SEO); custo desprezível no volume do blog.
-export const dynamic = "force-dynamic";
+/**
+ * Páginas estáticas: os posts existentes no build são gerados na hora; um post
+ * publicado depois é gerado na primeira visita (dynamicParams) e fica em cache
+ * até o painel revalidar (revalidateBlog).
+ */
+export async function generateStaticParams() {
+  return (await getAllPosts()).map((p) => ({ slug: p.slug }));
+}
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

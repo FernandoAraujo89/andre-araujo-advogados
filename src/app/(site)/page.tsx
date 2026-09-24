@@ -26,9 +26,10 @@ export const metadata: Metadata = pageMetadata({
   path: "/",
 });
 
-// A home é estática, mas revalida a cada 5 min para refletir os posts mais
-// recentes do blog (a seção de destaques lê do Blob).
-export const revalidate = 300;
+// A home é estática. Posts e equipe vêm do banco por um cache que o painel
+// revalida ao salvar (revalidateBlog/revalidateEquipe); a regeneração diária
+// é só uma rede de segurança.
+export const revalidate = 86400;
 
 const diferenciais = [
   {

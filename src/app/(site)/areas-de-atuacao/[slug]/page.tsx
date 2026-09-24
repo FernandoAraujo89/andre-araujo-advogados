@@ -18,7 +18,7 @@ type Props = {
 
 /**
  * Uma URL, duas fontes: as áreas fixas (src/data/areas.ts, geradas no build)
- * e as landing pages publicadas no painel (Vercel Blob, renderizadas sob
+ * e as landing pages publicadas no painel (banco Neon, renderizadas sob
  * demanda e revalidadas a cada alteração). Slugs nunca colidem: o painel
  * reserva os das áreas fixas.
  */

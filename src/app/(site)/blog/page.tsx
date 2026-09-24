@@ -13,10 +13,9 @@ export const metadata: Metadata = pageMetadata({
   path: "/blog",
 });
 
-// Renderização dinâmica: lê o Blob a cada requisição — publicar reflete na
-// hora. Segue SSR (SEO completo).
-export const dynamic = "force-dynamic";
-
+// Página estática: gerada no build a partir do banco e regenerada quando o
+// painel publica, edita ou exclui um post (revalidateBlog). Visitas não
+// consultam o banco.
 export default async function BlogPage() {
   const ordered = await getAllPosts();
   return (

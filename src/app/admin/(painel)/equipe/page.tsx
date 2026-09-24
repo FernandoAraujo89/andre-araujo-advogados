@@ -30,9 +30,10 @@ export default async function EquipeListPage() {
 
       {!blobConfigured && (
         <p className="mt-6 rounded-md border border-wine/30 bg-wine-mist px-5 py-4 text-base text-wine-deep">
-          <strong>Modo demonstração:</strong> o Vercel Blob ainda não está
-          configurado, então o que você alterar aqui não será salvo. Defina a
-          variável BLOB_READ_WRITE_TOKEN para valer de verdade.
+          <strong>Modo demonstração:</strong> o banco de dados ainda não está
+          configurado, então o que você alterar aqui não será salvo. No Vercel,
+          conecte o Neon ao projeto (Storage → Connect Project) para valer de
+          verdade.
         </p>
       )}
 

@@ -6,7 +6,7 @@ import {
 } from "@/lib/contato";
 
 /**
- * Recebe o formulário de contato (público). Grava no Blob e avisa por e-mail;
+ * Recebe o formulário de contato (público). Grava no banco e avisa por e-mail;
  * basta um dos dois dar certo para o visitante ver "Mensagem enviada".
  */
 export async function POST(request: Request) {
@@ -40,9 +40,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
   if (saved.status === "skipped" && emailed === "skipped") {
-    // Ambiente local sem Blob nem Resend: registra no console para o
+    // Ambiente local sem banco nem e-mail: registra no console para o
     // formulário continuar testável.
-    console.info("Contato recebido (sem Blob/Resend configurados):", parsed.value);
+    console.info("Contato recebido (sem banco/e-mail configurados):", parsed.value);
     return NextResponse.json({ ok: true });
   }
   return NextResponse.json(

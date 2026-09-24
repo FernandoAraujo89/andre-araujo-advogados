@@ -1,10 +1,5 @@
 import DeleteMessageButton from "@/components/admin/DeleteMessageButton";
-import {
-  emailEnabled,
-  listMessages,
-  storageEnabled,
-  storageIsPrivate,
-} from "@/lib/contato";
+import { emailEnabled, listMessages, storageEnabled } from "@/lib/contato";
 
 function formatDateTime(iso: string): string {
   return new Date(iso).toLocaleString("pt-BR", {
@@ -41,17 +36,10 @@ export default async function MensagensPage() {
 
       {!blobConfigured && (
         <p className="mt-6 rounded-md border border-wine/30 bg-wine-mist px-5 py-4 text-base text-wine-deep">
-          <strong>Vercel Blob não configurado:</strong> as mensagens do
-          formulário não estão sendo guardadas. Defina BLOB_READ_WRITE_TOKEN
-          no Vercel.
-        </p>
-      )}
-
-      {blobConfigured && !storageIsPrivate() && (
-        <p className="mt-6 rounded-md border border-line bg-paper-light px-5 py-4 text-base text-ink-soft">
-          As mensagens estão no store principal do Blob, com endereço
-          aleatório. Para guardá-las num store privado, crie um store Blob
-          privado no Vercel e defina CONTACT_BLOB_READ_WRITE_TOKEN (ver README).
+          <strong>Banco de dados não configurado:</strong> as mensagens do
+          formulário não estão sendo guardadas aqui (o aviso por e-mail, se
+          configurado, continua chegando). No Vercel, conecte o Neon ao projeto
+          (Storage → Connect Project).
         </p>
       )}
 

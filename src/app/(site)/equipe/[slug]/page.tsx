@@ -7,7 +7,7 @@ import Button from "@/components/Button";
 import Photo from "@/components/Photo";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { initialsOf } from "@/data/team";
-import { getTeamProfile } from "@/lib/equipe";
+import { getTeam, getTeamProfile } from "@/lib/equipe";
 import { getArea } from "@/data/areas";
 import { site } from "@/data/site";
 import { pageMetadata } from "@/lib/seo";
@@ -16,9 +16,18 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-// Lê do Blob a cada requisição, como o blog: alterar um perfil no painel
-// reflete no ar na hora, inclusive quem passa a ter (ou deixa de ter) página.
-export const dynamic = "force-dynamic";
+/**
+ * Páginas estáticas, como o blog: os perfis existentes no build são gerados
+ * na hora; quem ganha página depois é gerado na primeira visita
+ * (dynamicParams). Alterar no painel revalida (revalidateEquipe), inclusive
+ * quem passa a ter (ou deixa de ter) página.
+ */
+export async function generateStaticParams() {
+  return (await getTeam())
+    .filter((m) => m.hasProfile)
+    .map((m) => ({ slug: m.slug }));
+}
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

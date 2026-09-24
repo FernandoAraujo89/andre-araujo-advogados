@@ -2,8 +2,8 @@
  * Blog — tipos, categorias e a SEMENTE de posts.
  *
  * A partir da criação do painel /admin, a fonte de verdade em produção é o
- * Vercel Blob (ver src/lib/blog.ts). Este arquivo mantém os tipos e os 6
- * posts iniciais, usados como fallback quando o Blob ainda não tem dados
+ * banco Neon (ver src/lib/blog.ts). Este arquivo mantém os tipos e os 6
+ * posts iniciais, usados como fallback quando o banco ainda não tem dados
  * (primeiro deploy, ambiente local sem token). O corpo é Markdown.
  */
 

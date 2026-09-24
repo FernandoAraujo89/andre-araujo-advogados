@@ -7,7 +7,8 @@ august-debouzy.com) adaptado ao universo jurídico, com a sobriedade que o
 Provimento 205/2021 da OAB exige.
 
 **Stack:** Next.js 16 (App Router, Turbopack) · React 19 · Tailwind CSS 4 ·
-Framer Motion · lucide-react · react-markdown · Vercel Blob · TypeScript
+Framer Motion · lucide-react · react-markdown · Neon (Postgres) · Vercel Blob
+(imagens) · TypeScript
 
 ## Como rodar
 
@@ -17,6 +18,8 @@ npm run dev              # http://localhost:3000
 npm run build            # build de produção
 npm start                # serve o build
 npm run lint             # ESLint
+npm run db:setup         # cria as tabelas no Neon (scripts/schema.sql)
+npm run db:migrate       # traz o conteúdo do Blob (ou a semente) para o Neon
 npm run redirects:export # regenera redirects/ a partir de src/lib/redirects.ts
 ```
 
@@ -28,8 +31,8 @@ Nenhuma é necessária para o site público. Elas servem ao painel `/admin`:
 |---|---|
 | `ADMIN_PASSWORD` | Senha única do painel |
 | `ADMIN_SESSION_SECRET` | Assina o cookie de sessão (qualquer string longa e aleatória, ex.: `openssl rand -base64 48`) |
-| `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (store público), onde ficam os posts, as imagens de capa e, na falta do token abaixo, as mensagens do formulário |
-| `CONTACT_BLOB_READ_WRITE_TOKEN` | Token do segundo store Blob, **privado** (`andre-araujo-contato`): mensagens do formulário (dados pessoais) e o JSON das landing pages |
+| `DATABASE_URL` | Conexão com o Neon (Postgres): posts, equipe, landing pages e mensagens do formulário. Criada pelo Vercel ao conectar o Neon ao projeto (Storage → Connect Project) |
+| `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (store público `andre-araujo-blog`), só para as imagens enviadas pelo painel (capas de posts, fotos da equipe, imagens das landing pages) |
 | `SES_ACCESS_KEY_ID` + `SES_SECRET_ACCESS_KEY` | Aviso por e-mail pelo Amazon SES, com chaves de um usuário IAM restrito a `ses:SendEmail` (ver abaixo) |
 | `SES_ROLE_ARN` | Alternativa às chaves: ARN de uma role assumida via OIDC do Vercel, sem segredo fixo |
 | `SES_REGION` | Opcional. Região do SES (padrão `us-east-2`, onde `mail.andrearaujoadvogados.com.br` está verificado) |
@@ -39,10 +42,41 @@ Nenhuma é necessária para o site público. Elas servem ao painel `/admin`:
 
 Sem `ADMIN_PASSWORD` ou `ADMIN_SESSION_SECRET`, o painel fica fechado: o login
 responde dizendo qual variável falta e nenhuma sessão é aceita. Só no
-`next dev` existe um segredo de fallback. Sem `BLOB_READ_WRITE_TOKEN`, o blog
-usa a semente de `src/data/posts.ts` e o painel entra em modo demonstração
-(nada é salvo). Localmente, coloque as variáveis num `.env.local` (ignorado
-pelo git).
+`next dev` existe um segredo de fallback. Sem `DATABASE_URL`, o blog e a
+equipe usam as sementes de `src/data/*` e o painel entra em modo demonstração
+(nada é salvo). Localmente, `vercel env pull .env.local` traz as variáveis
+(o arquivo é ignorado pelo git).
+
+## Banco de dados (Neon)
+
+Posts, equipe, landing pages e mensagens do formulário ficam no Neon
+(Postgres), no plano gratuito, que não cobra por operação. O Blob ficou só
+para as imagens enviadas pelo painel.
+
+- **Tabelas** (`scripts/schema.sql`): `posts`, `team_members`,
+  `landing_pages` e `contact_messages`. Cada linha guarda o objeto inteiro em
+  `data` (jsonb), então os tipos de `src/data/*` continuam valendo sem mapear
+  coluna por coluna; `team_members.position` é a ordem do site.
+- **Camada de dados** em `src/lib/{blog,equipe,landing,contato}.ts`, com
+  `src/lib/db.ts` (driver HTTP `@neondatabase/serverless`, uma requisição por
+  query). Escritas são uma linha por vez (upsert/delete por slug). Na
+  primeira escrita com a tabela vazia, a semente é gravada antes, para não
+  sumir.
+- **Visitas não consultam o banco.** As leituras públicas passam por
+  `unstable_cache` com as tags `posts`, `equipe` e `landing`, e as páginas do
+  blog e da equipe são estáticas (`generateStaticParams` + `dynamicParams`).
+  Salvar no painel chama `revalidateTag(tag, { expire: 0 })` e os
+  `revalidatePath` (`src/app/api/admin/**/_validate.ts`), então a próxima
+  visita já lê o banco. Há ainda uma regeneração diária de segurança.
+- **Alterou o banco por fora** (SQL direto, `db:migrate` com o site no ar)?
+  O cache não sabe: salve qualquer item no painel ou publique de novo.
+- **Migração do Blob** (`scripts/migrate-blob-to-neon.mjs`, `npm run
+  db:migrate`): lê `blog/posts.json` do store público e a versão mais nova de
+  `equipe/membros-*.json`, `landing/pages-*.json` e `contato/mensagens/*` do
+  store privado (`CONTACT_BLOB_READ_WRITE_TOKEN`, só o script ainda usa) e
+  faz upsert. Idempotente, mas o Blob **sobrescreve** a linha de mesmo slug.
+  Se um store não responder, cai na semente e avisa; `-- --seed` ignora o
+  Blob de propósito.
 
 ## Estrutura de pastas
 
@@ -115,10 +149,10 @@ lista as mensagens do formulário de contato e lista, cria, edita e exclui posts
 upload de imagem de capa (JPG, PNG, WebP ou AVIF até 8 MB).
 
 Como funciona por baixo (`src/lib/blog.ts`): a fonte de verdade em produção
-é um único JSON no Vercel Blob (`blog/posts.json`). Quando o Blob está vazio
-ou sem token, entra a semente de `src/data/posts.ts`; a primeira gravação
-migra a semente para o Blob. As páginas do blog, a home e o sitemap leem o
-Blob a cada requisição, então publicar reflete na hora.
+é a tabela `posts` no Neon. Sem `DATABASE_URL` ou com a tabela vazia, entra
+a semente de `src/data/posts.ts`; a primeira gravação migra a semente para o
+banco. As páginas do blog, a home e o sitemap leem um cache que publicar,
+editar ou excluir revalida na hora (ver "Banco de dados").
 
 Segurança: sessão em cookie assinado (HMAC, 12 horas), checada no
 `proxy.ts` e de novo em cada rota e página do painel. O login não limita
@@ -140,17 +174,9 @@ mensagens desse formulário chegam ao painel com a origem (slug da página).
   depois das 10 áreas fixas. A home mantém só as fixas.
 - Rascunhos ficam fora do ar; a pré-visualização com o chrome do site fica em
   `/admin/preview/<slug>` (só logado).
-- Dados num JSON no store **privado** do painel (o mesmo das mensagens,
-  `CONTACT_BLOB_READ_WRITE_TOKEN`; `src/lib/landing.ts`), para rascunhos não
-  terem URL pública. O arquivo nunca é sobrescrito: cada gravação cria
-  `landing/pages-<n>.json` e apaga as anteriores, e a leitura pega a mais
-  nova. Motivo, medido em teste: sobrescrever o mesmo caminho faz a leitura
-  devolver a versão antiga por segundos (store privado) ou minutos (CDN do
-  store público, mesmo com query de cache-busting); com arquivo novo,
-  publicar e despublicar refletem na hora. O blog ainda sobrescreve
-  `blog/posts.json` e por isso pode demorar até um minuto para refletir.
-  Sem o token privado, cai no store público. As imagens enviadas pelo editor
-  continuam no store público, porque precisam de URL.
+- Dados na tabela `landing_pages` do Neon (`src/lib/landing.ts`): rascunhos
+  não têm URL pública. As imagens enviadas pelo editor vão para o Blob,
+  porque precisam de URL.
 - Tipos e modelo inicial em `src/data/landing.ts`; template público em
   `src/components/landing/LandingPageView.tsx`; editor em
   `src/components/admin/LandingEditor.tsx`. Slugs das áreas fixas e das
@@ -162,7 +188,7 @@ mensagens desse formulário chegam ao painel com a origem (slug da página).
 
 A página /equipe é gerenciada pelo escritório, com CRUD completo: incluir,
 editar, remover e reordenar (setas ↑ ↓ na lista). Mesmo desenho do blog e das
-landing pages — JSON versionado no Vercel Blob (`src/lib/equipe.ts`), com
+landing pages — tabela `team_members` no Neon (`src/lib/equipe.ts`), com
 `src/data/team.ts` de semente enquanto ninguém salvar nada.
 
 - **Setor** (Cível, Escala, Controladoria…) agrupa as pessoas na página
@@ -222,24 +248,14 @@ estados de sucesso e erro e um campo oculto anti-spam (honeypot + tempo
 mínimo de preenchimento). O envio vai para `src/app/api/contato/route.ts`,
 que:
 
-1. grava a mensagem como JSON no Vercel Blob (`contato/mensagens/`, um
-   arquivo por envio; privado se houver `CONTACT_BLOB_READ_WRITE_TOKEN`, senão no store
-   público com URL aleatória, que ninguém lista sem o token) e a exibe na aba **Mensagens** do painel `/admin`,
-   com links de WhatsApp, telefone e e-mail e botão de excluir;
+1. grava a mensagem na tabela `contact_messages` do Neon (uma linha por
+   envio) e a exibe na aba **Mensagens** do painel `/admin`, com links de
+   WhatsApp, telefone e e-mail e botão de excluir;
 2. avisa o escritório por e-mail, pelo Amazon SES (variáveis `SES_*`) ou,
    na falta dele, pelo Resend (`RESEND_API_KEY`); tudo em `src/lib/contato.ts`.
 
 Basta um dos dois dar certo para o visitante ver "Mensagem enviada". Sem
-Blob nem e-mail (dev local), a mensagem é registrada no console.
-
-As mensagens ficam num store Blob **privado** só delas (recomendado, são
-dados pessoais): `andre-araujo-contato`, conectado ao projeto com o prefixo
-`CONTACT_BLOB`, que gera a variável `CONTACT_BLOB_READ_WRITE_TOKEN`. O store
-principal (`andre-araujo-blog`) continua público, porque as imagens do blog
-precisam de URL pública. Para recriar: `vercel blob create-store <nome>
---access private` e, na conexão ao projeto, use um prefixo diferente de
-`BLOB` para não colidir com o token do blog (o CLI não expõe o prefixo; a
-API de conexão do store aceita `envVarPrefix`).
+banco nem e-mail (dev local), a mensagem é registrada no console.
 
 ### Aviso por e-mail pelo Amazon SES
 
@@ -306,8 +322,8 @@ arquivos em `redirects/`.
 - **Vercel com export estático:** use `redirects/vercel.json` como
   `vercel.json` na raiz.
 
-Atenção: o painel `/admin` e o blog dinâmico dependem de servidor (rotas de
-API e Blob), então o export estático (`output: 'export'`) só é viável se o
+Atenção: o painel `/admin` e as landing pages dependem de servidor (rotas de
+API e banco), então o export estático (`output: 'export'`) só é viável se o
 painel for abandonado.
 
 Depois de apontar o domínio, valide com
@@ -318,7 +334,7 @@ Depois de apontar o domínio, valide com
 
 - Metadata única por página (title ≤ 60, description ≤ 155), Open Graph e
   canonical via `src/lib/seo.ts`
-- `sitemap.xml` (inclui os posts do Blob) e `robots.txt` (bloqueia `/admin` e
+- `sitemap.xml` (inclui posts, perfis e landing pages do banco) e `robots.txt` (bloqueia `/admin` e
   `/api`) gerados por `src/app/sitemap.ts` e `robots.ts`
 - JSON-LD `LegalService` na home e no contato, `BlogPosting` nos posts e
   `FAQPage` no FAQ (`src/lib/jsonld.ts`)
@@ -338,8 +354,22 @@ build restaurou um CSS compilado antigo (em 15/09/2026 o site foi ao ar com o
 HTML novo e os tokens de fonte do tema anterior). Se algum estilo parecer
 desatualizado no ar, é essa a primeira coisa a conferir.
 
-As três variáveis de ambiente estão definidas no ambiente Production do
-Vercel.
+As variáveis de ambiente estão definidas no ambiente Production do Vercel
+(`vercel env ls production` lista os nomes). O build gera as páginas do blog
+e da equipe a partir do banco, então precisa de `DATABASE_URL`.
+
+Na primeira publicação com o Neon (ou num banco novo), antes do deploy:
+
+```bash
+vercel env pull .env.local   # traz DATABASE_URL para a máquina
+npm run db:setup             # cria as tabelas
+npm run db:migrate           # conteúdo do Blob, ou a semente se ele não responder
+npm run build                # confere localmente
+vercel --prod --force
+```
+
+Depois, no painel: crie e edite um integrante, crie um post e envie uma
+mensagem pelo formulário; confira se o site público atualiza ao salvar.
 
 ## Domínio e DNS
 

@@ -1,22 +1,17 @@
 import "server-only";
-import { put, list, get, del } from "@vercel/blob";
 import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
 import { awsCredentialsProvider } from "@vercel/functions/oidc";
 import { site } from "@/data/site";
+import { dbEnabled, json, sql } from "@/lib/db";
 
 /**
  * Mensagens do formulário de contato.
  *
- * Cada mensagem vira um JSON no Vercel Blob (`contato/mensagens/`), um
- * arquivo por envio, para dois envios simultâneos nunca se sobrescreverem.
- * O painel /admin lista e exclui as mensagens. Com o e-mail configurado (SES
- * ou Resend, ver notifyByEmail), o escritório também é avisado a cada mensagem.
- *
- * Onde ficam: com CONTACT_BLOB_READ_WRITE_TOKEN (o store PRIVADO do painel, que
- * também guarda as landing pages) os arquivos são privados, o ideal para
- * dados pessoais. Sem ele, vão para o
- * store principal (público, o mesmo do blog), com sufixo aleatório na URL:
- * ninguém lista nem adivinha o endereço sem o token, e o site nunca o exibe.
+ * Cada mensagem vira uma linha na tabela `contact_messages` do Neon (o objeto
+ * inteiro em `data`, jsonb). O painel /admin lista e exclui as mensagens. Com
+ * o e-mail configurado (SES ou Resend, ver notifyByEmail), o escritório também
+ * é avisado a cada mensagem, e basta um dos dois dar certo para o visitante
+ * ver "Mensagem enviada" (ver src/app/api/contato/route.ts).
  */
 
 export type ContactInput = {
@@ -35,28 +30,9 @@ export type ContactMessage = ContactInput & {
   receivedAt: string;
 };
 
-const PREFIX = "contato/mensagens/";
-
-type Storage = { token: string; access: "public" | "private" };
-
-function storage(): Storage | null {
-  if (process.env.CONTACT_BLOB_READ_WRITE_TOKEN) {
-    return { token: process.env.CONTACT_BLOB_READ_WRITE_TOKEN, access: "private" };
-  }
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    return { token: process.env.BLOB_READ_WRITE_TOKEN, access: "public" };
-  }
-  return null;
-}
-
 /** True quando há onde guardar as mensagens. */
 export function storageEnabled(): boolean {
-  return storage() !== null;
-}
-
-/** True quando as mensagens ficam num store privado (CONTACT_BLOB_READ_WRITE_TOKEN). */
-export function storageIsPrivate(): boolean {
-  return storage()?.access === "private";
+  return dbEnabled();
 }
 
 /** Valida e normaliza o corpo enviado pelo formulário. Devolve erro legível. */
@@ -104,71 +80,45 @@ export type SaveResult =
   | { status: "skipped" }
   | { status: "failed" };
 
-/** Grava a mensagem no Blob. "skipped" quando não há store configurado. */
+/** Grava a mensagem no banco. "skipped" quando não há banco configurado. */
 export async function saveMessage(input: ContactInput): Promise<SaveResult> {
-  const store = storage();
-  if (!store) return { status: "skipped" };
+  if (!dbEnabled()) return { status: "skipped" };
   const receivedAt = new Date().toISOString();
-  // O id começa pela data/hora para a listagem ordenar pelo nome do arquivo.
+  // O id começa pela data/hora: legível e único mesmo em envios simultâneos.
   const id = `${receivedAt.replace(/\D/g, "").slice(0, 14)}-${crypto
     .randomUUID()
     .slice(0, 8)}`;
   const message: ContactMessage = { id, receivedAt, ...input };
   try {
-    await put(`${PREFIX}${id}.json`, JSON.stringify(message, null, 2), {
-      access: store.access,
-      token: store.token,
-      contentType: "application/json",
-      // No store público, o sufixo aleatório é o que torna a URL imprevisível.
-      addRandomSuffix: store.access === "public",
-    });
+    await sql().query(
+      "insert into contact_messages (id, data, created_at) values ($1, $2::jsonb, $3)",
+      [id, json(message), receivedAt]
+    );
     return { status: "saved", message };
   } catch (err) {
-    console.error("Falha ao gravar mensagem de contato no Blob:", err);
+    console.error("Falha ao gravar mensagem de contato no banco:", err);
     return { status: "failed" };
   }
 }
 
 /** Todas as mensagens, da mais recente para a mais antiga (até `limit`). */
 export async function listMessages(limit = 200): Promise<ContactMessage[]> {
-  const store = storage();
-  if (!store) return [];
-  const { blobs } = await list({ prefix: PREFIX, limit, token: store.token });
-  const newestFirst = [...blobs].sort((a, b) =>
-    a.pathname < b.pathname ? 1 : -1
-  );
-  const messages = await Promise.all(
-    newestFirst.map(async (b) => {
-      try {
-        const res = await get(b.pathname, {
-          access: store.access,
-          token: store.token,
-        });
-        if (!res) return null;
-        const text = await new Response(res.stream).text();
-        return JSON.parse(text) as ContactMessage;
-      } catch (err) {
-        console.error(`Falha ao ler ${b.pathname}:`, err);
-        return null;
-      }
-    })
-  );
-  return messages.filter((m): m is ContactMessage => m !== null);
+  if (!dbEnabled()) return [];
+  const rows = (await sql().query(
+    "select data from contact_messages order by created_at desc limit $1",
+    [limit]
+  )) as { data: ContactMessage }[];
+  return rows.map((r) => r.data);
 }
 
 /** Exclui a mensagem. Devolve true se algo foi removido. */
 export async function deleteMessage(id: string): Promise<boolean> {
-  const store = storage();
-  if (!store || !/^[0-9]{14}-[0-9a-f]{8}$/.test(id)) return false;
-  const { blobs } = await list({
-    prefix: `${PREFIX}${id}`,
-    limit: 1,
-    token: store.token,
-  });
-  const found = blobs.find((b) => b.pathname.startsWith(`${PREFIX}${id}`));
-  if (!found) return false;
-  await del(found.url, { token: store.token });
-  return true;
+  if (!dbEnabled() || !/^[0-9]{14}-[0-9a-f]{8}$/.test(id)) return false;
+  const rows = await sql().query(
+    "delete from contact_messages where id = $1 returning id",
+    [id]
+  );
+  return rows.length > 0;
 }
 
 /*

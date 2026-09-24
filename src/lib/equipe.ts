@@ -1,6 +1,6 @@
 import "server-only";
 import { cache } from "react";
-import { put, get, list, del } from "@vercel/blob";
+import { unstable_cache } from "next/cache";
 import { slugify } from "@/data/posts";
 import {
   founderOf,
@@ -8,64 +8,52 @@ import {
   type TeamMember,
   type TeamMemberInput,
 } from "@/data/team";
+import { dbEnabled, json, requireDb, sql } from "@/lib/db";
 
 /**
- * Camada de dados da equipe: um único JSON no Vercel Blob com todos os
- * integrantes, na ordem em que devem aparecer no site. Mesmo desenho das
- * landing pages (src/lib/landing.ts):
- *
- * 1. O arquivo nunca é sobrescrito — cada gravação cria `equipe/membros-<n>.json`
- *    com número crescente e apaga as versões anteriores; a leitura pega a mais
- *    nova. Sobrescrever o mesmo caminho faz a leitura devolver a versão
- *    anterior por segundos, e "salvar" não refletiria na hora.
- * 2. Fica no store PRIVADO do painel quando existe (CONTACT_BLOB_READ_WRITE_TOKEN);
- *    só as fotos são públicas.
+ * Camada de dados da equipe: a tabela `team_members` no Neon, uma linha por
+ * integrante com o objeto inteiro em `data` (jsonb) e a ordem de exibição em
+ * `position`. Mesmo desenho do blog (src/lib/blog.ts).
  *
  * Enquanto ninguém salvar nada no painel, vale a semente de src/data/team.ts.
- * A primeira gravação persiste a lista inteira (semente + alteração), então a
+ * A primeira gravação persiste a semente inteira antes da alteração, então a
  * semente nunca se perde no meio do caminho.
  *
- * A ORDEM DO ARRAY É A ORDEM DO SITE. A página pública agrupa por setor
- * preservando essa ordem (ver groupBySetor em src/data/team.ts).
+ * A POSIÇÃO É A ORDEM DO SITE. A página pública agrupa por setor preservando
+ * essa ordem (ver groupBySetor em src/data/team.ts).
  */
 
-const PREFIX = "equipe/membros-";
+export const EQUIPE_TAG = "equipe";
 
-type Store = { token: string; access: "public" | "private" };
-
-function storage(): Store | null {
-  if (process.env.CONTACT_BLOB_READ_WRITE_TOKEN) {
-    return { token: process.env.CONTACT_BLOB_READ_WRITE_TOKEN, access: "private" };
-  }
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    return { token: process.env.BLOB_READ_WRITE_TOKEN, access: "public" };
-  }
-  return null;
-}
+type Row = { data: TeamMember };
+type Db = ReturnType<typeof sql>;
 
 /** True quando há onde guardar as alterações da equipe. */
 export function teamStorageEnabled(): boolean {
-  return storage() !== null;
+  return dbEnabled();
 }
 
-async function readFromBlob(store: Store): Promise<TeamMember[] | null> {
-  const { blobs } = await list({ prefix: PREFIX, token: store.token, limit: 100 });
-  if (blobs.length === 0) return null;
-  const newest = [...blobs].sort((a, b) => (a.pathname < b.pathname ? 1 : -1))[0];
-  const res = await get(newest.pathname, { access: store.access, token: store.token });
-  if (!res) return null;
-  const data = JSON.parse(await new Response(res.stream).text()) as TeamMember[];
-  return Array.isArray(data) ? data : [];
+async function readAll(db: Db): Promise<TeamMember[]> {
+  const rows = (await db.query(
+    "select data from team_members order by position, slug"
+  )) as Row[];
+  return rows.map((r) => r.data);
 }
 
-/** A equipe inteira, na ordem de exibição. Cai na semente se o Blob não responder. */
+/** A equipe do banco, em cache até o painel salvar (ou por 1 dia). */
+const readAllCached = unstable_cache(() => readAll(sql()), ["equipe-all"], {
+  tags: [EQUIPE_TAG],
+  revalidate: 86400,
+});
+
+/** A equipe inteira, na ordem de exibição. Cai na semente se o banco não responder. */
 export const getTeam = cache(async (): Promise<TeamMember[]> => {
-  const store = storage();
-  if (!store) return SEED_TEAM;
+  if (!dbEnabled()) return SEED_TEAM;
   try {
-    return (await readFromBlob(store)) ?? SEED_TEAM;
+    const fromDb = await readAllCached();
+    return fromDb.length > 0 ? fromDb : SEED_TEAM;
   } catch (err) {
-    console.error("Falha ao ler a equipe do Blob, usando semente:", err);
+    console.error("Falha ao ler a equipe do banco, usando semente:", err);
     return SEED_TEAM;
   }
 });
@@ -86,35 +74,28 @@ export async function getTeamProfile(slug: string): Promise<TeamMember | undefin
   return member?.hasProfile ? member : undefined;
 }
 
-async function persist(members: TeamMember[]): Promise<void> {
-  const store = storage();
-  if (!store) {
-    throw new Error(
-      "Vercel Blob não configurado. Ative o Storage → Blob no painel do Vercel e defina BLOB_READ_WRITE_TOKEN."
-    );
-  }
-  const pathname = `${PREFIX}${String(Date.now()).padStart(14, "0")}.json`;
-  await put(pathname, JSON.stringify(members, null, 2), {
-    access: store.access,
-    token: store.token,
-    contentType: "application/json",
-    addRandomSuffix: false,
-  });
-  try {
-    const { blobs } = await list({ prefix: PREFIX, token: store.token, limit: 100 });
-    const old = blobs.filter((b) => b.pathname !== pathname);
-    if (old.length > 0) await del(old.map((b) => b.url), { token: store.token });
-  } catch (err) {
-    console.error("Falha ao apagar versões antigas da equipe:", err);
-  }
+/** Na primeira escrita com a tabela vazia, grava a semente (na ordem dela). */
+async function ensureSeeded(db: Db): Promise<void> {
+  const [{ n }] = (await db.query(
+    "select count(*)::int as n from team_members"
+  )) as { n: number }[];
+  if (n > 0 || SEED_TEAM.length === 0) return;
+  await db.transaction((txn) =>
+    SEED_TEAM.map((m, position) =>
+      txn.query(
+        "insert into team_members (slug, position, data) values ($1, $2, $3::jsonb) on conflict (slug) do nothing",
+        [m.slug, position, json(m)]
+      )
+    )
+  );
 }
 
 /** Gera um slug único (acrescenta -2, -3… se já existir, ignorando `exceptSlug`). */
-function uniqueSlug(base: string, members: TeamMember[], exceptSlug?: string): string {
+function uniqueSlug(base: string, taken: string[], exceptSlug?: string): string {
   const root = slugify(base) || "integrante";
   let candidate = root;
   let n = 2;
-  while (members.some((m) => m.slug === candidate && m.slug !== exceptSlug)) {
+  while (taken.some((s) => s === candidate && s !== exceptSlug)) {
     candidate = `${root}-${n++}`;
   }
   return candidate;
@@ -122,10 +103,18 @@ function uniqueSlug(base: string, members: TeamMember[], exceptSlug?: string): s
 
 /** Cria um integrante no fim da lista e devolve o registro salvo. */
 export async function createTeamMember(input: TeamMemberInput): Promise<TeamMember> {
-  const members = await getTeam();
-  const slug = uniqueSlug(input.slug || input.name, members);
+  const db = requireDb();
+  await ensureSeeded(db);
+  const members = await readAll(db);
+  const slug = uniqueSlug(
+    input.slug || input.name,
+    members.map((m) => m.slug)
+  );
   const member: TeamMember = { ...input, slug };
-  await persist([...members, member]);
+  await db.query(
+    "insert into team_members (slug, position, data) values ($1, (select coalesce(max(position), -1) + 1 from team_members), $2::jsonb)",
+    [slug, json(member)]
+  );
   return member;
 }
 
@@ -134,23 +123,32 @@ export async function updateTeamMember(
   originalSlug: string,
   input: TeamMemberInput
 ): Promise<TeamMember | null> {
-  const members = await getTeam();
-  const idx = members.findIndex((m) => m.slug === originalSlug);
-  if (idx === -1) return null;
-  const slug = uniqueSlug(input.slug || input.name, members, originalSlug);
-  const next = [...members];
-  next[idx] = { ...input, slug };
-  await persist(next);
-  return next[idx];
+  const db = requireDb();
+  await ensureSeeded(db);
+  const members = await readAll(db);
+  if (!members.some((m) => m.slug === originalSlug)) return null;
+  const slug = uniqueSlug(
+    input.slug || input.name,
+    members.map((m) => m.slug),
+    originalSlug
+  );
+  const member: TeamMember = { ...input, slug };
+  await db.query(
+    "update team_members set slug = $2, data = $3::jsonb, updated_at = now() where slug = $1",
+    [originalSlug, slug, json(member)]
+  );
+  return member;
 }
 
 /** Remove o integrante. True se algo foi removido. */
 export async function deleteTeamMember(slug: string): Promise<boolean> {
-  const members = await getTeam();
-  const next = members.filter((m) => m.slug !== slug);
-  if (next.length === members.length) return false;
-  await persist(next);
-  return true;
+  const db = requireDb();
+  await ensureSeeded(db);
+  const rows = await db.query(
+    "delete from team_members where slug = $1 returning slug",
+    [slug]
+  );
+  return rows.length > 0;
 }
 
 /**
@@ -159,7 +157,9 @@ export async function deleteTeamMember(slug: string): Promise<boolean> {
  * reordenação nunca apaga ninguém.
  */
 export async function reorderTeam(slugs: string[]): Promise<TeamMember[]> {
-  const members = await getTeam();
+  const db = requireDb();
+  await ensureSeeded(db);
+  const members = await readAll(db);
   const byslug = new Map(members.map((m) => [m.slug, m]));
   const ordered: TeamMember[] = [];
   for (const slug of slugs) {
@@ -170,6 +170,15 @@ export async function reorderTeam(slugs: string[]): Promise<TeamMember[]> {
     }
   }
   const next = [...ordered, ...byslug.values()];
-  await persist(next);
+  if (next.length > 0) {
+    await db.transaction((txn) =>
+      next.map((m, position) =>
+        txn.query(
+          "update team_members set position = $2, updated_at = now() where slug = $1",
+          [m.slug, position]
+        )
+      )
+    );
+  }
   return next;
 }

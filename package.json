@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "db:setup": "node --env-file=.env.local scripts/db-setup.mjs",
+    "db:migrate": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file=.env.local scripts/migrate-blob-to-neon.mjs",
     "redirects:export": "node --experimental-strip-types --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/export-redirects.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-sesv2": "3.1132.0",
+    "@neondatabase/serverless": "^1.1.0",
     "@vercel/blob": "^2.5.0",
     "@vercel/functions": "3.9.7",
     "framer-motion": "^12.42.2",

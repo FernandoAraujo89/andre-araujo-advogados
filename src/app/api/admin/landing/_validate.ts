@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import type {
   LandingPageInput,
   LpImage,
@@ -6,10 +6,11 @@ import type {
   LpSectionType,
 } from "@/data/landing";
 import { youtubeId } from "@/data/landing";
+import { LANDING_TAG } from "@/lib/landing";
 
 /**
  * Valida e normaliza a landing page enviada pelo editor. Devolve erro
- * legível. Limites generosos, mas finitos: o JSON inteiro vai para o Blob e
+ * legível. Limites generosos, mas finitos: o JSON inteiro vai para o banco e
  * é lido a cada render.
  */
 
@@ -166,6 +167,8 @@ export function parseLandingInput(raw: unknown): Ok | Fail {
  * (por isso o layout raiz inteiro).
  */
 export function revalidateLanding(slugs: string[]) {
+  // A tag vence primeiro (`expire: 0`): a próxima visita já lê o banco.
+  revalidateTag(LANDING_TAG, { expire: 0 });
   revalidatePath("/", "layout");
   revalidatePath("/areas-de-atuacao");
   revalidatePath("/sitemap.xml");

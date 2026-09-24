@@ -2,8 +2,8 @@
  * Equipe — semente e tipos.
  *
  * Esta lista é o ponto de partida: a partir do momento em que alguém salva
- * qualquer alteração em /admin → Equipe, a equipe passa a vir do Vercel Blob
- * (src/lib/equipe.ts) e esta semente só volta a ser usada se o Blob não
+ * qualquer alteração em /admin → Equipe, a equipe passa a vir do banco (Neon,
+ * src/lib/equipe.ts) e esta semente só volta a ser usada se o banco não
  * estiver configurado. Mesmo desenho dos posts (src/data/posts.ts).
  *
  * Fotos quadradas (800×800) em public/equipe/<slug>.jpg. Quem não tem foto
@@ -36,7 +36,7 @@ export type TeamMemberInput = Omit<TeamMember, "slug"> & { slug?: string };
 
 /**
  * Ordem dos setores na página pública. É só a ordem inicial: a ordem real é a
- * do array salvo no Blob, reordenável no painel. Um setor que não esteja aqui
+ * da posição salva no banco, reordenável no painel. Um setor que não esteja aqui
  * aparece depois, na ordem em que surgir.
  */
 export const SETORES = [

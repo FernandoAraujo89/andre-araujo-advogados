@@ -5,7 +5,7 @@
  * setor jurídico: hero fixo no topo, seções reordenáveis no meio (texto com
  * imagem, lista, passos, cards, sobre o escritório, avaliações do Google,
  * perguntas frequentes, chamada para ação) e fechamento com formulário. Os
- * dados vivem no Vercel Blob (src/lib/landing.ts) e as páginas publicadas
+ * dados vivem no banco Neon (src/lib/landing.ts) e as páginas publicadas
  * entram na lista de áreas de atuação em /areas-de-atuacao/<slug>.
  *
  * Este arquivo é importado também no navegador (editor), então não pode ter
