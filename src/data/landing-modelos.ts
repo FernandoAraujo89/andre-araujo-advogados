@@ -6,7 +6,6 @@
 
 import {
   emptyLandingPage,
-  heroImageDefault,
   newSection,
   type LandingPageInput,
   type LpSectionOf,
@@ -58,8 +57,13 @@ function feriasPremio(): LandingPageInput {
       title: "Aposentou sem usufruir as férias-prêmio? Você pode ter",
       highlight: "valores a receber",
       text: "A Justiça reconhece a conversão em dinheiro das férias-prêmio que o servidor adquiriu e não usufruiu antes de se aposentar. Muitos aposentados nunca conferiram essa situação. Descubra se é o seu caso.",
-      button: { label: "Quero analisar meu caso", link: { tipo: "whatsapp" } },
-      image: heroImageDefault,
+      button: { label: "Quero analisar meu caso", link: { tipo: "contato" } },
+      // Recorte com fundo transparente (gerado no Magnific), no lugar da
+      // estátua do modelo padrão: mostra para quem é o direito.
+      image: {
+        src: `${FP}/hero-professora-aposentada.webp`,
+        alt: "Professora aposentada sorrindo, com uma pasta de documentos nos braços",
+      },
       ornament: true,
     },
     sections: [
@@ -118,7 +122,7 @@ function feriasPremio(): LandingPageInput {
         title: "O tempo corre contra quem",
         highlight: "não confere o próprio histórico",
         text: "Em regra, o pedido de conversão das férias-prêmio deve ser feito em até cinco anos contados da aposentadoria. Depois disso, o direito pode se perder.\n\nA análise do escritório começa pelo seu histórico funcional: quantos períodos foram adquiridos, quantos foram usufruídos e se algum foi contado para a aposentadoria. Com isso, você sabe exatamente o que pode pedir e qual o melhor caminho.",
-        button: { label: "Falar com o escritório", link: { tipo: "whatsapp" } },
+        button: { label: "Falar com o escritório", link: { tipo: "contato" } },
         image: {
           src: "/images/escritorio/apresentacao.jpg",
           alt: "André Araújo conduzindo uma reunião com a equipe na sala de reuniões do escritório",

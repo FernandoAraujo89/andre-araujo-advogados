@@ -131,10 +131,12 @@ function Hero({ ctx }: { ctx: Ctx }) {
             aria-hidden
             className="pointer-events-none absolute bottom-[-2rem] left-[50%] aspect-[577/515] h-[108%] @5xl:bottom-[-4.1cqi] @5xl:left-[75cqi] @5xl:h-auto @5xl:w-[min(53.7cqi,59rem)]"
           >
+            {/* Costuma ser o maior elemento da primeira tela (LCP): pré-carrega */}
             <Image
               src={LP_IMAGES.louros}
               alt=""
               fill
+              preload
               sizes="(min-width: 1024px) 54vw, 90vw"
               className="object-contain"
             />

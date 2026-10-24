@@ -168,6 +168,16 @@ export function newSectionId(): string {
   return Math.random().toString(36).slice(2, 10);
 }
 
+/**
+ * Botão de chamada padrão: leva ao formulário da própria página, onde o
+ * contato fica registrado no painel com a origem (decisão do escritório,
+ * 24/10/2026). O WhatsApp continua como opção de cada botão no editor.
+ */
+const formButton = (label = "Quero analisar meu caso"): LpButton => ({
+  label,
+  link: { tipo: "contato" },
+});
+
 const whatsappButton = (label = "Falar no WhatsApp"): LpButton => ({
   label,
   link: { tipo: "whatsapp" },
@@ -258,7 +268,7 @@ export function newSection(type: LpSectionType): LpSection {
         title: "A experiência do escritório",
         highlight: "a serviço do seu caso",
         text: "Conte aqui como o escritório conduz o atendimento: quem analisa o caso, como o cliente acompanha cada etapa e o que torna o trabalho diferente.",
-        button: whatsappButton(),
+        button: formButton("Fale com o escritório"),
         image: { src: LP_IMAGES.destaque, alt: "Martelo de juiz sobre uma mesa de mármore" },
       };
     case "depoimentos":
@@ -267,10 +277,7 @@ export function newSection(type: LpSectionType): LpSection {
         id,
         eyebrow: "Avaliações no Google",
         title: "O que dizem os nossos clientes",
-        button: {
-          label: "Ver todas as avaliações",
-          link: { tipo: "url", href: googleReviews.url },
-        },
+        button: formButton(),
         items: googleDepoimentos(),
       };
     case "equipe":
@@ -336,7 +343,7 @@ export function emptyLandingPage(): LandingPageInput {
       title: "Orientação jurídica clara, do primeiro contato até",
       highlight: "a solução do seu caso",
       text: "Explique em uma ou duas frases o problema que esta página resolve e para quem ela é.",
-      button: whatsappButton(),
+      button: formButton(),
       image: heroImageDefault,
       ornament: true,
     },
@@ -452,7 +459,14 @@ export function upgradeLanding(raw: unknown): LandingPage {
       sections.push(newSection("depoimentos"));
     }
   }
-  if (old.fechamento?.formulario !== false) {
+  // Com formulário, os botões levam a ele; sem, ao WhatsApp, como antes.
+  const hasForm = old.fechamento?.formulario !== false;
+  if (!hasForm) {
+    for (const s of sections) {
+      if ("button" in s && s.button.link.tipo === "contato") s.button = whatsappButton();
+    }
+  }
+  if (hasForm) {
     sections.push({
       ...(newSection("contato") as LpSectionOf<"contato">),
       title: old.fechamento?.title || "Fale com o escritório",
@@ -479,7 +493,7 @@ export function upgradeLanding(raw: unknown): LandingPage {
       title: old.hero?.title ?? "",
       highlight: "",
       text: old.hero?.subtitle ?? "",
-      button: whatsappButton(old.hero?.ctaLabel || "Falar no WhatsApp"),
+      button: hasForm ? formButton() : whatsappButton(old.hero?.ctaLabel || "Falar no WhatsApp"),
       image: v1Image(old.hero?.image, heroImageDefault),
       ornament: !old.hero?.image?.src,
     },
