@@ -13,7 +13,8 @@ import { dbEnabled, json, requireDb, sql } from "@/lib/db";
  * linha por página com o objeto inteiro em `data` (jsonb). Mesmo desenho do
  * blog (src/lib/blog.ts). Não há semente: sem banco, não há landing pages.
  *
- * Rascunhos ficam só no banco, sem URL pública; as imagens continuam no Blob.
+ * Rascunhos ficam só no banco, sem URL pública; as imagens enviadas pelo
+ * editor também ficam no banco (tabela `images`, servidas por /imagens/<id>).
  * Páginas gravadas no formato antigo (antes do layout do Figma) são
  * convertidas na leitura (upgradeLanding) e regravadas no formato novo no
  * próximo salvamento.

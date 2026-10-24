@@ -4,12 +4,11 @@ import { dbEnabled, requireDb, sql } from "@/lib/db";
 /**
  * Imagens enviadas pelo painel.
  *
- * O destino preferido é o Vercel Blob (URL pública, CDN). Quando ele não
- * responde — a cota mensal do plano Hobby estourou em 23/09/2026 e bloqueou
- * os stores até o ciclo virar — o upload cai aqui: a imagem, já otimizada,
- * vai para a tabela `images` do Neon e é servida por /imagens/<id> com cache
- * de um ano. Os dois formatos de URL convivem nos posts, na equipe e nas
- * landing pages, então nada precisa ser migrado quando o Blob volta.
+ * Ficam na tabela `images` do Neon, já otimizadas, e são servidas por
+ * /imagens/<id> com cache de um ano (no navegador e na borda da Vercel).
+ * O site usava o Vercel Blob, mas a cota mensal do plano Hobby estourou em
+ * 23/09/2026 e o Blob saiu do projeto em 24/10/2026: hoje nenhuma página
+ * depende dele.
  */
 
 /** Ids gerados por saveImage: slug + carimbo + sufixo + extensão. */

@@ -6,7 +6,13 @@ import JsonLd from "@/components/JsonLd";
 import Reveal from "@/components/Reveal";
 import CardRail from "@/components/landing/CardRail";
 import Slider from "@/components/landing/Slider";
-import { LpPicture, staticKit, type LandingKit, type LpPath } from "@/components/landing/kit";
+import {
+  LpPicture,
+  canOptimize,
+  staticKit,
+  type LandingKit,
+  type LpPath,
+} from "@/components/landing/kit";
 import {
   LP_IMAGES,
   linkHref,
@@ -500,7 +506,7 @@ function EquipeSection({ s, i, ctx }: { s: LpSectionOf<"equipe">; i: number; ctx
                       alt={`Foto de ${m.name}`}
                       fill
                       sizes="(min-width: 1024px) 330px, 80vw"
-                      unoptimized={!m.photo.startsWith("/") && !m.photo.includes(".public.blob.vercel-storage.com/")}
+                      unoptimized={!canOptimize(m.photo)}
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                     />
                   ) : (

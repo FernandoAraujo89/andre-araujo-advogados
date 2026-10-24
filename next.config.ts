@@ -15,12 +15,6 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
         pathname: "/**",
       },
-      {
-        // Imagens de capa enviadas pelo painel /admin (Vercel Blob).
-        protocol: "https",
-        hostname: "*.public.blob.vercel-storage.com",
-        pathname: "/**",
-      },
     ],
   },
   /**

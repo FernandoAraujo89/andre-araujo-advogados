@@ -7,8 +7,8 @@ august-debouzy.com) adaptado ao universo jurídico, com a sobriedade que o
 Provimento 205/2021 da OAB exige.
 
 **Stack:** Next.js 16 (App Router, Turbopack) · React 19 · Tailwind CSS 4 ·
-Framer Motion · lucide-react · react-markdown · Neon (Postgres) · Vercel Blob
-(imagens) · TypeScript
+Framer Motion · lucide-react · react-markdown · Neon (Postgres, também para
+as imagens do painel) · TypeScript
 
 ## Como rodar
 
@@ -19,7 +19,6 @@ npm run build            # build de produção
 npm start                # serve o build
 npm run lint             # ESLint
 npm run db:setup         # cria as tabelas no Neon (scripts/schema.sql)
-npm run db:migrate       # traz o conteúdo do Blob (ou a semente) para o Neon
 npm run redirects:export # regenera redirects/ a partir de src/lib/redirects.ts
 ```
 
@@ -31,8 +30,7 @@ Nenhuma é necessária para o site público. Elas servem ao painel `/admin`:
 |---|---|
 | `ADMIN_PASSWORD` | Senha única do painel |
 | `ADMIN_SESSION_SECRET` | Assina o cookie de sessão (qualquer string longa e aleatória, ex.: `openssl rand -base64 48`) |
-| `DATABASE_URL` | Conexão com o Neon (Postgres): posts, equipe, landing pages e mensagens do formulário. Criada pelo Vercel ao conectar o Neon ao projeto (Storage → Connect Project) |
-| `BLOB_READ_WRITE_TOKEN` | Token do Vercel Blob (store público `andre-araujo-blog`), só para as imagens enviadas pelo painel (capas de posts, fotos da equipe, imagens das landing pages) |
+| `DATABASE_URL` | Conexão com o Neon (Postgres): posts, equipe, landing pages, mensagens do formulário e as imagens enviadas pelo painel. Criada pelo Vercel ao conectar o Neon ao projeto (Storage → Connect Project) |
 | `SES_ACCESS_KEY_ID` + `SES_SECRET_ACCESS_KEY` | Aviso por e-mail pelo Amazon SES, com chaves de um usuário IAM restrito a `ses:SendEmail` (ver abaixo) |
 | `SES_ROLE_ARN` | Alternativa às chaves: ARN de uma role assumida via OIDC do Vercel, sem segredo fixo |
 | `SES_REGION` | Opcional. Região do SES (padrão `us-east-2`, onde `mail.andrearaujoadvogados.com.br` está verificado) |
@@ -49,12 +47,13 @@ equipe usam as sementes de `src/data/*` e o painel entra em modo demonstração
 
 ## Banco de dados (Neon)
 
-Posts, equipe, landing pages e mensagens do formulário ficam no Neon
-(Postgres), no plano gratuito, que não cobra por operação. O Blob ficou só
-para as imagens enviadas pelo painel.
+Posts, equipe, landing pages, mensagens do formulário e as imagens enviadas
+pelo painel ficam no Neon (Postgres), no plano gratuito, que não cobra por
+operação. O projeto usava o Vercel Blob, que saiu em 24/10/2026 depois de a
+cota do plano Hobby estourar; o conteúdo antigo já tinha sido migrado.
 
 - **Tabelas** (`scripts/schema.sql`): `posts`, `team_members`,
-  `landing_pages` e `contact_messages`. Cada linha guarda o objeto inteiro em
+  `landing_pages`, `contact_messages` e `images`. Cada linha guarda o objeto inteiro em
   `data` (jsonb), então os tipos de `src/data/*` continuam valendo sem mapear
   coluna por coluna; `team_members.position` é a ordem do site.
 - **Camada de dados** em `src/lib/{blog,equipe,landing,contato}.ts`, com
@@ -68,15 +67,8 @@ para as imagens enviadas pelo painel.
   Salvar no painel chama `revalidateTag(tag, { expire: 0 })` e os
   `revalidatePath` (`src/app/api/admin/**/_validate.ts`), então a próxima
   visita já lê o banco. Há ainda uma regeneração diária de segurança.
-- **Alterou o banco por fora** (SQL direto, `db:migrate` com o site no ar)?
-  O cache não sabe: salve qualquer item no painel ou publique de novo.
-- **Migração do Blob** (`scripts/migrate-blob-to-neon.mjs`, `npm run
-  db:migrate`): lê `blog/posts.json` do store público e a versão mais nova de
-  `equipe/membros-*.json`, `landing/pages-*.json` e `contato/mensagens/*` do
-  store privado (`CONTACT_BLOB_READ_WRITE_TOKEN`, só o script ainda usa) e
-  faz upsert. Idempotente, mas o Blob **sobrescreve** a linha de mesmo slug.
-  Se um store não responder, cai na semente e avisa; `-- --seed` ignora o
-  Blob de propósito.
+- **Alterou o banco por fora** (SQL direto com o site no ar)? O cache não
+  sabe: salve qualquer item no painel ou publique de novo.
 
 ## Estrutura de pastas
 
@@ -106,8 +98,9 @@ src/
                            admin/: AdminHeader, PostEditor, DeletePostButton,
                            DeleteMessageButton
   data/                    TODO O CONTEÚDO EDITÁVEL (ver abaixo)
-  lib/                     blog.ts e contato.ts (Blob), auth.ts, admin-guard.ts,
-                           seo.ts, jsonld.ts, redirects.ts
+  lib/                     db.ts, blog.ts, equipe.ts, landing.ts, contato.ts,
+                           imagens.ts (Neon), auth.ts, admin-guard.ts, seo.ts,
+                           jsonld.ts, redirects.ts
   proxy.ts                 Barreira de autenticação do /admin
 scripts/export-redirects.mjs  Gera os arquivos de redirects/ a partir do mapa
 redirects/                 Arquivos de redirect por plataforma (gerados)
@@ -133,9 +126,9 @@ Todo o conteúdo vive em `src/data/`; nenhum texto exige mexer em componente:
 | `areas.ts` | As 9 áreas cíveis (texto, listas, FAQ de cada área) |
 | `area-images.ts` | Foto de cada área exibida no card (slug → arquivo em `public/images/areas/`) |
 | `servidores.ts` | Hub e as 4 subpáginas do Direito do Servidor Público |
-| `team.ts` | Semente da equipe (nome, cargo, setor, ramal, foto; OAB, bio e perfil próprio para advogados). A partir da primeira alteração em /admin → Equipe, vale o que está no Blob |
+| `team.ts` | Semente da equipe (nome, cargo, setor, ramal, foto; OAB, bio e perfil próprio para advogados). A partir da primeira alteração em /admin → Equipe, vale o que está no banco |
 | `reviews.ts` | Nota, quantidade e avaliações do Google exibidas na home |
-| `posts.ts` | Tipos, categorias e a semente de 6 posts (o blog em produção vem do Blob, ver abaixo) |
+| `posts.ts` | Tipos, categorias e a semente de 6 posts (o blog em produção vem do banco, ver acima) |
 | `faq.ts` | Perguntas gerais de atendimento (as demais vêm de areas/servidores) |
 
 Os textos das páginas institucionais (home, O Escritório) ficam nos próprios
@@ -190,9 +183,9 @@ foram geradas no Magnific e otimizadas em WebP).
 - Rascunhos ficam fora do ar; a pré-visualização com o chrome do site fica em
   `/admin/preview/<slug>` (só logado).
 - Dados na tabela `landing_pages` do Neon (`src/lib/landing.ts`): rascunhos
-  não têm URL pública. As imagens enviadas pelo editor vão para o Blob (ou
-  para o banco, quando o Blob falha), porque precisam de URL. Páginas no
-  formato anterior ao layout do Figma são convertidas na leitura.
+  não têm URL pública. As imagens enviadas pelo editor também vão para o
+  banco e são servidas por `/imagens/<id>`. Páginas no formato anterior ao
+  layout do Figma são convertidas na leitura.
 - Em `next dev` sem `DATABASE_URL`, as páginas ficam em
   `.data/landing-pages.json` (fora do git), para testar o editor localmente.
   Para entrar no painel local, defina `ADMIN_PASSWORD` no `.env.local`.
@@ -217,8 +210,8 @@ landing pages — tabela `team_members` no Neon (`src/lib/equipe.ts`), com
 - **Ramal** é dado interno: aparece só na lista do painel, **nunca no site**.
 - **Página própria** (`/equipe/<slug>`) exige minibiografia — o painel recusa
   publicar um perfil vazio. As áreas marcadas viram links na página do perfil.
-- Sem foto, o card mostra as iniciais (`PhotoPlaceholder`); o upload envia
-  para `equipe/fotos/` no Blob.
+- Sem foto, o card mostra as iniciais (`PhotoPlaceholder`); a foto enviada
+  vai para o banco, como as demais imagens do painel.
 - A ordem da lista no painel é a ordem do site.
 
 Quem tinha perfil publicado e sai da equipe deixa uma URL órfã: acrescente uma
@@ -245,12 +238,11 @@ da equipe e imagens das landing pages:
   acima de 4,5 MB.
 - **No servidor**, o `sharp` corrige a orientação, limita a 1600px de novo e
   grava em WebP (`src/lib/imagens.ts`).
-- **Destino:** o Vercel Blob (store público `andre-araujo-blog`, URL de
-  CDN). Se o Blob não responder — em 23/09/2026 a cota mensal do plano Hobby
-  estourou e bloqueou os stores até o ciclo virar —, a imagem vai para a
-  tabela `images` do Neon e é servida por `/imagens/<id>`
-  (`src/app/imagens/[id]/route.ts`) com cache de um ano. As duas formas de
-  URL convivem; nada precisa ser migrado quando o Blob volta.
+- **Destino:** a tabela `images` do Neon. A imagem é servida por
+  `/imagens/<id>` (`src/app/imagens/[id]/route.ts`) com cache de um ano, no
+  navegador e na borda da Vercel, e o `next/image` gera os tamanhos a partir
+  dali. Sem `DATABASE_URL`, o upload responde com erro claro e o editor
+  aceita colar a URL de uma imagem.
 
 Cada uma das 10 áreas tem uma foto própria em `public/images/areas/<slug>.webp`
 (1200x800, imagens autorais geradas para o site: cena silenciosa de objetos e
@@ -381,8 +373,12 @@ Depois de apontar o domínio, valide com
 ## Deploy
 
 O site roda no Vercel (projeto `site-andre-araujo`, time
-`fernando89-projects`). **O Vercel não está ligado ao GitHub:** um `git push`
-não publica nada. Para publicar, com o CLI autenticado:
+`fernando89-projects`). **Desde 24/10/2026 o Vercel está ligado ao GitHub:**
+cada `git push` na `main` publica o site em produção, e outros branches geram
+deploys de pré-visualização. Teste localmente (`npm run lint` e
+`npm run build`) antes de enviar para a `main`.
+
+Também dá para publicar pelo CLI, com ele autenticado:
 
 ```bash
 vercel --prod --force
@@ -391,7 +387,8 @@ vercel --prod --force
 O `--force` publica sem o cache de build do deploy anterior. Sem ele, o
 build restaurou um CSS compilado antigo (em 15/09/2026 o site foi ao ar com o
 HTML novo e os tokens de fonte do tema anterior). Se algum estilo parecer
-desatualizado no ar, é essa a primeira coisa a conferir.
+desatualizado no ar, é essa a primeira coisa a conferir; no painel do Vercel,
+"Redeploy" sem "Use existing Build Cache" faz o mesmo.
 
 As variáveis de ambiente estão definidas no ambiente Production do Vercel
 (`vercel env ls production` lista os nomes). O build gera as páginas do blog
@@ -402,7 +399,6 @@ Na primeira publicação com o Neon (ou num banco novo), antes do deploy:
 ```bash
 vercel env pull .env.local   # traz DATABASE_URL para a máquina
 npm run db:setup             # cria as tabelas
-npm run db:migrate           # conteúdo do Blob, ou a semente se ele não responder
 npm run build                # confere localmente
 vercel --prod --force
 ```

@@ -31,8 +31,8 @@ create table if not exists contact_messages (
 
 create index if not exists contact_messages_created_idx on contact_messages (created_at desc);
 
--- Imagens enviadas pelo painel quando o Vercel Blob não responde (cota do
--- plano estourada): o arquivo já otimizado fica em `bytes` e é servido por
+-- Imagens enviadas pelo painel (capas de posts, fotos da equipe, imagens das
+-- landing pages): o arquivo já otimizado fica em `bytes` e é servido por
 -- /imagens/<id> (src/app/imagens/[id]/route.ts) com cache de um ano.
 create table if not exists images (
   id          text primary key,

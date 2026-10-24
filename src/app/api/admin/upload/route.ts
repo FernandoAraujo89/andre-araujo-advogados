@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { put } from "@vercel/blob";
 import { isAdmin } from "@/lib/admin-guard";
 import { slugify } from "@/data/posts";
 import { imageStorageEnabled, optimizeImage, saveImage } from "@/lib/imagens";
@@ -10,31 +9,26 @@ import { imageStorageEnabled, optimizeImage, saveImage } from "@/lib/imagens";
 const MAX_BYTES = 4 * 1024 * 1024;
 const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 
-// Pasta de destino no Blob (e prefixo do id no banco). Lista fechada: o
-// caminho vem do cliente e não pode virar um prefixo qualquer.
-const PASTAS: Record<string, string> = {
-  blog: "blog/images",
-  equipe: "equipe/fotos",
-  landing: "landing/images",
-};
+// Prefixo do id da imagem no banco, por origem. Lista fechada: o valor vem
+// do cliente e não pode virar um prefixo qualquer.
+const PASTAS = ["blog", "equipe", "landing"] as const;
 
 /**
  * Upload de imagem do painel (capa de post, foto da equipe, imagens das
- * landing pages). A imagem é otimizada aqui (orientação, 1600px, WebP) e vai
- * para o Vercel Blob; se o Blob não responder (cota do plano estourada), vai
- * para o banco e é servida por /imagens/<id>. Devolve `{ url }` nos dois casos.
+ * landing pages). A imagem é otimizada aqui (orientação, 1600px, WebP), vai
+ * para a tabela `images` do Neon e é servida por /imagens/<id>. Devolve
+ * `{ url }`.
  */
 export async function POST(request: Request) {
   if (!(await isAdmin())) {
     return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
   }
 
-  const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!blobToken && !imageStorageEnabled()) {
+  if (!imageStorageEnabled()) {
     return NextResponse.json(
       {
         error:
-          "Sem onde guardar imagens: conecte o Neon ao projeto no Vercel (Storage → Connect Project) ou ative o Blob, ou cole a URL de uma imagem no campo abaixo.",
+          "Sem onde guardar imagens: o banco de dados não está configurado. No Vercel, conecte o Neon ao projeto (Storage → Connect Project), ou cole a URL de uma imagem no campo de endereço.",
       },
       { status: 500 }
     );
@@ -58,34 +52,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const pastaKey = String(form?.get("pasta") ?? "blog");
-  const pasta = PASTAS[pastaKey] ?? PASTAS.blog;
+  const pastaRaw = String(form?.get("pasta") ?? "blog");
+  const pasta = (PASTAS as readonly string[]).includes(pastaRaw) ? pastaRaw : "blog";
   const base = slugify(file.name.replace(/\.[^.]+$/, "")) || "imagem";
-  const image = await optimizeImage(Buffer.from(await file.arrayBuffer()), file.type);
 
-  // 1. Blob, quando configurado e dentro da cota.
-  if (blobToken) {
-    try {
-      const blob = await put(`${pasta}/${base}-${Date.now()}.${image.ext}`, image.bytes, {
-        access: "public",
-        contentType: image.mime,
-        addRandomSuffix: false,
-        allowOverwrite: true,
-      });
-      return NextResponse.json({ url: blob.url });
-    } catch (err) {
-      const detail = err instanceof Error ? err.message : "Falha no upload.";
-      if (!imageStorageEnabled()) {
-        return NextResponse.json({ error: detail }, { status: 500 });
-      }
-      console.warn(`Blob indisponível (${detail}); guardando a imagem no banco.`);
-    }
-  }
-
-  // 2. Banco (Neon), servido por /imagens/<id>.
   try {
-    const prefixo = pastaKey in PASTAS ? pastaKey : "blog";
-    const { url } = await saveImage(`${prefixo}-${base}`, image);
+    const image = await optimizeImage(Buffer.from(await file.arrayBuffer()), file.type);
+    const { url } = await saveImage(`${pasta}-${base}`, image);
     return NextResponse.json({ url });
   } catch (err) {
     return NextResponse.json(

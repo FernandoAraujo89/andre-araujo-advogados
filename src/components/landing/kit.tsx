@@ -82,11 +82,14 @@ export type LandingKit = {
   Section: ComponentType<SectionSlotProps>;
 };
 
-/** Hosts liberados no next.config (images.remotePatterns) e arquivos locais. */
+/**
+ * Imagens que o next/image pode otimizar: arquivos do site, as do painel
+ * (/imagens/<id>, no banco) e os hosts liberados no next.config. Qualquer
+ * outra URL colada no editor é exibida como veio.
+ */
 export function canOptimize(src: string): boolean {
   return (
-    src.startsWith("/") ||
-    /^https:\/\/[^/]+\.public\.blob\.vercel-storage\.com\//.test(src) ||
+    (src.startsWith("/") && !src.startsWith("//")) ||
     src.startsWith("https://images.unsplash.com/")
   );
 }
