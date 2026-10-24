@@ -189,6 +189,179 @@ function feriasPremio(): LandingPageInput {
   };
 }
 
+const PP = "/images/landing/progressao-promocao";
+
+/**
+ * Progressão e promoção de professores da rede estadual de Minas Gerais:
+ * retroativos quando o Estado publica o ato depois da data em que o servidor
+ * cumpriu os requisitos. Conteúdo a partir da página de campanha do
+ * escritório (progressaoepromocao.netlify.app), sem "consulta gratuita" nem
+ * "especialista" e sem citar decisão entre aspas (Provimento 205/2021 da
+ * OAB). Prazos com "em regra": a prescrição alcança cada parcela mensal.
+ */
+function progressaoPromocao(): LandingPageInput {
+  const cards = newSection("cards") as LpSectionOf<"cards">;
+  const numeros = newSection("numeros") as LpSectionOf<"numeros">;
+  const destaque = newSection("destaque") as LpSectionOf<"destaque">;
+  const depoimentos = newSection("depoimentos") as LpSectionOf<"depoimentos">;
+  const equipe = newSection("equipe") as LpSectionOf<"equipe">;
+  const perguntas = newSection("perguntas") as LpSectionOf<"perguntas">;
+  const blog = newSection("blog") as LpSectionOf<"blog">;
+  const galeria = newSection("galeria") as LpSectionOf<"galeria">;
+  const contato = newSection("contato") as LpSectionOf<"contato">;
+
+  return {
+    version: 2,
+    slug: "progressao-e-promocao",
+    status: "rascunho",
+    name: "Progressão e promoção",
+    tagline:
+      "Professor de MG com progressão ou promoção publicada em atraso pode ter diferenças salariais a receber.",
+    seo: {
+      title: "Progressão atrasada? Retroativos para professores de MG",
+      description:
+        "Professor da rede estadual de MG com progressão ou promoção publicada em atraso pode ter retroativos a receber. Veja quem tem direito e como pedir.",
+    },
+    whatsappMessage:
+      "Olá! Vim pela página de progressão e promoção. Sou professor(a) da rede estadual de Minas Gerais e gostaria de saber se tenho retroativos a receber.",
+    hero: {
+      eyebrow: "Professores da rede estadual de Minas Gerais",
+      title: "Sua progressão saiu atrasada? Você pode ter",
+      highlight: "dinheiro a receber",
+      text: "Quando o Estado publica a progressão ou a promoção depois da data em que você cumpriu os requisitos, a diferença do período pode ser cobrada. Muitos professores ainda não conferiram essa situação.",
+      button: { label: "Verificar minha situação", link: { tipo: "contato" } },
+      image: {
+        src: `${PP}/hero-professora.webp`,
+        alt: "Professora sorrindo, com livros e uma pasta nos braços",
+      },
+      ornament: true,
+    },
+    sections: [
+      {
+        ...cards,
+        title: "Você se encaixa em alguma destas situações?",
+        text: "Progressão e promoção são direitos previstos no plano de carreira. Quando o reconhecimento oficial demora, o período sem o novo valor pode gerar diferenças a receber.",
+        items: [
+          {
+            image: {
+              src: `${PP}/professor-carta.webp`,
+              alt: "Professor sentado na sala de aula vazia lendo um comunicado oficial",
+            },
+            title: "Progressão publicada com atraso",
+          },
+          {
+            image: {
+              src: `${PP}/professora-diploma.webp`,
+              alt: "Professora segurando o diploma de pós-graduação no corredor da escola",
+            },
+            title: "Promoção por titulação demorou",
+          },
+          {
+            image: {
+              src: `${PP}/professora-contracheques.webp`,
+              alt: "Professora comparando contracheques com uma calculadora à mesa da cozinha",
+            },
+            title: "O novo valor veio muito depois",
+          },
+          {
+            image: {
+              src: `${PP}/sala-de-aula.webp`,
+              alt: "Professor escrevendo no quadro enquanto alunos levantam a mão",
+            },
+            title: "Aconteceu nos últimos 5 anos",
+          },
+        ],
+      },
+      {
+        ...numeros,
+        title: "O que muda no seu contracheque",
+        text: "O direito nasce na data em que os requisitos foram cumpridos, e não na data em que o Estado decide publicar o ato.",
+        items: [
+          {
+            value: "2",
+            label: "caminhos na carreira: progressão, por tempo e avaliação, e promoção, por titulação",
+          },
+          { value: "R$", label: "de diferença em cada mês entre a data de vigência e a publicação do ato" },
+          { value: "5", label: "anos de diferenças, em regra, podem ser cobrados; as parcelas mais antigas prescrevem" },
+          {
+            value: googleReviews.rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 }),
+            label: `é a nota do escritório no Google, com ${googleReviews.count} avaliações`,
+          },
+        ],
+      },
+      {
+        ...destaque,
+        eyebrow: "O que diz a Justiça",
+        title: "O direito nasce quando você cumpre os requisitos,",
+        highlight: "não quando o Estado publica",
+        text: "Em decisões sobre o tema, a Justiça mineira tem reconhecido que, quando a progressão ou a promoção é concedida com atraso, o servidor tem direito às diferenças desde a data de vigência, respeitada a prescrição de cinco anos.\n\nProgressão não é favor: é um direito conquistado com tempo de serviço, formação e avaliações. O Estado não pode se beneficiar do seu trabalho sem pagar o que é devido.",
+        button: { label: "Falar com o escritório", link: { tipo: "contato" } },
+        image: {
+          src: "/images/escritorio/reuniao-andamento.jpg",
+          alt: "Equipe do escritório reunida na sala de reuniões",
+        },
+      },
+      {
+        ...depoimentos,
+        title: "Quem confiou no escritório recomenda",
+      },
+      {
+        ...equipe,
+        title: "Quem vai cuidar do seu caso",
+        text: "Advogados com experiência em Direito do Servidor Público, que conhecem os planos de carreira da educação de Minas Gerais e acompanham cada etapa com você.",
+      },
+      {
+        ...perguntas,
+        title: "Perguntas sobre progressão e promoção",
+        items: [
+          {
+            question: "Qual é a diferença entre progressão e promoção?",
+            answer:
+              "Na carreira da educação de Minas Gerais, a progressão é o avanço de grau dentro do mesmo nível, ligado ao tempo de efetivo exercício e às avaliações de desempenho. A promoção é a mudança de nível, ligada à titulação, como uma pós-graduação, um mestrado ou um doutorado.",
+          },
+          {
+            question: "Minha progressão saiu atrasada. Tenho direito a retroativos?",
+            answer:
+              "Se você cumpriu os requisitos e o ato foi publicado depois, em regra existe diferença salarial no período entre a data de vigência e a data da publicação. A análise da ficha funcional confirma as datas e o valor aproximado.",
+          },
+          {
+            question: "Até quanto tempo para trás dá para cobrar?",
+            answer:
+              "Em regra, as diferenças dos últimos cinco anos. As parcelas mais antigas que isso prescrevem, por isso vale verificar o quanto antes.",
+          },
+          {
+            question: "Entreguei o diploma e a promoção demorou. Também vale?",
+            answer:
+              "Sim. A promoção por titulação segue a mesma lógica: se a titulação exigida já tinha sido apresentada e o reconhecimento demorou, pode haver diferenças a receber, desde que os demais requisitos do plano de carreira estejam cumpridos.",
+          },
+          {
+            question: "Sou designado ou contratado. Tenho esse direito?",
+            answer:
+              "A progressão e a promoção fazem parte da carreira dos servidores efetivos. Quem atua como designado ou contratado, em regra, não tem esse tipo de movimentação, mas outras situações podem ser analisadas.",
+          },
+          {
+            question: "Aposentados também podem pedir?",
+            answer:
+              "Sim, se a progressão ou a promoção atrasada aconteceu quando ainda estavam na ativa e as diferenças estão dentro do prazo de cinco anos. O atraso também pode ter reflexos nos proventos da aposentadoria.",
+          },
+          {
+            question: "Quais documentos preciso separar?",
+            answer:
+              "Documento de identidade, contracheques do período, a publicação da progressão ou da promoção no Diário Oficial e, se tiver, a ficha funcional ou o comprovante de entrega da titulação. Se faltar algum, o escritório orienta como solicitar.",
+          },
+        ],
+      },
+      { ...blog, title: "Conteúdos para servidores", category: "Tributário e Servidor Público" },
+      galeria,
+      {
+        ...contato,
+        title: "Verifique sua situação",
+        text: "Conte rapidamente quando você cumpriu os requisitos e quando a progressão ou a promoção foi publicada. O escritório analisa a sua ficha funcional e explica, com clareza, se há retroativos a receber.",
+      },
+    ],
+  };
+}
+
 export const landingModelos: LandingModelo[] = [
   {
     id: "padrao",
@@ -203,6 +376,13 @@ export const landingModelos: LandingModelo[] = [
     descricao:
       "Página pronta para servidores aposentados de Minas Gerais que não usufruíram as férias-prêmio.",
     criar: feriasPremio,
+  },
+  {
+    id: "progressao-e-promocao",
+    nome: "Progressão e promoção de professores",
+    descricao:
+      "Página pronta para professores da rede estadual de Minas Gerais com progressão ou promoção publicada em atraso.",
+    criar: progressaoPromocao,
   },
 ];
 

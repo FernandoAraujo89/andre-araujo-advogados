@@ -39,6 +39,13 @@ import { faqPageJsonLd } from "@/lib/jsonld";
  * só estreita a página, mostra exatamente o layout do celular. As proporções
  * em cqi reproduzem as do Figma (quadro de 1440px).
  *
+ * Largura (layout contido, padrão de site institucional): o conteúdo fica
+ * na grade de 1240px do site e as proporções do Figma usam `--lp-u`, 1% da
+ * largura até o quadro de 1440px; acima disso tudo para de crescer e fica
+ * centralizado, e só os fundos ocupam a tela inteira. A imagem do topo se
+ * posiciona dentro desse quadro (`--lp-frame-x`), para não se afastar do
+ * texto em monitores 2K e 4K.
+ *
  * Seções com imagens que sangram a borda usam overflow-clip, e não hidden:
  * um contêiner hidden ainda rola quando algo dentro dele recebe foco, e no
  * editor clicar numa imagem empurraria a seção para o lado.
@@ -81,7 +88,7 @@ function Hero({ ctx }: { ctx: Ctx }) {
   const h = page.hero;
   const p: LpPath = ["hero"];
   return (
-    <section className="relative isolate overflow-clip bg-[linear-gradient(110deg,var(--color-accent-surface-deep)_5%,var(--color-ink)_55%,color-mix(in_oklab,var(--color-ink)_84%,var(--color-paper-light))_100%)] text-paper-light @5xl:flex @5xl:min-h-[clamp(42rem,52.5cqi,56rem)] @5xl:items-center">
+    <section className="relative isolate overflow-clip bg-[linear-gradient(110deg,var(--color-accent-surface-deep)_5%,var(--color-ink)_55%,color-mix(in_oklab,var(--color-ink)_84%,var(--color-paper-light))_100%)] text-paper-light @5xl:flex @5xl:min-h-[max(42rem,calc(var(--lp-u)*52.5))] @5xl:items-center">
       {/* Texto acima da imagem; o contêiner não captura cliques para a
           imagem continuar clicável no editor */}
       <div className={`${wrap} pointer-events-none relative z-10 min-w-0 pt-32 @5xl:flex-1 @5xl:pb-24 @5xl:pt-36`}>
@@ -125,11 +132,11 @@ function Hero({ ctx }: { ctx: Ctx }) {
       {/* Imagem recortada: abaixo do texto no celular; à direita, sangrando
           a borda inferior, no desktop. Os louros ficam atrás, cortados pela
           borda direita, como no layout. */}
-      <div className="relative h-[24rem] @xl:h-[30rem] @5xl:absolute @5xl:inset-0 @5xl:h-auto">
+      <div className="relative h-[24rem] @xl:h-[30rem] @5xl:absolute @5xl:inset-y-0 @5xl:left-[var(--lp-frame-x)] @5xl:h-auto @5xl:w-[min(100cqi,1440px)] @5xl:overflow-clip">
         {h.ornament && (
           <div
             aria-hidden
-            className="pointer-events-none absolute bottom-[-2rem] left-[50%] aspect-[577/515] h-[108%] @5xl:bottom-[-4.1cqi] @5xl:left-[75cqi] @5xl:h-auto @5xl:w-[min(53.7cqi,59rem)]"
+            className="pointer-events-none absolute bottom-[-2rem] left-[50%] aspect-[577/515] h-[108%] @5xl:bottom-[calc(var(--lp-u)*-4.1)] @5xl:left-[calc(var(--lp-u)*75)] @5xl:h-auto @5xl:w-[calc(var(--lp-u)*53.7)]"
           >
             {/* Costuma ser o maior elemento da primeira tela (LCP): pré-carrega */}
             <Image
@@ -142,7 +149,7 @@ function Hero({ ctx }: { ctx: Ctx }) {
             />
           </div>
         )}
-        <div className="absolute bottom-0 left-1/2 aspect-[712/989] h-full -translate-x-1/2 @5xl:bottom-[-1.7cqi] @5xl:left-[65.8cqi] @5xl:h-auto @5xl:w-[min(31cqi,34rem)] @5xl:translate-x-0">
+        <div className="absolute bottom-0 left-1/2 aspect-[712/989] h-full -translate-x-1/2 @5xl:bottom-[calc(var(--lp-u)*-1.7)] @5xl:left-[calc(var(--lp-u)*65.8)] @5xl:h-auto @5xl:w-[calc(var(--lp-u)*31)] @5xl:translate-x-0">
           <K.Img
             path={[...p, "image"]}
             value={h.image}
@@ -161,16 +168,16 @@ function CardsSection({ s, i, ctx }: { s: LpSectionOf<"cards">; i: number; ctx: 
   const { K } = ctx;
   const list: LpPath = ["sections", i, "items"];
   return (
-    <section className="relative overflow-clip bg-paper pb-16 pt-20 @5xl:pb-[5.3cqi] @5xl:pt-[4.6cqi]">
+    <section className="relative overflow-clip bg-paper pb-16 pt-20 @5xl:pb-[calc(var(--lp-u)*5.3)] @5xl:pt-[calc(var(--lp-u)*4.6)]">
       <div
         aria-hidden
-        className="pointer-events-none absolute right-[-5.3cqi] top-0 hidden aspect-[431/314] w-[23.4cqi] rotate-180 @3xl:block"
+        className="pointer-events-none absolute right-[calc(var(--lp-u)*-5.3)] top-0 hidden aspect-[431/314] w-[calc(var(--lp-u)*23.4)] rotate-180 @3xl:block"
       >
         <Image src={LP_IMAGES.curvas} alt="" fill sizes="24vw" />
       </div>
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-[-1cqi] hidden aspect-[431/314] w-[23.4cqi] @3xl:block"
+        className="pointer-events-none absolute bottom-0 left-[calc(var(--lp-u)*-1)] hidden aspect-[431/314] w-[calc(var(--lp-u)*23.4)] @3xl:block"
       >
         <Image src={LP_IMAGES.curvas} alt="" fill sizes="24vw" />
       </div>
@@ -198,7 +205,7 @@ function CardsSection({ s, i, ctx }: { s: LpSectionOf<"cards">; i: number; ctx: 
       <div className="relative mt-10 @5xl:mt-12">
         <CardRail
           label={s.title || "Cards"}
-          className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-pl-[var(--lp-edge)] pb-10 pl-[var(--lp-edge)] pr-[var(--lp-gutter)] pt-6 [scrollbar-width:none] @5xl:gap-[2.8cqi] [&::-webkit-scrollbar]:hidden"
+          className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-pl-[var(--lp-edge)] pb-10 pl-[var(--lp-edge)] pr-[var(--lp-gutter)] pt-6 [scrollbar-width:none] @5xl:gap-[calc(var(--lp-u)*2.8)] [&::-webkit-scrollbar]:hidden"
           controlsClassName={`${wrap} flex justify-end gap-4`}
         >
           {s.items.map((item, j) => (
@@ -208,7 +215,7 @@ function CardsSection({ s, i, ctx }: { s: LpSectionOf<"cards">; i: number; ctx: 
               list={list}
               index={j}
               count={s.items.length}
-              className="group relative aspect-[310/419] w-[72cqi] shrink-0 snap-start overflow-hidden border border-accent/70 bg-ink shadow-[0_4px_35px_rgba(22,34,44,0.25)] @xl:w-[44cqi] @3xl:w-[30cqi] @5xl:w-[21.5cqi]"
+              className="group relative aspect-[310/419] w-[calc(var(--lp-u)*72)] shrink-0 snap-start overflow-hidden border border-accent/70 bg-ink shadow-[0_4px_35px_rgba(22,34,44,0.25)] @xl:w-[calc(var(--lp-u)*44)] @3xl:w-[calc(var(--lp-u)*30)] @5xl:w-[calc(var(--lp-u)*21.5)]"
             >
               <K.Img
                 path={[...list, j, "image"]}
@@ -233,7 +240,7 @@ function CardsSection({ s, i, ctx }: { s: LpSectionOf<"cards">; i: number; ctx: 
             </K.Item>
           ))}
           {K.editing && (
-            <li className="flex aspect-[310/419] w-[72cqi] shrink-0 @xl:w-[44cqi] @3xl:w-[30cqi] @5xl:w-[21.5cqi]">
+            <li className="flex aspect-[310/419] w-[calc(var(--lp-u)*72)] shrink-0 @xl:w-[calc(var(--lp-u)*44)] @3xl:w-[calc(var(--lp-u)*30)] @5xl:w-[calc(var(--lp-u)*21.5)]">
               <K.Add
                 list={list}
                 count={s.items.length}
@@ -253,10 +260,10 @@ function NumerosSection({ s, i, ctx }: { s: LpSectionOf<"numeros">; i: number; c
   const { K } = ctx;
   const list: LpPath = ["sections", i, "items"];
   return (
-    <section className="relative overflow-clip bg-paper-light py-20 @5xl:py-[6cqi]">
+    <section className="relative overflow-clip bg-paper-light py-20 @5xl:py-[calc(var(--lp-u)*6)]">
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-2 left-0 hidden aspect-[319/609] w-[13cqi] @3xl:block"
+        className="pointer-events-none absolute bottom-2 left-0 hidden aspect-[319/609] w-[calc(var(--lp-u)*13)] @3xl:block"
       >
         <Image src={LP_IMAGES.justicaTraco} alt="" fill sizes="13vw" />
       </div>
@@ -327,14 +334,16 @@ function DestaqueSection({ s, i, ctx }: { s: LpSectionOf<"destaque">; i: number;
   return (
     <section className="relative overflow-clip bg-ink py-20 text-paper-light @5xl:py-24">
       <div
-        className={`${wrap} grid items-center gap-14 @5xl:grid-cols-[minmax(0,25cqi)_minmax(0,1fr)] @5xl:gap-[10cqi]`}
+        className={`${wrap} grid items-center gap-14 @5xl:grid-cols-[minmax(0,calc(var(--lp-u)*25))_minmax(0,1fr)] @5xl:gap-[calc(var(--lp-u)*10)]`}
       >
-        <Reveal className="relative">
+        {/* No celular e no tablet o bloco tem a largura da foto, para o
+            círculo (proporcional a ele) não crescer além dela */}
+        <Reveal className="relative w-full max-w-sm @5xl:max-w-none">
           <div
             aria-hidden
-            className="absolute left-[-34%] top-[8%] aspect-square w-[78%] rounded-full bg-gold @5xl:left-[-18.5cqi] @5xl:top-[2.6cqi] @5xl:w-[27cqi]"
+            className="absolute left-[-34%] top-[8%] aspect-square w-[78%] rounded-full bg-gold @5xl:left-[calc(var(--lp-u)*-18.5)] @5xl:top-[calc(var(--lp-u)*2.6)] @5xl:w-[calc(var(--lp-u)*27)]"
           />
-          <div className="relative aspect-[362/494] w-[80%] max-w-sm overflow-hidden bg-accent-surface-deep @5xl:-ml-[2.4cqi] @5xl:w-full @5xl:max-w-none">
+          <div className="relative aspect-[362/494] w-[80%] overflow-hidden bg-accent-surface-deep @5xl:-ml-[calc(var(--lp-u)*2.4)] @5xl:w-full">
             <K.Img
               path={[...p, "image"]}
               value={s.image}
@@ -394,7 +403,7 @@ function DepoimentosSection({
   return (
     <section className="bg-paper-light py-24 @5xl:py-40">
       <div
-        className={`${wrap} grid gap-12 @5xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] @5xl:items-start @5xl:gap-[7.8cqi]`}
+        className={`${wrap} grid gap-12 @5xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] @5xl:items-start @5xl:gap-[calc(var(--lp-u)*7.8)]`}
       >
         <Reveal>
           <K.Text
@@ -497,7 +506,7 @@ function EquipeSection({ s, i, ctx }: { s: LpSectionOf<"equipe">; i: number; ctx
           />
         </Reveal>
         {/* Linha centralizada: 1, 2 ou 3 pessoas ficam no meio, como no layout */}
-        <ul className="mt-14 flex flex-wrap justify-center gap-x-[7.9cqi] gap-y-14 @5xl:mt-20">
+        <ul className="mt-14 flex flex-wrap justify-center gap-x-[calc(var(--lp-u)*7.9)] gap-y-14 @5xl:mt-20">
           {members.map((m, j) => {
             const card = (
               <>
@@ -524,7 +533,7 @@ function EquipeSection({ s, i, ctx }: { s: LpSectionOf<"equipe">; i: number; ctx
             return (
               <li
                 key={m.slug}
-                className="w-full max-w-[20.625rem] @xl:w-[calc(50%-4cqi)] @5xl:w-[min(20.625rem,calc((100%-15.8cqi)/3))]"
+                className="w-full max-w-[20.625rem] @xl:w-[calc(50%_-_var(--lp-u)*4)] @5xl:w-[min(20.625rem,calc((100%_-_var(--lp-u)*15.8)/3))]"
               >
                 <Reveal delay={j * 0.08}>
                   {m.hasProfile && !K.editing ? (
@@ -565,7 +574,7 @@ function BlogSection({ s, i, ctx }: { s: LpSectionOf<"blog">; i: number; ctx: Ct
             Ainda não há posts nesta categoria. A seção fica oculta no site até haver algum.
           </p>
         ) : (
-          <ul className="mt-14 flex flex-wrap justify-center gap-x-[8.4cqi] gap-y-12 @5xl:mt-16">
+          <ul className="mt-14 flex flex-wrap justify-center gap-x-[calc(var(--lp-u)*8.4)] gap-y-12 @5xl:mt-16">
             {list.map((post, j) => {
               const tile = (
                 <>
@@ -591,7 +600,7 @@ function BlogSection({ s, i, ctx }: { s: LpSectionOf<"blog">; i: number; ctx: Ct
                 </>
               );
               return (
-                <li key={post.slug} className="w-full @3xl:w-[calc((100%-16.8cqi)/3)]">
+                <li key={post.slug} className="w-full @3xl:w-[calc((100%_-_var(--lp-u)*16.8)/3)]">
                   <Reveal delay={j * 0.08}>
                     {K.editing ? (
                       <div className="group">{tile}</div>
@@ -631,7 +640,7 @@ function GaleriaSection({ s, i, ctx }: { s: LpSectionOf<"galeria">; i: number; c
         </Reveal>
       </div>
       <ul
-        className={`mt-14 flex gap-5 @5xl:mt-20 @5xl:gap-[4.5cqi] ${
+        className={`mt-14 flex gap-5 @5xl:mt-20 @5xl:gap-[calc(var(--lp-u)*4.5)] ${
           centered
             ? "justify-center"
             : "snap-x snap-mandatory overflow-x-auto scroll-pl-[var(--lp-edge)] pl-[var(--lp-edge)] pr-[var(--lp-gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -644,7 +653,7 @@ function GaleriaSection({ s, i, ctx }: { s: LpSectionOf<"galeria">; i: number; c
             list={list}
             index={j}
             count={s.images.length}
-            className="relative aspect-[577/396] w-[80cqi] shrink-0 snap-start overflow-hidden bg-line @3xl:w-[52cqi] @5xl:w-[40cqi]"
+            className="relative aspect-[577/396] w-[calc(var(--lp-u)*80)] shrink-0 snap-start overflow-hidden bg-line @3xl:w-[calc(var(--lp-u)*52)] @5xl:w-[calc(var(--lp-u)*40)]"
           >
             <K.Img
               path={[...list, j]}
@@ -672,7 +681,7 @@ function PerguntasSection({ s, i, ctx }: { s: LpSectionOf<"perguntas">; i: numbe
     <section className="bg-paper-light py-24 @5xl:py-32">
       {!K.editing && s.items.length > 0 && <JsonLd data={faqPageJsonLd(s.items)} />}
       <div
-        className={`${wrap} grid gap-12 @5xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] @5xl:items-start @5xl:gap-[7.8cqi]`}
+        className={`${wrap} grid gap-12 @5xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] @5xl:items-start @5xl:gap-[calc(var(--lp-u)*7.8)]`}
       >
         <Reveal className="@5xl:sticky @5xl:top-32">
           <K.Text
@@ -740,7 +749,7 @@ function ContatoSection({ s, i, ctx }: { s: LpSectionOf<"contato">; i: number; c
   const { K, wa, page } = ctx;
   return (
     <section id="contato" className="scroll-mt-24 bg-paper py-24 @5xl:py-32">
-      <div className={`${wrap} grid gap-12 @5xl:grid-cols-2 @5xl:gap-[7cqi]`}>
+      <div className={`${wrap} grid gap-12 @5xl:grid-cols-2 @5xl:gap-[calc(var(--lp-u)*7)]`}>
         <Reveal>
           <K.Text
             path={["sections", i, "title"]}
@@ -855,7 +864,7 @@ export default function LandingPageView({
 
   return (
     <div className="@container">
-      <div className="[--lp-edge:max(var(--lp-gutter),calc((100cqi_-_1240px)/2))] [--lp-gutter:1.25rem] @3xl:[--lp-gutter:2.5rem] @7xl:[--lp-gutter:4rem]">
+      <div className="[--lp-edge:max(var(--lp-gutter),calc((100cqi_-_1240px)/2))] [--lp-frame-x:max(0px,calc((100cqi_-_1440px)/2))] [--lp-gutter:1.25rem] [--lp-u:min(1cqi,14.4px)] @3xl:[--lp-gutter:2.5rem] @7xl:[--lp-gutter:4rem]">
         {preview && (
           <p className="fixed inset-x-0 bottom-0 z-40 bg-gold px-5 py-2 text-center text-sm font-medium text-ink">
             Pré-visualização
