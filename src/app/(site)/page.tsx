@@ -159,6 +159,7 @@ export default async function Home() {
                   area={area}
                   index={i + 1}
                   wide={i === areasDeAtuacao.length - 1}
+                  surface="paper"
                 />
               </Reveal>
             ))}

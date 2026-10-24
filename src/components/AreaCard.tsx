@@ -10,6 +10,8 @@ type AreaCardProps = {
   index?: number;
   /** Card ocupando a linha inteira (o último da grade): foto à esquerda em lg+ */
   wide?: boolean;
+  /** Branco sobre fundo creme (padrão) ou creme sobre faixa branca */
+  surface?: "light" | "paper";
   className?: string;
 };
 
@@ -17,14 +19,16 @@ export default function AreaCard({
   area,
   index,
   wide = false,
+  surface = "light",
   className = "",
 }: AreaCardProps) {
   const image = areaImages[area.slug];
+  const bg = surface === "paper" ? "bg-paper" : "bg-paper-light";
 
   return (
     <Link
       href={area.href ?? `/areas-de-atuacao/${area.slug}`}
-      className={`group flex h-full flex-col overflow-hidden rounded-md border border-line bg-paper-light transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)] ${
+      className={`group flex h-full flex-col overflow-hidden rounded-md border border-line ${bg} transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_18px_50px_rgba(22,34,44,0.12)] ${
         wide ? "lg:flex-row" : ""
       } ${className}`}
     >

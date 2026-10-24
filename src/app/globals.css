@@ -11,8 +11,14 @@
  */
 @theme {
   /* Cores */
+  /*
+   * Duas superfícies claras que se alternam: o creme (paper) é o fundo das
+   * páginas; o branco (paper-light) marca cards, campos, o header e as
+   * faixas alternadas. Só creme deixava tudo monótono; o branco dá contraste
+   * e respiro sem esquentar a paleta.
+   */
   --color-paper: #f7f4ed;
-  --color-paper-light: #fdfbf7;
+  --color-paper-light: #ffffff;
   --color-ink: #16222c;
   --color-ink-soft: #4a5560;
   --color-wine: #721420;
@@ -63,6 +69,24 @@
   --text-card: clamp(1.375rem, 1.24rem + 0.56vw, 1.75rem); /* 22 → 28px */
   --text-card--line-height: 1.2;
   --text-card--letter-spacing: -0.015em;
+
+  /*
+   * Landing pages: a mesma escala, mas relativa à largura do contêiner da
+   * página (cqi) e não da janela. Assim a prévia de celular do editor do
+   * painel, que só estreita a página, já mostra os corpos do celular.
+   */
+  --text-lp-hero: clamp(2.5rem, 1.6rem + 3.4cqi, 4.25rem); /* 40 → 68px */
+  --text-lp-hero--line-height: 1.05;
+  --text-lp-hero--letter-spacing: -0.035em;
+  --text-lp-heading: clamp(2.25rem, 1.72rem + 2.25cqi, 3.75rem); /* 36 → 60px */
+  --text-lp-heading--line-height: 1.08;
+  --text-lp-heading--letter-spacing: -0.03em;
+  --text-lp-card: clamp(1.5rem, 1.25rem + 0.9cqi, 2rem); /* 24 → 32px */
+  --text-lp-card--line-height: 1.15;
+  --text-lp-card--letter-spacing: -0.015em;
+  --text-lp-stat: clamp(3rem, 2.1rem + 3.4cqi, 5.25rem); /* 48 → 84px */
+  --text-lp-stat--line-height: 1;
+  --text-lp-stat--letter-spacing: -0.04em;
 
   /* Entrada da foto do hero: aproximação lenta, quase imperceptível */
   --animate-hero-zoom: hero-zoom 2.4s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -143,4 +167,32 @@ body {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 4px;
+}
+
+/*
+ * Editor visual das landing pages (/admin/landing/editar): contorno ao passar
+ * o mouse sobre um texto editável e texto de ajuda nos campos vazios. As
+ * classes só aparecem dentro do editor; o azul é a cor de seleção do editor,
+ * legível tanto no creme quanto no azul-tinta.
+ */
+.lp-editable {
+  border-radius: 2px;
+  cursor: text;
+  min-width: 1ch;
+  outline: 1px dashed transparent;
+  outline-offset: 4px;
+  transition: outline-color 0.15s;
+}
+.lp-editable:hover {
+  outline-color: rgb(59 130 246 / 0.75);
+}
+.lp-editable:focus {
+  outline: 2px solid rgb(59 130 246);
+  outline-offset: 4px;
+}
+.lp-editable:empty::before {
+  content: attr(data-placeholder);
+  font-style: italic;
+  opacity: 0.45;
+  pointer-events: none;
 }

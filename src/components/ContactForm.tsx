@@ -54,7 +54,7 @@ async function submitContact(data: {
 }
 
 const inputCls =
-  "w-full rounded-md border border-line bg-paper-light px-5 py-3.5 text-ink placeholder:text-ink-soft/50 focus:border-accent focus:outline-none";
+  "w-full rounded-md border border-line bg-white px-5 py-3.5 text-ink placeholder:text-ink-soft/50 focus:border-accent focus:outline-none";
 
 export default function ContactForm({ assuntoInicial, origem }: Props = {}) {
   const [nome, setNome] = useState("");

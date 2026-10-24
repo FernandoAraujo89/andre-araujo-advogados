@@ -9,7 +9,8 @@ import SectionHeading from "@/components/SectionHeading";
 import LandingPageView from "@/components/landing/LandingPageView";
 import { areas, getArea } from "@/data/areas";
 import { getLandingPage } from "@/lib/landing";
-import { getFounder } from "@/lib/equipe";
+import { getAllPosts } from "@/lib/blog";
+import { getTeam } from "@/lib/equipe";
 import { pageMetadata } from "@/lib/seo";
 
 type Props = {
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: page.seo.title,
     description: page.seo.description,
     path: `/areas-de-atuacao/${page.slug}`,
-    image: page.seo.image ?? page.hero.image?.src,
+    image: page.seo.image ?? (page.hero.image.src || undefined),
   });
 }
 
@@ -53,7 +54,8 @@ export default async function AreaPage({ params }: Props) {
   if (!area) {
     const page = await getLandingPage(slug);
     if (!page || page.status !== "publicada") notFound();
-    return <LandingPageView page={page} founder={await getFounder()} />;
+    const [team, posts] = await Promise.all([getTeam(), getAllPosts()]);
+    return <LandingPageView page={page} team={team} posts={posts} />;
   }
 
   const outras = areas.filter((a) => a.slug !== area.slug).slice(0, 3);

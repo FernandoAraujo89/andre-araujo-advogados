@@ -18,7 +18,7 @@ const variants = {
   primary: "bg-accent-surface text-paper-light hover:bg-accent-surface-deep",
   secondary:
     "border border-ink/25 text-ink hover:border-accent hover:text-accent-deep",
-  light: "bg-paper text-ink hover:bg-paper-light",
+  light: "bg-paper-light text-ink hover:bg-paper",
   // Contorno claro para uso sobre fundos escuros (heros coloridos).
   "ghost-light":
     "border border-paper/40 text-paper-light hover:border-paper-light hover:bg-paper/10",
@@ -30,6 +30,17 @@ const sizes = {
   lg: "px-8 py-4 text-base",
 };
 
+export type ButtonVariant = keyof typeof variants;
+
+/** Classes do botão, para quem precisa do visual sem o link (ex.: editor). */
+export function buttonClass(
+  variant: ButtonVariant = "primary",
+  size: keyof typeof sizes = "md",
+  className = ""
+): string {
+  return `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+}
+
 export default function Button({
   href,
   children,
@@ -39,7 +50,7 @@ export default function Button({
   className = "",
   ariaLabel,
 }: ButtonProps) {
-  const cls = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+  const cls = buttonClass(variant, size, className);
   if (external) {
     return (
       <a

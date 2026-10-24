@@ -13,7 +13,7 @@ type Props = {
 };
 
 const field =
-  "w-full rounded-md border border-line bg-paper px-4 py-3 text-ink focus:border-wine focus:outline-none";
+  "w-full rounded-md border border-line bg-white px-4 py-3 text-ink focus:border-wine focus:outline-none";
 const labelCls = "mb-2 block text-base font-medium text-ink";
 
 function todayISO() {
@@ -224,7 +224,7 @@ export default function PostEditor({ mode, initial }: Props) {
       </div>
 
       {/* Imagem de capa */}
-      <fieldset className="rounded-md border border-line p-5">
+      <fieldset className="rounded-md border border-line bg-paper-light p-5">
         <legend className="px-2 text-base font-medium text-ink">
           Imagem de capa
         </legend>

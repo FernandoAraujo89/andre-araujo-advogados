@@ -3,7 +3,8 @@ import SiteChrome from "@/components/SiteChrome";
 import LandingPageView from "@/components/landing/LandingPageView";
 import { isAdmin } from "@/lib/admin-guard";
 import { getLandingPage } from "@/lib/landing";
-import { getFounder } from "@/lib/equipe";
+import { getAllPosts } from "@/lib/blog";
+import { getTeam } from "@/lib/equipe";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -18,11 +19,11 @@ export const dynamic = "force-dynamic";
 export default async function PreviewLandingPage({ params }: Props) {
   if (!(await isAdmin())) redirect("/admin/login");
   const { slug } = await params;
-  const page = await getLandingPage(slug);
+  const [page, team, posts] = await Promise.all([getLandingPage(slug), getTeam(), getAllPosts()]);
   if (!page) notFound();
   return (
     <SiteChrome>
-      <LandingPageView page={page} preview founder={await getFounder()} />
+      <LandingPageView page={page} team={team} posts={posts} preview />
     </SiteChrome>
   );
 }

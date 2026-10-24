@@ -15,6 +15,7 @@ const ALLOWED = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 const PASTAS: Record<string, string> = {
   blog: "blog/images",
   equipe: "equipe/fotos",
+  landing: "landing/images",
 };
 
 /**

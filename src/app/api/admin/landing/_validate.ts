@@ -1,106 +1,177 @@
 import { revalidatePath, revalidateTag } from "next/cache";
-import type {
-  LandingPageInput,
-  LpImage,
-  LpSection,
-  LpSectionType,
+import {
+  LP_LIMITS,
+  heroImageDefault,
+  sectionLabels,
+  type LandingPageInput,
+  type LpButton,
+  type LpImage,
+  type LpLink,
+  type LpSection,
+  type LpSectionType,
 } from "@/data/landing";
-import { youtubeId } from "@/data/landing";
+import { categories, type Category } from "@/data/posts";
 import { LANDING_TAG } from "@/lib/landing";
 
 /**
- * Valida e normaliza a landing page enviada pelo editor. Devolve erro
+ * Valida e normaliza a landing page enviada pelo editor visual. Devolve erro
  * legível. Limites generosos, mas finitos: o JSON inteiro vai para o banco e
- * é lido a cada render.
+ * é lido a cada render. Textos vazios são aceitos (a peça some no site);
+ * só o essencial para a página existir é obrigatório.
  */
-
-const MAX_SECTIONS = 20;
-const MAX_ITEMS = 12;
 
 type Ok = { ok: true; value: LandingPageInput };
 type Fail = { ok: false; error: string };
+type Raw = Record<string, unknown>;
 
-const str = (v: unknown, max: number) =>
-  typeof v === "string" ? v.trim().slice(0, max) : "";
+const obj = (v: unknown): Raw => (v && typeof v === "object" ? (v as Raw) : {});
+const arr = (v: unknown, max: number = LP_LIMITS.items): unknown[] =>
+  Array.isArray(v) ? v.slice(0, max) : [];
 
-function image(raw: unknown): LpImage | undefined {
-  if (!raw || typeof raw !== "object") return undefined;
-  const r = raw as Record<string, unknown>;
-  const src = str(r.src, 500);
-  if (!src) return undefined;
-  if (!/^https?:\/\//.test(src) && !src.startsWith("/")) return undefined;
-  return { src, alt: str(r.alt, 200) };
+/** Uma linha: sem quebras, espaços aparados. */
+const line = (v: unknown, max: number) =>
+  typeof v === "string" ? v.replace(/\s+/g, " ").trim().slice(0, max) : "";
+
+/** Texto corrido: mantém parágrafos, no máximo uma linha em branco. */
+const text = (v: unknown, max: number) =>
+  typeof v === "string"
+    ? v
+        .replace(/\r\n?/g, "\n")
+        .replace(/[ \t]+/g, " ")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim()
+        .slice(0, max)
+    : "";
+
+/** Imagem do site, do Blob/banco (/imagens) ou de um endereço https. */
+function image(raw: unknown, fallback?: LpImage): LpImage {
+  const r = obj(raw);
+  const src = line(r.src, 500);
+  const valid = src.startsWith("/") ? !src.startsWith("//") : /^https?:\/\//.test(src);
+  if (!valid) return fallback ?? { src: "", alt: "" };
+  return { src, alt: line(r.alt, 200) };
 }
 
-function pairs(raw: unknown, a: "title" | "question", b: "text" | "answer") {
-  if (!Array.isArray(raw)) return [];
-  return raw
-    .slice(0, MAX_ITEMS)
-    .map((it) => {
-      const r = (it ?? {}) as Record<string, unknown>;
-      return { [a]: str(r[a], 200), [b]: str(r[b], 2000) };
-    })
-    .filter((it) => it[a] && it[b]);
+/** Destino de botão/card: caminho do site, âncora, http(s), tel ou e-mail. */
+function href(v: unknown): string {
+  const h = line(v, 500);
+  if (!h) return "";
+  if (h.startsWith("/") && !h.startsWith("//")) return h;
+  if (h.startsWith("#")) return h;
+  if (/^(https?:\/\/|mailto:|tel:)/i.test(h)) return h;
+  return "";
 }
 
-const TYPES: LpSectionType[] = [
-  "texto",
-  "lista",
-  "passos",
-  "cards",
-  "sobre",
-  "avaliacoes",
-  "faq",
-  "cta",
-];
+function link(raw: unknown): LpLink {
+  const r = obj(raw);
+  if (r.tipo === "contato") return { tipo: "contato" };
+  if (r.tipo === "url") {
+    const h = href(r.href);
+    return h ? { tipo: "url", href: h } : { tipo: "whatsapp" };
+  }
+  return { tipo: "whatsapp" };
+}
+
+function button(raw: unknown): LpButton {
+  const r = obj(raw);
+  return { label: line(r.label, 40), link: link(r.link) };
+}
+
+const TYPES = Object.keys(sectionLabels) as LpSectionType[];
 
 function section(raw: unknown): LpSection | null {
-  if (!raw || typeof raw !== "object") return null;
-  const r = raw as Record<string, unknown>;
+  const r = obj(raw);
   const type = r.type as LpSectionType;
   if (!TYPES.includes(type)) return null;
-  const id = str(r.id, 20) || Math.random().toString(36).slice(2, 10);
-  const title = str(r.title, 200);
-  const intro = str(r.intro, 1000) || undefined;
+  const id = line(r.id, 20).replace(/[^a-z0-9-]/gi, "") || Math.random().toString(36).slice(2, 10);
+  const base = { id, ...(r.hidden === true ? { hidden: true } : {}) };
+  const title = line(r.title, 200);
+
   switch (type) {
-    case "texto": {
-      const text = str(r.text, 6000);
-      if (!title || !text) return null;
-      return { type, id, title, text, image: image(r.image) };
+    case "cards":
+      return {
+        ...base,
+        type,
+        title,
+        text: text(r.text, 1000),
+        items: arr(r.items).map((it) => {
+          const i = obj(it);
+          const h = href(i.href);
+          return { image: image(i.image), title: line(i.title, 120), ...(h ? { href: h } : {}) };
+        }),
+      };
+    case "numeros":
+      return {
+        ...base,
+        type,
+        title,
+        text: text(r.text, 1000),
+        items: arr(r.items).map((it) => {
+          const i = obj(it);
+          return { value: line(i.value, 20), label: line(i.label, 160) };
+        }),
+      };
+    case "destaque":
+      return {
+        ...base,
+        type,
+        eyebrow: line(r.eyebrow, 80),
+        title,
+        highlight: line(r.highlight, 120),
+        text: text(r.text, 3000),
+        button: button(r.button),
+        image: image(r.image),
+      };
+    case "depoimentos":
+      return {
+        ...base,
+        type,
+        eyebrow: line(r.eyebrow, 80),
+        title,
+        button: button(r.button),
+        items: arr(r.items)
+          .map((it) => {
+            const i = obj(it);
+            return { quote: text(i.quote, 1500), name: line(i.name, 80), role: line(i.role, 120) };
+          })
+          .filter((i) => i.quote),
+      };
+    case "equipe":
+      return {
+        ...base,
+        type,
+        title,
+        text: text(r.text, 1000),
+        members: arr(r.members, 24)
+          .map((s) => line(s, 80))
+          .filter(Boolean),
+      };
+    case "blog": {
+      const category = categories.includes(r.category as Category) ? (r.category as Category) : "";
+      return { ...base, type, title, category };
     }
-    case "lista": {
-      const items = Array.isArray(r.items)
-        ? r.items.map((i) => str(i, 300)).filter(Boolean).slice(0, MAX_ITEMS)
-        : [];
-      if (!title || items.length === 0) return null;
-      return { type, id, title, intro, items };
-    }
-    case "passos":
-    case "cards": {
-      const items = pairs(r.items, "title", "text") as { title: string; text: string }[];
-      if (!title || items.length === 0) return null;
-      return { type, id, title, intro, items };
-    }
-    case "sobre": {
-      const text = str(r.text, 4000);
-      if (!title || !text) return null;
-      return { type, id, title, text, image: image(r.image) };
-    }
-    case "avaliacoes":
-      return { type, id };
-    case "faq": {
-      const items = pairs(r.items, "question", "answer") as {
-        question: string;
-        answer: string;
-      }[];
-      if (!title || items.length === 0) return null;
-      return { type, id, title, items };
-    }
-    case "cta": {
-      const text = str(r.text, 1000);
-      if (!title) return null;
-      return { type, id, title, text };
-    }
+    case "galeria":
+      return {
+        ...base,
+        type,
+        title,
+        images: arr(r.images).map((i) => image(i)),
+      };
+    case "perguntas":
+      return {
+        ...base,
+        type,
+        eyebrow: line(r.eyebrow, 80),
+        title,
+        items: arr(r.items, 20)
+          .map((it) => {
+            const i = obj(it);
+            return { question: line(i.question, 200), answer: text(i.answer, 2000) };
+          })
+          .filter((i) => i.question && i.answer),
+      };
+    case "contato":
+      return { ...base, type, title, text: text(r.text, 1000) };
   }
 }
 
@@ -108,56 +179,56 @@ export function parseLandingInput(raw: unknown): Ok | Fail {
   if (typeof raw !== "object" || raw === null) {
     return { ok: false, error: "Dados inválidos." };
   }
-  const b = raw as Record<string, unknown>;
-
-  const name = str(b.name, 60);
-  const tagline = str(b.tagline, 200);
-  const slug = str(b.slug, 80);
-  const status = b.status === "publicada" ? "publicada" : "rascunho";
-
-  if (name.length < 3) return { ok: false, error: "Informe o nome da página (o rótulo do menu)." };
-  if (tagline.length < 10) return { ok: false, error: "Informe a frase curta do card (pelo menos 10 caracteres)." };
-
-  const seoRaw = (b.seo ?? {}) as Record<string, unknown>;
-  const seo = {
-    title: str(seoRaw.title, 70) || name,
-    description: str(seoRaw.description, 160) || tagline,
-    image: str(seoRaw.image, 500) || undefined,
-  };
-
-  const h = (b.hero ?? {}) as Record<string, unknown>;
-  const videoUrl = str(h.videoUrl, 300);
-  if (videoUrl && !youtubeId(videoUrl)) {
-    return { ok: false, error: "O vídeo precisa ser um link do YouTube." };
+  const b = raw as Raw;
+  if (b.version !== 2) {
+    return { ok: false, error: "Formato de página desatualizado. Recarregue o editor." };
   }
-  const hero = {
-    eyebrow: str(h.eyebrow, 80) || undefined,
-    title: str(h.title, 160),
-    subtitle: str(h.subtitle, 400),
-    image: image(h.image),
-    videoUrl: videoUrl || undefined,
-    ctaLabel: str(h.ctaLabel, 40) || "Falar no WhatsApp",
-    whatsappMessage: str(h.whatsappMessage, 300),
-  };
-  if (hero.title.length < 5) return { ok: false, error: "Informe o título principal da página." };
-  if (hero.subtitle.length < 10) return { ok: false, error: "Informe o subtítulo do topo." };
-  if (hero.whatsappMessage.length < 5) return { ok: false, error: "Informe a mensagem inicial do WhatsApp." };
 
-  const sections = (Array.isArray(b.sections) ? b.sections : [])
-    .slice(0, MAX_SECTIONS)
+  const name = line(b.name, 60);
+  const tagline = line(b.tagline, 200);
+  const slug = line(b.slug, 80);
+  const status = b.status === "publicada" ? "publicada" : "rascunho";
+  const whatsappMessage = line(b.whatsappMessage, 300);
+
+  if (name.length < 3) {
+    return { ok: false, error: "Informe o nome da página (o rótulo do menu), no painel “Página”." };
+  }
+  if (tagline.length < 10) {
+    return { ok: false, error: "Informe a frase do card (pelo menos 10 caracteres), no painel “Página”." };
+  }
+  if (whatsappMessage.length < 5) {
+    return { ok: false, error: "Informe a mensagem inicial do WhatsApp, no painel “Página”." };
+  }
+
+  const seoRaw = obj(b.seo);
+  const seoImage = image({ src: seoRaw.image }).src;
+  const seo = {
+    title: line(seoRaw.title, 70) || name,
+    description: line(seoRaw.description, 160) || tagline,
+    ...(seoImage ? { image: seoImage } : {}),
+  };
+
+  const h = obj(b.hero);
+  const hero = {
+    eyebrow: line(h.eyebrow, 80),
+    title: line(h.title, 160),
+    highlight: line(h.highlight, 120),
+    text: text(h.text, 600),
+    button: button(h.button),
+    image: image(h.image, heroImageDefault),
+    ornament: h.ornament !== false,
+  };
+  if (hero.title.length < 3) {
+    return { ok: false, error: "Escreva o título principal no topo da página." };
+  }
+
+  const sections = arr(b.sections, LP_LIMITS.sections)
     .map(section)
     .filter((s): s is LpSection => s !== null);
 
-  const f = (b.fechamento ?? {}) as Record<string, unknown>;
-  const fechamento = {
-    title: str(f.title, 160) || "Conte sua situação",
-    text: str(f.text, 600),
-    formulario: f.formulario !== false,
-  };
-
   return {
     ok: true,
-    value: { slug, status, name, tagline, seo, hero, sections, fechamento },
+    value: { version: 2, slug, status, name, tagline, seo, whatsappMessage, hero, sections },
   };
 }
 

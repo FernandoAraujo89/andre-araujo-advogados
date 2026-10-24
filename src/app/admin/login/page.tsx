@@ -66,7 +66,7 @@ export default function AdminLoginPage() {
             autoFocus
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-md border border-line bg-paper px-4 py-3 text-ink focus:border-wine focus:outline-none"
+            className="w-full rounded-md border border-line bg-white px-4 py-3 text-ink focus:border-wine focus:outline-none"
           />
           {error && (
             <p role="alert" className="mt-3 text-base text-wine-deep">

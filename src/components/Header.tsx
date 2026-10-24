@@ -55,7 +55,7 @@ export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       {/* Linha principal — sólida para funcionar sobre o hero escuro */}
-      <div className="bg-paper/95 shadow-[0_2px_24px_rgba(22,34,44,0.06)] backdrop-blur-md">
+      <div className="bg-paper-light/95 shadow-[0_2px_24px_rgba(22,34,44,0.06)] backdrop-blur-md">
         <div className="mx-auto flex h-[4.5rem] max-w-[1240px] items-center justify-between gap-6 px-5 lg:h-[5.5rem] lg:max-w-[1600px] lg:px-8 xl:px-16 2xl:px-24">
           <Link
             href="/"
@@ -108,14 +108,14 @@ export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
 
                     {/* Submenu com todas as áreas; abre no hover ou foco */}
                     <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-opacity duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                      <div className="rounded-md border border-line bg-paper p-2 shadow-[0_18px_50px_rgba(22,34,44,0.14)]">
+                      <div className="rounded-md border border-line bg-paper-light p-2 shadow-[0_18px_50px_rgba(22,34,44,0.14)]">
                         <ul className="grid w-[34rem] grid-cols-2 gap-0.5">
                           {areas.map((a) => (
                             <li key={a.href}>
                               <Link
                                 href={a.href}
                                 aria-current={isActive(a.href) ? "page" : undefined}
-                                className={`block rounded-sm px-3 py-2.5 text-[0.9375rem] transition-colors hover:bg-paper-light hover:text-accent-deep ${
+                                className={`block rounded-sm px-3 py-2.5 text-[0.9375rem] transition-colors hover:bg-paper hover:text-accent-deep ${
                                   isActive(a.href)
                                     ? "font-medium text-accent-deep"
                                     : "text-ink"
@@ -198,7 +198,7 @@ export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
         <nav
           id="menu-mobile"
           aria-label="Navegação principal (mobile)"
-          className="border-t border-line bg-paper px-5 pb-8 pt-4 xl:hidden"
+          className="border-t border-line bg-paper-light px-5 pb-8 pt-4 xl:hidden"
         >
           <ul className="flex flex-col">
             {navMain.map((item) => {

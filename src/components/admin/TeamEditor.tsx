@@ -17,7 +17,7 @@ type Props = {
 };
 
 const field =
-  "w-full rounded-md border border-line bg-paper px-4 py-3 text-ink focus:border-wine focus:outline-none";
+  "w-full rounded-md border border-line bg-white px-4 py-3 text-ink focus:border-wine focus:outline-none";
 const labelCls = "mb-2 block text-base font-medium text-ink";
 
 export default function TeamEditor({ mode, initial, setoresEmUso = [] }: Props) {
@@ -231,7 +231,7 @@ export default function TeamEditor({ mode, initial, setoresEmUso = [] }: Props) 
       </div>
 
       {/* Foto */}
-      <fieldset className="rounded-md border border-line p-5">
+      <fieldset className="rounded-md border border-line bg-paper-light p-5">
         <legend className="px-2 text-base font-medium text-ink">Foto</legend>
         <div className="flex flex-wrap items-start gap-6">
           <div className="h-32 w-32 shrink-0 overflow-hidden rounded-md border border-line bg-paper">
@@ -296,7 +296,7 @@ export default function TeamEditor({ mode, initial, setoresEmUso = [] }: Props) 
       </fieldset>
 
       {/* Página própria */}
-      <fieldset className="rounded-md border border-line p-5">
+      <fieldset className="rounded-md border border-line bg-paper-light p-5">
         <legend className="px-2 text-base font-medium text-ink">
           Página própria
         </legend>

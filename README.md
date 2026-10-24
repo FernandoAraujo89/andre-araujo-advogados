@@ -161,13 +161,28 @@ tentativas; a senha deve ser longa.
 ## Landing pages de campanha
 
 O escritório cria páginas de campanha (tráfego pago) em `/admin/landing`,
-sem mexer em código. Cada página segue um template do setor: topo com
-título, subtítulo, botão do WhatsApp (mensagem pré-preenchida) e imagem ou
-vídeo do YouTube; seções reordenáveis (texto com imagem, lista de itens,
-passo a passo, cards de diferenciais, sobre o escritório, avaliações do
-Google, perguntas frequentes com schema FAQPage, chamada para o WhatsApp); e
-fechamento com o formulário de contato já marcado com o nome da página. As
+sem mexer em código, num editor visual: a página aparece como no site e
+cada elemento é editado no lugar. Textos: clique e digite. Imagens: clique
+(ou arraste o arquivo por cima) e troque no painel lateral. Botões: texto no
+lugar, destino no painel (WhatsApp com a mensagem da página, formulário da
+página ou outro endereço). Cada seção tem uma barra para subir, descer,
+ocultar, duplicar e excluir, e "Adicionar seção" aparece entre elas. Há
+desfazer e refazer (⌘Z / ⇧⌘Z), salvar com ⌘S e prévia de computador e de
+celular.
+
+O layout é o do arquivo do Figma "Landing page" no sistema visual do site:
+topo escuro com imagem recortada e louros, cards com foto em carrossel,
+números, faixa de destaque com foto, depoimentos (as avaliações do Google),
+equipe (escolhida no painel), publicações do blog (automáticas, por
+categoria) e galeria. Além dos blocos do Figma, há perguntas frequentes (com
+schema FAQPage) e o formulário de contato já marcado com o nome da página; as
 mensagens desse formulário chegam ao painel com a origem (slug da página).
+
+Ao criar uma página, o escritório escolhe um modelo
+(`src/data/landing-modelos.ts`): o padrão, com textos de exemplo, ou
+"Férias-prêmio de aposentados", pronto para revisar e publicar. As imagens
+do template ficam em `public/images/landing/` (as do modelo de férias-prêmio
+foram geradas no Magnific e otimizadas em WebP).
 
 - Publicadas, entram em `/areas-de-atuacao/<slug>` e na lista de áreas
   (dropdown do menu, sanfona no celular, índice de áreas, rodapé e sitemap),
@@ -175,12 +190,18 @@ mensagens desse formulário chegam ao painel com a origem (slug da página).
 - Rascunhos ficam fora do ar; a pré-visualização com o chrome do site fica em
   `/admin/preview/<slug>` (só logado).
 - Dados na tabela `landing_pages` do Neon (`src/lib/landing.ts`): rascunhos
-  não têm URL pública. As imagens enviadas pelo editor vão para o Blob,
-  porque precisam de URL.
-- Tipos e modelo inicial em `src/data/landing.ts`; template público em
-  `src/components/landing/LandingPageView.tsx`; editor em
-  `src/components/admin/LandingEditor.tsx`. Slugs das áreas fixas e das
-  rotas do site são reservados.
+  não têm URL pública. As imagens enviadas pelo editor vão para o Blob (ou
+  para o banco, quando o Blob falha), porque precisam de URL. Páginas no
+  formato anterior ao layout do Figma são convertidas na leitura.
+- Em `next dev` sem `DATABASE_URL`, as páginas ficam em
+  `.data/landing-pages.json` (fora do git), para testar o editor localmente.
+  Para entrar no painel local, defina `ADMIN_PASSWORD` no `.env.local`.
+- Tipos, conteúdo inicial e conversão em `src/data/landing.ts`; a página em
+  `src/components/landing/LandingPageView.tsx`, que serve ao site e ao
+  editor (o editor troca as peças estáticas de `kit.tsx` pelas editáveis de
+  `src/components/admin/landing-editor/`). As medidas usam consultas de
+  contêiner, por isso a prévia de celular do editor é fiel. Slugs das áreas
+  fixas e das rotas do site são reservados.
 - Salvar revalida a própria página e o layout raiz (o menu está em todas as
   páginas).
 

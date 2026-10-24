@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# armazenamento local das landing pages em `next dev` sem banco
+/.data/

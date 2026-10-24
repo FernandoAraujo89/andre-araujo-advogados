@@ -5,7 +5,7 @@ import { getAllLandingPages, landingStorageEnabled } from "@/lib/landing";
 
 export default async function LandingListPage() {
   const pages = await getAllLandingPages();
-  const blobConfigured = landingStorageEnabled();
+  const storageEnabled = landingStorageEnabled();
 
   return (
     <div>
@@ -25,7 +25,7 @@ export default async function LandingListPage() {
         </Link>
       </div>
 
-      {!blobConfigured && (
+      {!storageEnabled && (
         <p className="mt-6 rounded-md border border-wine/30 bg-wine-mist px-5 py-4 text-base text-wine-deep">
           <strong>Modo demonstração:</strong> o banco de dados ainda não está
           configurado, então o que você criar aqui não será salvo. No Vercel,
