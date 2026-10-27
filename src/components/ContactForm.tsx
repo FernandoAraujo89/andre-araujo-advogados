@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { areasDeAtuacao } from "@/data/atuacao";
+import { leadLabel } from "@/data/google-ads";
+import { trackConversion } from "@/lib/gtag";
 
 type FormState = "idle" | "sending" | "success" | "error";
 
@@ -115,6 +117,9 @@ export default function ContactForm({ assuntoInicial, origem }: Props = {}) {
         elapsed: Date.now() - startedAt,
       });
       setState("success");
+      // Conversão "Lead" do Google Ads: só depois de a API confirmar. O
+      // rótulo é o da landing page de origem ou o geral (src/data/google-ads.ts).
+      trackConversion(leadLabel(origem));
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "");
       setState("error");

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, Instrument_Serif } from "next/font/google";
+import GoogleAds from "@/components/GoogleAds";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -54,7 +55,11 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${instrumentSans.variable} ${instrumentSerif.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Tag do Google Ads e conversões; não entra no painel /admin */}
+        <GoogleAds />
+      </body>
     </html>
   );
 }

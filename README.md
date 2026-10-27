@@ -198,6 +198,31 @@ foram geradas no Magnific e otimizadas em WebP).
 - Salvar revalida a própria página e o layout raiz (o menu está em todas as
   páginas).
 
+## Google Ads (tag e conversões)
+
+A tag do Google Ads (`gtag.js`, conta `AW-17574475028`) entra em todas as
+páginas públicas pelo layout raiz (`src/components/GoogleAds.tsx`), inclusive
+na 404; o painel `/admin` fica de fora. O ID e os rótulos das conversões estão
+em `src/data/google-ads.ts`, e todo disparo passa por `src/lib/gtag.ts`, que
+enfileira os comandos em `window.dataLayer` como a tag oficial faz.
+
+| Conversão | Quando dispara | Onde |
+|---|---|---|
+| Visualização de página | A cada página vista, inclusive nas navegações dentro do site, que não recarregam a página. Rótulo próprio nas landing pages de Progressão e de Férias-prêmio; geral nas demais | `GoogleAds.tsx` |
+| Lead | Quando o formulário de contato é enviado e a API confirma. Rótulo próprio nas duas landing pages (pela `origem` do formulário, que é o slug da página); geral nos demais formulários | `ContactForm.tsx` |
+| Contato WhatsApp | Clique em qualquer link que abre o WhatsApp (cabeçalho, rodapé, botão flutuante, páginas e landing pages), por delegação no documento, sem marcar botão por botão | `GoogleAds.tsx` |
+
+- As landing pages são reconhecidas pelo slug em `/areas-de-atuacao/<slug>`
+  (`campaigns` em `src/data/google-ads.ts`). **Se o endereço de uma delas
+  mudar no painel, atualize o slug ali**; até lá, a página conta como geral.
+- Em `next dev` o script do Google não é carregado, para os testes não
+  virarem visitas e conversões reais; os comandos ficam em `window.dataLayer`
+  e dá para conferir no console. Em produção o script carrega e processa a
+  fila, inclusive o que foi disparado antes de ele terminar de carregar.
+- Para conferir no ar: DevTools → Rede, filtrando por
+  `googleads.g.doubleclick.net` (cada conversão gera uma requisição com o
+  rótulo em `label=`), ou a extensão Google Tag Assistant.
+
 ## Equipe (/admin → Equipe)
 
 A página /equipe é gerenciada pelo escritório, com CRUD completo: incluir,
