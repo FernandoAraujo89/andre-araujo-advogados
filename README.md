@@ -210,7 +210,32 @@ enfileira os comandos em `window.dataLayer` como a tag oficial faz.
 |---|---|---|
 | Visualização de página | A cada página vista, inclusive nas navegações dentro do site, que não recarregam a página. Rótulo próprio nas landing pages de Progressão e de Férias-prêmio; geral nas demais | `GoogleAds.tsx` |
 | Lead | Quando o formulário de contato é enviado e a API confirma. Rótulo próprio nas duas landing pages (pela `origem` do formulário, que é o slug da página); geral nos demais formulários | `ContactForm.tsx` |
-| Contato WhatsApp | Clique em qualquer link que abre o WhatsApp (cabeçalho, rodapé, botão flutuante, páginas e landing pages), por delegação no documento, sem marcar botão por botão | `GoogleAds.tsx` |
+| Contato WhatsApp | Clique em qualquer link que abre o WhatsApp direto (cabeçalho, rodapé, botão flutuante, páginas), por delegação no documento, sem marcar botão por botão. Nas landing pages com formulário não há link direto (ver abaixo) | `GoogleAds.tsx` |
+
+### WhatsApp pelo formulário nas landing pages
+
+Nas landing pages publicadas que têm a seção "Formulário de contato" visível,
+nenhum botão abre o WhatsApp direto (pedido do gestor de tráfego, 09/11/2026:
+o clique direto não diz de onde a pessoa veio e só gera conversão de clique).
+Os botões continuam dizendo "WhatsApp", mas levam ao formulário (`#contato`):
+
+1. Cabeçalho, rodapé e botão flutuante usam `src/components/WhatsAppLink.tsx`,
+   que troca o destino pelo caminho da página (lista vinda de
+   `getLandingFormPaths`, em `src/lib/landing.ts`). Os botões da página
+   configurados como WhatsApp no editor fazem o mesmo (`whatsappTarget`, em
+   `src/data/landing.ts`), e o número na seção de contato aparece sem link.
+2. O formulário mostra "Preencha o formulário para falar no WhatsApp" e o
+   botão "Enviar e abrir o WhatsApp".
+3. Depois de a API confirmar o envio, dispara o Lead da página e, quando o
+   Google confirma o recebimento (ou depois de 1,5 s), abre o WhatsApp na
+   mesma aba com a mensagem inicial da página, o nome e o texto do visitante.
+   Na mesma aba porque, depois do envio, uma aba nova seria bloqueada como
+   pop-up.
+4. A tela de sucesso tem o botão "Abrir o WhatsApp", caso ele não abra
+   sozinho; esse botão tem `data-sem-conversao` e não conta de novo.
+
+Landing page sem formulário visível e o resto do site continuam abrindo o
+WhatsApp direto.
 
 - As landing pages são reconhecidas pelo slug em `/areas-de-atuacao/<slug>`
   (`campaigns` em `src/data/google-ads.ts`). **Se o endereço de uma delas

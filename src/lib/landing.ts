@@ -5,7 +5,12 @@ import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { areas } from "@/data/areas";
 import { slugify } from "@/data/posts";
-import { upgradeLanding, type LandingPage, type LandingPageInput } from "@/data/landing";
+import {
+  hasContactForm,
+  upgradeLanding,
+  type LandingPage,
+  type LandingPageInput,
+} from "@/data/landing";
 import { dbEnabled, json, requireDb, sql } from "@/lib/db";
 
 /**
@@ -89,6 +94,16 @@ export async function getPublishedLandingPages(): Promise<LandingPage[]> {
   return pages
     .filter((p) => p.status === "publicada")
     .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
+}
+
+/**
+ * Caminhos das landing pages publicadas que têm formulário visível. Nelas, os
+ * links de WhatsApp do cabeçalho, do rodapé e do botão flutuante levam ao
+ * formulário (src/components/WhatsAppLink.tsx).
+ */
+export async function getLandingFormPaths(): Promise<string[]> {
+  const pages = await getPublishedLandingPages();
+  return pages.filter(hasContactForm).map((p) => `/areas-de-atuacao/${p.slug}`);
 }
 
 export async function getLandingPage(slug: string): Promise<LandingPage | undefined> {

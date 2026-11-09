@@ -3,6 +3,7 @@ import Image from "next/image";
 import { site, navMain, navSecondary } from "@/data/site";
 import type { AreaDeAtuacao } from "@/data/atuacao";
 import SocialLinks from "@/components/SocialLinks";
+import WhatsAppLink from "@/components/WhatsAppLink";
 
 export default function Footer({ areas }: { areas: AreaDeAtuacao[] }) {
   // Quebra o e-mail só após o "@" (via <wbr>), evitando cortes no meio
@@ -63,14 +64,9 @@ export default function Footer({ areas }: { areas: AreaDeAtuacao[] }) {
                 </a>
               </li>
               <li>
-                <a
-                  href={site.whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-colors hover:text-paper-light"
-                >
+                <WhatsAppLink className="transition-colors hover:text-paper-light">
                   WhatsApp {site.whatsapp}
-                </a>
+                </WhatsAppLink>
               </li>
               <li>
                 <a

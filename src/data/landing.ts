@@ -171,7 +171,8 @@ export function newSectionId(): string {
 /**
  * Botão de chamada padrão: leva ao formulário da própria página, onde o
  * contato fica registrado no painel com a origem (decisão do escritório,
- * 24/10/2026). O WhatsApp continua como opção de cada botão no editor.
+ * 24/10/2026). O WhatsApp continua como opção de cada botão no editor, mas,
+ * se a página tem formulário, também passa por ele (ver whatsappTarget).
  */
 const formButton = (label = "Quero analisar meu caso"): LpButton => ({
   label,
@@ -323,7 +324,7 @@ export function newSection(type: LpSectionType): LpSection {
         type,
         id,
         title: "Fale com o escritório",
-        text: "Envie sua mensagem ou fale direto pelo WhatsApp. Retornamos o quanto antes.",
+        text: "Preencha o formulário para falar no WhatsApp. Ao enviar, a conversa abre com a sua mensagem.",
       };
   }
 }
@@ -363,6 +364,21 @@ export function emptyLandingPage(): LandingPageInput {
 /** Link de WhatsApp do escritório com a mensagem da página. */
 export function whatsappHref(whatsapp: string, message: string): string {
   return `https://wa.me/${whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+}
+
+/** A página tem a seção "Formulário de contato" visível. */
+export function hasContactForm(page: Pick<LandingPageInput, "sections">): boolean {
+  return page.sections.some((s) => s.type === "contato" && !s.hidden);
+}
+
+/**
+ * Para onde vão os botões de WhatsApp da página. Com formulário, vão a ele:
+ * o WhatsApp abre depois do envio, quando o lead já foi registrado no painel
+ * e no Google Ads (pedido do gestor de tráfego, 09/11/2026). Sem formulário,
+ * abrem o WhatsApp direto, como antes.
+ */
+export function whatsappTarget(page: LandingPageInput, whatsapp: string): string {
+  return hasContactForm(page) ? "#contato" : whatsappHref(whatsapp, page.whatsappMessage);
 }
 
 /** Endereço final de um botão. */

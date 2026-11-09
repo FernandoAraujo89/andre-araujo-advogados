@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { areasDeAtuacao } from "@/data/atuacao";
 import { leadLabel } from "@/data/google-ads";
+import { site } from "@/data/site";
 import { trackConversion } from "@/lib/gtag";
 
 type FormState = "idle" | "sending" | "success" | "error";
@@ -16,7 +17,27 @@ type Props = {
   assuntoInicial?: string;
   /** Identificador da página de origem, gravado junto com a mensagem */
   origem?: string;
+  /**
+   * Landing pages: mensagem inicial do WhatsApp da página. Com ela, o
+   * formulário é o caminho para o WhatsApp: depois do envio confirmado (lead
+   * registrado no painel e no Google Ads), o WhatsApp abre com essa mensagem,
+   * o nome e o texto do visitante.
+   */
+  whatsappMessage?: string;
 };
+
+/** Até onde o texto do visitante entra na mensagem do WhatsApp. */
+const WHATSAPP_TEXT_MAX = 500;
+
+/** Link do WhatsApp do escritório com a mensagem da página e a do visitante. */
+function whatsappAfterForm(base: string, nome: string, mensagem: string): string {
+  const resumo =
+    mensagem.length > WHATSAPP_TEXT_MAX
+      ? `${mensagem.slice(0, WHATSAPP_TEXT_MAX).trimEnd()}…`
+      : mensagem;
+  const text = [base.trim(), `Meu nome é ${nome}.`, resumo].filter(Boolean).join("\n\n");
+  return `https://wa.me/${site.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
+}
 
 /** Máscara de celular brasileiro: (99) 99999-9999 */
 function maskPhone(value: string): string {
@@ -58,7 +79,9 @@ async function submitContact(data: {
 const inputCls =
   "w-full rounded-md border border-line bg-white px-5 py-3.5 text-ink placeholder:text-ink-soft/50 focus:border-accent focus:outline-none";
 
-export default function ContactForm({ assuntoInicial, origem }: Props = {}) {
+export default function ContactForm({ assuntoInicial, origem, whatsappMessage }: Props = {}) {
+  const viaWhatsApp = whatsappMessage !== undefined;
+  const [whatsappUrl, setWhatsappUrl] = useState("");
   const [nome, setNome] = useState("");
   const [celular, setCelular] = useState("");
   const [email, setEmail] = useState("");
@@ -116,14 +139,51 @@ export default function ContactForm({ assuntoInicial, origem }: Props = {}) {
         site,
         elapsed: Date.now() - startedAt,
       });
-      setState("success");
       // Conversão "Lead" do Google Ads: só depois de a API confirmar. O
       // rótulo é o da landing page de origem ou o geral (src/data/google-ads.ts).
-      trackConversion(leadLabel(origem));
+      if (whatsappMessage !== undefined) {
+        // Landing page: o WhatsApp abre na mesma aba depois de o Google
+        // receber o lead (abrir antes poderia perder a conversão). Aba nova
+        // seria bloqueada como pop-up, porque não é mais o clique que a abre.
+        const url = whatsappAfterForm(whatsappMessage, nome.trim(), mensagem.trim());
+        setWhatsappUrl(url);
+        setState("success");
+        trackConversion(leadLabel(origem), () => window.location.assign(url));
+      } else {
+        setState("success");
+        trackConversion(leadLabel(origem));
+      }
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "");
       setState("error");
     }
+  }
+
+  if (state === "success" && viaWhatsApp) {
+    return (
+      <div
+        role="status"
+        className="flex flex-col items-start gap-4 rounded-md border border-line bg-paper-light p-8"
+      >
+        <h3 className="text-card text-ink">Mensagem enviada</h3>
+        <p className="text-ink-soft">
+          Obrigado pelo contato, {nome.trim().split(" ")[0]}. Estamos abrindo o
+          WhatsApp do escritório com a sua mensagem: é só enviar por lá.
+        </p>
+        {/* data-sem-conversao: o lead já foi contado; o clique aqui não vira
+            outra conversão de WhatsApp (GoogleAds.tsx) */}
+        <a
+          href={whatsappUrl}
+          data-sem-conversao
+          className="inline-flex items-center gap-2 rounded-sm bg-accent-surface px-8 py-4 font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-accent-surface-deep"
+        >
+          Abrir o WhatsApp
+        </a>
+        <p className="text-base text-ink-soft">
+          Se o WhatsApp não abrir sozinho, toque no botão.
+        </p>
+      </div>
+    );
   }
 
   if (state === "success") {
@@ -146,6 +206,17 @@ export default function ContactForm({ assuntoInicial, origem }: Props = {}) {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
+      {viaWhatsApp && (
+        <div>
+          <h3 className="text-xl leading-snug text-ink">
+            Preencha o formulário para falar no WhatsApp
+          </h3>
+          <p className="mt-2 text-base text-ink-soft">
+            Ao enviar, o WhatsApp do escritório abre com a sua mensagem.
+          </p>
+        </div>
+      )}
+
       <div>
         <label htmlFor="nome" className="mb-2 block text-base font-medium text-ink">
           Nome
@@ -293,7 +364,11 @@ export default function ContactForm({ assuntoInicial, origem }: Props = {}) {
         disabled={state === "sending"}
         className="inline-flex items-center gap-2 rounded-sm bg-accent-surface px-8 py-4 font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-accent-surface-deep disabled:opacity-60"
       >
-        {state === "sending" ? "Enviando..." : "Enviar mensagem"}
+        {state === "sending"
+          ? "Enviando..."
+          : viaWhatsApp
+            ? "Enviar e abrir o WhatsApp"
+            : "Enviar mensagem"}
       </button>
     </form>
   );

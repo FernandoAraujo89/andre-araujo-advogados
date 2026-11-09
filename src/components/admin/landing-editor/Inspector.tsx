@@ -159,7 +159,7 @@ function PagePanel({ storageEnabled }: { storageEnabled: boolean }) {
           max={300}
           rows={3}
           onChange={(v) => set(["whatsappMessage"], v)}
-          help="Texto que já vem escrito quando o visitante toca num botão de WhatsApp desta página."
+          help="Texto que já vem escrito quando o WhatsApp abre. Com formulário na página, o WhatsApp abre depois do envio, e a mensagem leva também o nome e o texto do visitante."
         />
       </Group>
       <Group title="Google e compartilhamento">
@@ -356,7 +356,13 @@ function ButtonPanel({ path }: { path: (string | number)[] }) {
   const setLink = (link: LpLink) => set([...path, "link"], link);
 
   const options: { tipo: LpLink["tipo"]; title: string; desc: string }[] = [
-    { tipo: "whatsapp", title: "WhatsApp", desc: "Abre a conversa com a mensagem da página" },
+    {
+      tipo: "whatsapp",
+      title: "WhatsApp",
+      desc: hasContato
+        ? "Passa pelo formulário: o WhatsApp abre depois do envio, e o lead conta no Google Ads"
+        : "Abre a conversa com a mensagem da página",
+    },
     { tipo: "contato", title: "Formulário da página", desc: "Rola até o formulário de contato" },
     { tipo: "url", title: "Outro endereço", desc: "Página do site, link externo, telefone" },
   ];

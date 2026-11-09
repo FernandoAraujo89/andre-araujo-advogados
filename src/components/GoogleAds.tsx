@@ -48,7 +48,13 @@ export default function GoogleAds() {
       // auxclick: só o botão do meio (abre em nova aba); o direito é o menu
       if (e.type === "auxclick" && e.button !== 1) return;
       const link = e.target instanceof Element ? e.target.closest("a[href]") : null;
-      if (link && isWhatsAppHref(link.getAttribute("href"))) {
+      // data-sem-conversao: o botão "Abrir o WhatsApp" depois do formulário,
+      // que já contou como lead (ContactForm.tsx)
+      if (
+        link &&
+        !link.hasAttribute("data-sem-conversao") &&
+        isWhatsAppHref(link.getAttribute("href"))
+      ) {
         trackConversion(WHATSAPP_LABEL);
       }
     }

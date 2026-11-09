@@ -41,9 +41,35 @@ function init() {
   gtag("config", GOOGLE_ADS_ID);
 }
 
-/** Dispara uma conversão do Google Ads pelo rótulo (ver src/data/google-ads.ts). */
-export function trackConversion(label: string): void {
+/** Tempo máximo de espera pelo envio antes de seguir com `onSent`. */
+const SEND_TIMEOUT_MS = 1500;
+
+/**
+ * Dispara uma conversão do Google Ads pelo rótulo (ver src/data/google-ads.ts).
+ *
+ * `onSent` roda quando o Google confirma o envio, para quem vai sair da
+ * página logo depois (o formulário das landing pages abre o WhatsApp): sair
+ * antes poderia perder a conversão. Se o gtag.js não carregar (bloqueador de
+ * anúncios, `next dev`), `onSent` roda mesmo assim depois de 1,5 s, uma vez só.
+ */
+export function trackConversion(label: string, onSent?: () => void): void {
   if (typeof window === "undefined") return;
   init();
-  gtag("event", "conversion", { send_to: `${GOOGLE_ADS_ID}/${label}` });
+  const sendTo = `${GOOGLE_ADS_ID}/${label}`;
+  if (!onSent) {
+    gtag("event", "conversion", { send_to: sendTo });
+    return;
+  }
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    onSent();
+  };
+  gtag("event", "conversion", {
+    send_to: sendTo,
+    event_callback: finish,
+    event_timeout: SEND_TIMEOUT_MS,
+  });
+  window.setTimeout(finish, SEND_TIMEOUT_MS + 200);
 }

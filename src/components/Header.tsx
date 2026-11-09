@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { site, navMain } from "@/data/site";
 import type { AreaDeAtuacao } from "@/data/atuacao";
+import WhatsAppLink from "@/components/WhatsAppLink";
 
 const AREAS_HREF = "/areas-de-atuacao";
 
@@ -147,14 +148,9 @@ export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
             >
               {site.phone}
             </a>
-            <a
-              href={site.whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-sm bg-accent-surface px-5 py-2.5 text-[0.9375rem] font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-accent-surface-deep"
-            >
+            <WhatsAppLink className="inline-flex items-center gap-2 whitespace-nowrap rounded-sm bg-accent-surface px-5 py-2.5 text-[0.9375rem] font-medium text-paper-light transition-all duration-300 hover:scale-[1.02] hover:bg-accent-surface-deep">
               Falar no WhatsApp
-            </a>
+            </WhatsAppLink>
           </div>
 
           <button
@@ -282,14 +278,12 @@ export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
           </ul>
 
           <div className="mt-6 flex flex-col gap-3">
-            <a
-              href={site.whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
+            <WhatsAppLink
+              onClick={closeMenu}
               className="inline-flex items-center justify-center gap-2 rounded-sm bg-accent-surface px-6 py-3.5 font-medium text-paper-light"
             >
               Falar no WhatsApp
-            </a>
+            </WhatsAppLink>
             <a
               href={site.phoneHref}
               className="inline-flex items-center justify-center gap-2 rounded-sm border border-ink/25 px-6 py-3.5 font-medium text-ink"

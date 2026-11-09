@@ -17,7 +17,7 @@ import {
   LP_IMAGES,
   linkHref,
   newItem,
-  whatsappHref,
+  whatsappTarget,
   type LandingPage,
   type LandingPageInput,
   type LpSection,
@@ -746,7 +746,7 @@ function PerguntasSection({ s, i, ctx }: { s: LpSectionOf<"perguntas">; i: numbe
 }
 
 function ContatoSection({ s, i, ctx }: { s: LpSectionOf<"contato">; i: number; ctx: Ctx }) {
-  const { K, wa, page } = ctx;
+  const { K, page } = ctx;
   return (
     <section id="contato" className="scroll-mt-24 bg-paper py-24 @5xl:py-32">
       <div className={`${wrap} grid gap-12 @5xl:grid-cols-2 @5xl:gap-[calc(var(--lp-u)*7)]`}>
@@ -767,16 +767,14 @@ function ContatoSection({ s, i, ctx }: { s: LpSectionOf<"contato">; i: number; c
             placeholder="Texto de apoio (opcional)"
           />
           <ul className="mt-10 space-y-6 text-ink">
+            {/* Sem link direto: o WhatsApp abre depois do envio do
+                formulário, para o lead ser registrado (ver ContactForm) */}
             <li>
               <p className="label">WhatsApp</p>
-              <a
-                href={wa}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 inline-block text-lg font-medium hover:text-accent-deep"
-              >
-                {site.whatsapp}
-              </a>
+              <p className="mt-1 text-lg font-medium">{site.whatsapp}</p>
+              <p className="mt-1 text-base text-ink-soft">
+                A conversa abre assim que você envia o formulário.
+              </p>
             </li>
             <li>
               <p className="label">Telefone</p>
@@ -805,7 +803,11 @@ function ContatoSection({ s, i, ctx }: { s: LpSectionOf<"contato">; i: number; c
             className={K.editing ? "pointer-events-none select-none" : undefined}
             inert={K.editing || undefined}
           >
-            <ContactForm assuntoInicial={page.name || undefined} origem={page.slug || undefined} />
+            <ContactForm
+              assuntoInicial={page.name || undefined}
+              origem={page.slug || undefined}
+              whatsappMessage={page.whatsappMessage}
+            />
           </div>
         </Reveal>
       </div>
@@ -855,7 +857,8 @@ export default function LandingPageView({
 }) {
   const ctx: Ctx = {
     K: kit,
-    wa: whatsappHref(site.whatsapp, page.whatsappMessage),
+    // Com formulário na página, os botões de WhatsApp levam a ele
+    wa: whatsappTarget(page, site.whatsapp),
     page,
     team,
     posts,
