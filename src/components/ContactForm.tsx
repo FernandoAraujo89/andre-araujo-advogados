@@ -51,7 +51,8 @@ function maskPhone(value: string): string {
 
 /**
  * Envia para a API do site (src/app/api/contato/route.ts), que grava a
- * mensagem no painel /admin e avisa o escritório por e-mail. `site` é o campo
+ * mensagem no painel /admin, avisa o escritório por e-mail e manda o lead ao
+ * webhook da landing page, se houver. `site` é o campo
  * oculto anti-spam (fica vazio para pessoas) e `elapsed`, o tempo desde que o
  * formulário apareceu.
  */
@@ -62,6 +63,8 @@ async function submitContact(data: {
   assunto: string;
   mensagem: string;
   origem?: string;
+  /** Endereço da página, com UTMs e gclid, para o webhook dos leads */
+  pagina: string;
   site: string;
   elapsed: number;
 }): Promise<void> {
@@ -136,6 +139,7 @@ export default function ContactForm({ assuntoInicial, origem, whatsappMessage }:
         assunto,
         mensagem: mensagem.trim(),
         origem,
+        pagina: window.location.href,
         site,
         elapsed: Date.now() - startedAt,
       });

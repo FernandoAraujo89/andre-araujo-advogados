@@ -19,7 +19,7 @@ import { getIn, listOps } from "./state";
 /**
  * Painel lateral do editor: mostra as opções do que está selecionado. Sem
  * seleção, mostra os dados da página (nome no menu, endereço, WhatsApp,
- * Google) e o sumário das seções.
+ * webhook dos leads, Google) e o sumário das seções.
  */
 
 const field =
@@ -95,6 +95,88 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+type WebhookTest = { state: "idle" | "sending" | "ok" | "error"; msg?: string };
+
+/**
+ * Webhook dos leads (src/lib/lead-webhook.ts): o endereço e um botão que
+ * manda um lead de exemplo, para o Make aprender os campos sem um envio real
+ * pelo site.
+ */
+function LeadWebhookGroup() {
+  const { page, set } = useEditor();
+  const [test, setTest] = useState<WebhookTest>({ state: "idle" });
+  const url = page.leadWebhook ?? "";
+  const hasForm = page.sections.some((s) => s.type === "contato" && !s.hidden);
+
+  async function sendTest() {
+    setTest({ state: "sending" });
+    try {
+      const res = await fetch("/api/admin/landing/webhook-teste", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, slug: page.slug, name: page.name }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        status?: number;
+        error?: string;
+      };
+      if (res.ok && data.ok) {
+        setTest({ state: "ok", msg: `Teste enviado: o webhook respondeu ${data.status}.` });
+      } else {
+        setTest({
+          state: "error",
+          msg:
+            data.error ||
+            (data.status ? `O webhook respondeu ${data.status}.` : "O webhook não respondeu."),
+        });
+      }
+    } catch {
+      setTest({ state: "error", msg: "Não foi possível enviar o teste." });
+    }
+  }
+
+  return (
+    <Group title="Leads">
+      <Field
+        title="Webhook"
+        value={url}
+        max={500}
+        placeholder="https://hook.us1.make.com/..."
+        onChange={(v) => {
+          set(["leadWebhook"], v);
+          setTest({ state: "idle" });
+        }}
+        help={
+          hasForm
+            ? "Cada envio do formulário desta página vai também para este endereço (ex.: Make): nome, celular, e-mail, assunto, mensagem, link da página, UTMs e gclid. Fica só no servidor. Vazio: não envia."
+            : "Só funciona com a seção “Formulário de contato” visível na página."
+        }
+      />
+      {url && (
+        <div>
+          <button
+            type="button"
+            disabled={test.state === "sending"}
+            onClick={sendTest}
+            className="flex items-center gap-2 rounded-md border border-line bg-white px-3 py-2 text-sm text-ink transition-colors hover:border-ink/30 disabled:opacity-60"
+          >
+            {test.state === "sending" ? "Enviando..." : "Enviar teste"}
+          </button>
+          <p
+            className={`${hint} ${
+              test.state === "error" ? "text-wine-deep" : test.state === "ok" ? "text-ink" : ""
+            }`}
+          >
+            {test.msg ??
+              "Manda um lead de exemplo, marcado como teste, para o Make aprender os campos. Não cria mensagem no painel nem conversão no Google Ads."}
+          </p>
+        </div>
+      )}
+    </Group>
+  );
+}
+
 function PagePanel({ storageEnabled }: { storageEnabled: boolean }) {
   const { page, set, apply, select } = useEditor();
   return (
@@ -162,6 +244,7 @@ function PagePanel({ storageEnabled }: { storageEnabled: boolean }) {
           help="Texto que já vem escrito quando o WhatsApp abre. Com formulário na página, o WhatsApp abre depois do envio, e a mensagem leva também o nome e o texto do visitante."
         />
       </Group>
+      <LeadWebhookGroup />
       <Group title="Google e compartilhamento">
         <Field
           title="Título da aba e do Google"

@@ -12,6 +12,7 @@ import {
 } from "@/data/landing";
 import { categories, type Category } from "@/data/posts";
 import { LANDING_TAG } from "@/lib/landing";
+import { isWebhookUrl } from "@/lib/lead-webhook";
 
 /**
  * Valida e normaliza a landing page enviada pelo editor visual. Devolve erro
@@ -189,6 +190,8 @@ export function parseLandingInput(raw: unknown): Ok | Fail {
   const slug = line(b.slug, 80);
   const status = b.status === "publicada" ? "publicada" : "rascunho";
   const whatsappMessage = line(b.whatsappMessage, 300);
+  // Sempre presente (vazio para limpar): a gravação mescla com a versão salva
+  const leadWebhook = line(b.leadWebhook, 500).replace(/\s/g, "");
 
   if (name.length < 3) {
     return { ok: false, error: "Informe o nome da página (o rótulo do menu), no painel “Página”." };
@@ -198,6 +201,12 @@ export function parseLandingInput(raw: unknown): Ok | Fail {
   }
   if (whatsappMessage.length < 5) {
     return { ok: false, error: "Informe a mensagem inicial do WhatsApp, no painel “Página”." };
+  }
+  if (leadWebhook && !isWebhookUrl(leadWebhook)) {
+    return {
+      ok: false,
+      error: "O webhook dos leads precisa ser um endereço que comece com https://, no painel “Página”.",
+    };
   }
 
   const seoRaw = obj(b.seo);
@@ -228,7 +237,18 @@ export function parseLandingInput(raw: unknown): Ok | Fail {
 
   return {
     ok: true,
-    value: { version: 2, slug, status, name, tagline, seo, whatsappMessage, hero, sections },
+    value: {
+      version: 2,
+      slug,
+      status,
+      name,
+      tagline,
+      seo,
+      whatsappMessage,
+      leadWebhook,
+      hero,
+      sections,
+    },
   };
 }
 

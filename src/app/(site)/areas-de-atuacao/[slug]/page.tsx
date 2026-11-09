@@ -55,7 +55,10 @@ export default async function AreaPage({ params }: Props) {
     const page = await getLandingPage(slug);
     if (!page || page.status !== "publicada") notFound();
     const [team, posts] = await Promise.all([getTeam(), getAllPosts()]);
-    return <LandingPageView page={page} team={team} posts={posts} />;
+    // O webhook dos leads fica só no servidor (src/lib/lead-webhook.ts)
+    return (
+      <LandingPageView page={{ ...page, leadWebhook: undefined }} team={team} posts={posts} />
+    );
   }
 
   const outras = areas.filter((a) => a.slug !== area.slug).slice(0, 3);

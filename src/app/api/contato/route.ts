@@ -4,10 +4,13 @@ import {
   saveMessage,
   notifyByEmail,
 } from "@/lib/contato";
+import { sendLeadToWebhook } from "@/lib/lead-webhook";
 
 /**
- * Recebe o formulário de contato (público). Grava no banco e avisa por e-mail;
- * basta um dos dois dar certo para o visitante ver "Mensagem enviada".
+ * Recebe o formulário de contato (público). Grava no banco, avisa por e-mail
+ * e, nas landing pages com webhook configurado, manda o lead ao webhook
+ * (src/lib/lead-webhook.ts); basta um dos três dar certo para o visitante ver
+ * "Mensagem enviada".
  */
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -33,13 +36,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
 
+  // O webhook corre em paralelo com o banco e o e-mail (até 5 s)
+  const webhook = sendLeadToWebhook(parsed.value, body.pagina);
   const saved = await saveMessage(parsed.value);
   const emailed = await notifyByEmail(parsed.value);
+  const hooked = await webhook;
 
-  if (saved.status === "saved" || emailed === "sent") {
+  if (saved.status === "saved" || emailed === "sent" || hooked === "sent") {
     return NextResponse.json({ ok: true });
   }
-  if (saved.status === "skipped" && emailed === "skipped") {
+  if (saved.status === "skipped" && emailed === "skipped" && hooked === "skipped") {
     // Ambiente local sem banco nem e-mail: registra no console para o
     // formulário continuar testável.
     console.info("Contato recebido (sem banco/e-mail configurados):", parsed.value);

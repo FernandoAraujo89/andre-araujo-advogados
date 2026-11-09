@@ -110,6 +110,12 @@ export type LandingPage = {
   seo: { title: string; description: string; image?: string };
   /** Mensagem pré-preenchida dos botões de WhatsApp da página */
   whatsappMessage: string;
+  /**
+   * Webhook que recebe cada lead do formulário da página (ex.: cenário do
+   * Make). Só o servidor usa: não vai para a página pública
+   * (src/lib/lead-webhook.ts).
+   */
+  leadWebhook?: string;
   hero: LpHero;
   sections: LpSection[];
   createdAt: string; // ISO yyyy-mm-dd

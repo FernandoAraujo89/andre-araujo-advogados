@@ -32,8 +32,20 @@ type History = { past: LandingPageInput[]; present: LandingPageInput; future: La
 
 /** Só os campos que o servidor aceita (sem datas). */
 function toInput(page: LandingPage | LandingPageInput): LandingPageInput {
-  const { version, slug, status, name, tagline, seo, whatsappMessage, hero, sections } = page;
-  return { version, slug, status, name, tagline, seo, whatsappMessage, hero, sections };
+  const { version, slug, status, name, tagline, seo, whatsappMessage, leadWebhook, hero, sections } =
+    page;
+  return {
+    version,
+    slug,
+    status,
+    name,
+    tagline,
+    seo,
+    whatsappMessage,
+    leadWebhook,
+    hero,
+    sections,
+  };
 }
 
 async function uploadImage(file: File): Promise<string> {

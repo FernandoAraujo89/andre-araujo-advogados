@@ -247,6 +247,30 @@ Ajustes do celular (gestor de tráfego, 09/11/2026, à tarde):
 Landing page sem formulário visível e o resto do site continuam abrindo o
 WhatsApp direto, com o menu de sempre.
 
+### Webhook dos leads (Make)
+
+Cada landing page pode mandar os leads do formulário para um webhook (pedido
+do gestor de tráfego, 09/11/2026). O endereço fica no editor da página, no
+painel "Página", grupo "Leads", campo "Webhook" (vazio: não envia). Fica só
+no banco e no servidor: o repositório é público e a página pública não
+recebe esse campo, porque quem tivesse o endereço poderia mandar leads falsos.
+
+- O envio sai da API do formulário (`src/app/api/contato/route.ts` →
+  `src/lib/lead-webhook.ts`), em paralelo com o banco e o e-mail, com até 5 s
+  de espera. Basta um dos três dar certo para o visitante ver "Mensagem
+  enviada". Falha do webhook vai para o log só com a página e o status.
+- Só vale para landing page publicada com o campo preenchido; o formulário
+  da página Contato e o anti-spam (campo oculto e envio em menos de 3 s) não
+  disparam o webhook.
+- Corpo: JSON plano, sempre com as mesmas chaves: `pagina` (slug), `nome`,
+  `celular`, `celular_internacional` (+55...), `email`, `assunto`,
+  `mensagem`, `url` (página com a query, sem o `#`), `utm_source`,
+  `utm_medium`, `utm_campaign`, `utm_term`, `utm_content`, `gclid`,
+  `gbraid`, `wbraid`, `recebido_em` (ISO 8601) e `teste`.
+- O botão "Enviar teste", ao lado do campo, manda um lead de exemplo com
+  `teste: true` (`/api/admin/landing/webhook-teste`), para o Make aprender os
+  campos sem gerar mensagem no painel, e-mail ou conversão no Google Ads.
+
 - As landing pages são reconhecidas pelo slug em `/areas-de-atuacao/<slug>`
   (`campaigns` em `src/data/google-ads.ts`). **Se o endereço de uma delas
   mudar no painel, atualize o slug ali**; até lá, a página conta como geral.
