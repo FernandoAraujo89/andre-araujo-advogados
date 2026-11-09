@@ -223,7 +223,7 @@ Os botões continuam dizendo "WhatsApp", mas levam ao formulário (`#contato`):
    que troca o destino pelo caminho da página (lista vinda de
    `getLandingFormPaths`, em `src/lib/landing.ts`). Os botões da página
    configurados como WhatsApp no editor fazem o mesmo (`whatsappTarget`, em
-   `src/data/landing.ts`), e o número na seção de contato aparece sem link.
+   `src/data/landing.ts`).
 2. O formulário mostra "Preencha o formulário para falar no WhatsApp" e o
    botão "Enviar e abrir o WhatsApp".
 3. Depois de a API confirmar o envio, dispara o Lead da página e, quando o
@@ -234,8 +234,18 @@ Os botões continuam dizendo "WhatsApp", mas levam ao formulário (`#contato`):
 4. A tela de sucesso tem o botão "Abrir o WhatsApp", caso ele não abra
    sozinho; esse botão tem `data-sem-conversao` e não conta de novo.
 
+Ajustes do celular (gestor de tráfego, 09/11/2026, à tarde):
+
+- A seção do formulário mostra só título, texto e formulário. Telefone, e-mail
+  e número do WhatsApp saíram dela (continuam no rodapé): quem chegava pelo
+  botão via primeiro a lista e achava que era para ligar ou chamar pelo
+  número.
+- Abaixo de 1280px, o botão "Menu" do cabeçalho dá lugar a "Falar no
+  WhatsApp" (leva ao formulário), como no desktop. Abaixo de 350px o botão
+  diz só "WhatsApp" para caber ao lado do logo.
+
 Landing page sem formulário visível e o resto do site continuam abrindo o
-WhatsApp direto.
+WhatsApp direto, com o menu de sempre.
 
 - As landing pages são reconhecidas pelo slug em `/areas-de-atuacao/<slug>`
   (`campaigns` em `src/data/google-ads.ts`). **Se o endereço de uma delas

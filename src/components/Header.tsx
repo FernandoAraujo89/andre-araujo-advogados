@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { site, navMain } from "@/data/site";
 import type { AreaDeAtuacao } from "@/data/atuacao";
-import WhatsAppLink from "@/components/WhatsAppLink";
+import WhatsAppLink, { useWhatsAppViaForm } from "@/components/WhatsAppLink";
 
 const AREAS_HREF = "/areas-de-atuacao";
 
@@ -36,10 +36,17 @@ function Chevron({ className = "" }: { className?: string }) {
  * Atuação" abre um submenu com todas as áreas (dropdown no desktop, acordeão
  * no menu mobile) e os demais itens são links diretos. O menu completo aparece
  * a partir de xl (1280px); abaixo disso usa o hambúrguer.
+ *
+ * Nas landing pages com formulário, abaixo de xl o hambúrguer dá lugar ao
+ * botão "Falar no WhatsApp", que leva ao formulário (pedido do gestor de
+ * tráfego, 09/11/2026): na página de campanha o botão do topo é a chamada
+ * para o contato, como no desktop, e não a saída para o resto do site. A
+ * navegação continua no rodapé.
  */
 export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const landing = useWhatsAppViaForm();
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
@@ -57,7 +64,7 @@ export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
     <header className="fixed inset-x-0 top-0 z-50">
       {/* Linha principal — sólida para funcionar sobre o hero escuro */}
       <div className="bg-paper-light/95 shadow-[0_2px_24px_rgba(22,34,44,0.06)] backdrop-blur-md">
-        <div className="mx-auto flex h-[4.5rem] max-w-[1240px] items-center justify-between gap-6 px-5 lg:h-[5.5rem] lg:max-w-[1600px] lg:px-8 xl:px-16 2xl:px-24">
+        <div className={`mx-auto flex h-[4.5rem] max-w-[1240px] items-center justify-between ${landing ? "gap-4" : "gap-6"} px-5 lg:h-[5.5rem] lg:max-w-[1600px] lg:px-8 xl:px-16 2xl:px-24`}>
           <Link
             href="/"
             aria-label="André Araújo Advogados, ir para a página inicial"
@@ -70,7 +77,7 @@ export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
               height={130}
               priority
               unoptimized
-              className="h-10 w-auto lg:h-12"
+              className={`w-auto lg:h-12 ${landing ? "h-8 min-[420px]:h-10" : "h-10"}`}
             />
           </Link>
 
@@ -153,44 +160,53 @@ export default function Header({ areas }: { areas: AreaDeAtuacao[] }) {
             </WhatsAppLink>
           </div>
 
-          <button
-            type="button"
-            className="flex h-11 items-center gap-2 rounded-sm border border-ink/20 bg-paper-light px-4 text-[0.9375rem] font-medium text-ink transition-colors hover:border-accent xl:hidden"
-            aria-expanded={open}
-            aria-controls="menu-mobile"
-            onClick={() => setOpen((v) => !v)}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              aria-hidden="true"
-              className="shrink-0"
+          {landing ? (
+            <WhatsAppLink
+              ariaLabel="Falar no WhatsApp"
+              className="inline-flex h-11 shrink-0 items-center whitespace-nowrap rounded-sm bg-accent-surface px-3 text-[0.9375rem] font-medium text-paper-light transition-colors hover:bg-accent-surface-deep min-[420px]:px-5 xl:hidden"
             >
-              {open ? (
-                <path
-                  d="M5 5l10 10M15 5L5 15"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                />
-              ) : (
-                <path
-                  d="M3 5.5h14M3 10h14M3 14.5h14"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                />
-              )}
-            </svg>
-            {open ? "Fechar" : "Menu"}
-          </button>
+              <span className="max-[349px]:hidden">Falar no&nbsp;</span>WhatsApp
+            </WhatsAppLink>
+          ) : (
+            <button
+              type="button"
+              className="flex h-11 items-center gap-2 rounded-sm border border-ink/20 bg-paper-light px-4 text-[0.9375rem] font-medium text-ink transition-colors hover:border-accent xl:hidden"
+              aria-expanded={open}
+              aria-controls="menu-mobile"
+              onClick={() => setOpen((v) => !v)}
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden="true"
+                className="shrink-0"
+              >
+                {open ? (
+                  <path
+                    d="M5 5l10 10M15 5L5 15"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                  />
+                ) : (
+                  <path
+                    d="M3 5.5h14M3 10h14M3 14.5h14"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                  />
+                )}
+              </svg>
+              {open ? "Fechar" : "Menu"}
+            </button>
+          )}
         </div>
       </div>
 
       {/* Menu mobile — áreas como acordeão + links diretos */}
-      {open && (
+      {open && !landing && (
         <nav
           id="menu-mobile"
           aria-label="Navegação principal (mobile)"

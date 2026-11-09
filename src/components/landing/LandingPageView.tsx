@@ -748,8 +748,13 @@ function PerguntasSection({ s, i, ctx }: { s: LpSectionOf<"perguntas">; i: numbe
 function ContatoSection({ s, i, ctx }: { s: LpSectionOf<"contato">; i: number; ctx: Ctx }) {
   const { K, page } = ctx;
   return (
-    <section id="contato" className="scroll-mt-24 bg-paper py-24 @5xl:py-32">
-      <div className={`${wrap} grid gap-12 @5xl:grid-cols-2 @5xl:gap-[calc(var(--lp-u)*7)]`}>
+    // Só título, texto e formulário: telefone, e-mail e número do WhatsApp
+    // ficam no rodapé. Pedido do gestor de tráfego (09/11/2026): no celular,
+    // quem tocava num botão de WhatsApp caía primeiro na lista de contatos e
+    // achava que era para ligar ou chamar pelo número, sem passar pelo
+    // formulário, que é o que registra o lead.
+    <section id="contato" className="scroll-mt-[4.5rem] bg-paper py-16 lg:scroll-mt-[5.5rem] @3xl:py-24 @5xl:py-32">
+      <div className={`${wrap} grid items-start gap-10 @5xl:grid-cols-2 @5xl:gap-[calc(var(--lp-u)*7)]`}>
         <Reveal>
           <K.Text
             path={["sections", i, "title"]}
@@ -766,36 +771,6 @@ function ContatoSection({ s, i, ctx }: { s: LpSectionOf<"contato">; i: number; c
             className="mt-6 block max-w-xl text-lg text-pretty text-ink-soft"
             placeholder="Texto de apoio (opcional)"
           />
-          <ul className="mt-10 space-y-6 text-ink">
-            {/* Sem link direto: o WhatsApp abre depois do envio do
-                formulário, para o lead ser registrado (ver ContactForm) */}
-            <li>
-              <p className="label">WhatsApp</p>
-              <p className="mt-1 text-lg font-medium">{site.whatsapp}</p>
-              <p className="mt-1 text-base text-ink-soft">
-                A conversa abre assim que você envia o formulário.
-              </p>
-            </li>
-            <li>
-              <p className="label">Telefone</p>
-              <a href={site.phoneHref} className="mt-1 inline-block text-lg font-medium hover:text-accent-deep">
-                {site.phone}
-              </a>
-            </li>
-            <li>
-              <p className="label">E-mail</p>
-              <a
-                href={site.emailHref}
-                className="mt-1 inline-block break-words text-lg font-medium hover:text-accent-deep"
-              >
-                {site.email}
-              </a>
-            </li>
-            <li>
-              <p className="label">Atendimento</p>
-              <p className="mt-1 text-lg">Presencial na sede ou online, em todo o Brasil.</p>
-            </li>
-          </ul>
         </Reveal>
         <Reveal delay={0.1}>
           {/* No editor o formulário é só a prévia: não envia nada */}
