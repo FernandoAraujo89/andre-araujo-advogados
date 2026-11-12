@@ -123,6 +123,19 @@ function section(raw: unknown): LpSection | null {
         button: button(r.button),
         image: image(r.image),
       };
+    case "passos":
+    case "lista": {
+      const items = arr(r.items)
+        .map((it) => {
+          const i = obj(it);
+          return { title: line(i.title, 120), text: text(i.text, 600) };
+        })
+        .filter((i) => i.title || i.text);
+      const common = { ...base, eyebrow: line(r.eyebrow, 80), title, text: text(r.text, 1000), items };
+      return type === "passos"
+        ? { ...common, type }
+        : { ...common, type, button: button(r.button) };
+    }
     case "depoimentos":
       return {
         ...base,

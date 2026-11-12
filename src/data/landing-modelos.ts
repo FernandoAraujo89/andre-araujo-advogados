@@ -372,6 +372,22 @@ const adePrazo = {
     "Em regra, as diferenças dos últimos cinco anos. Como a prescrição alcança cada parcela mensal, a cada mês que passa uma parcela mais antiga deixa de poder ser cobrada. Por isso vale verificar o quanto antes.",
 };
 
+/** "Por que agir agora": três motivos iguais nas duas páginas de ADE. */
+const adeMotivos = [
+  {
+    title: "O prazo corre mês a mês",
+    text: "Em regra, só as diferenças dos últimos cinco anos podem ser cobradas. Quem mudou de faixa há mais tempo perde uma parcela a cada mês que passa.",
+  },
+  {
+    title: "Sem custas em primeira instância",
+    text: "No Juizado Especial da Fazenda Pública não há custas processuais nem honorários de sucumbência na primeira instância.",
+  },
+  {
+    title: "Processo baseado em documentos",
+    text: "A prova são as suas avaliações e os seus contracheques, o que, na maioria dos casos, dispensa audiência.",
+  },
+];
+
 const adeProcesso = {
   question: "Como funciona o processo?",
   answer:
@@ -393,6 +409,10 @@ const AP = "/images/landing/ade-policiais-penais";
 function adePoliciaisPenais(): LandingPageInput {
   const cards = newSection("cards") as LpSectionOf<"cards">;
   const numeros = newSection("numeros") as LpSectionOf<"numeros">;
+  const atraso = newSection("passos") as LpSectionOf<"passos">;
+  const etapas = newSection("passos") as LpSectionOf<"passos">;
+  const quem = newSection("lista") as LpSectionOf<"lista">;
+  const motivos = newSection("lista") as LpSectionOf<"lista">;
   const destaque = newSection("destaque") as LpSectionOf<"destaque">;
   const depoimentos = newSection("depoimentos") as LpSectionOf<"depoimentos">;
   const equipe = newSection("equipe") as LpSectionOf<"equipe">;
@@ -464,22 +484,22 @@ function adePoliciaisPenais(): LandingPageInput {
         ],
       },
       {
-        ...numeros,
-        title: "Nove meses que fazem diferença no contracheque",
-        text: "O ciclo anual de avaliação termina em dezembro. A partir de janeiro, o servidor já cumpre os requisitos para o novo percentual, calculado sobre o vencimento básico.",
+        ...atraso,
+        eyebrow: "Como o atraso acontece",
+        title: "Três datas explicam a diferença no seu contracheque",
+        text: "O ADE sobe de faixa quando você completa o número de avaliações satisfatórias. O problema está no intervalo entre conquistar o direito e começar a receber.",
         items: [
           {
-            value: "9",
-            label: "meses de diferença, de janeiro a setembro, quando a nova faixa só é implantada em outubro",
+            title: "Dezembro: o ciclo de avaliação se encerra",
+            text: "Com a avaliação do ano concluída e resultado igual ou superior a 70%, você completa o número de avaliações exigido para a faixa seguinte.",
           },
           {
-            value: "70%",
-            label: "é o resultado mínimo na avaliação de desempenho para que ela conte para o ADE",
+            title: "Janeiro: o direito já existe",
+            text: "A partir daqui, todos os requisitos da lei estão cumpridos. O novo percentual já deveria incidir sobre o seu vencimento básico.",
           },
-          { value: "5", label: "anos de diferenças, em regra, podem ser cobrados; as parcelas mais antigas prescrevem" },
           {
-            value: googleReviews.rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 }),
-            label: `é a nota do escritório no Google, com ${googleReviews.count} avaliações`,
+            title: "1º de outubro: o Estado começa a pagar",
+            text: "É só nesta data que o novo percentual costuma aparecer no contracheque. Os nove meses anteriores ficam sem a diferença.",
           },
         ],
       },
@@ -496,13 +516,104 @@ function adePoliciaisPenais(): LandingPageInput {
         },
       },
       {
+        ...numeros,
+        title: "Quanto isso pode representar",
+        text: "Um exemplo ilustrativo: policial penal com vencimento básico de R$ 5.000 que passou da faixa de 10% para a de 20% do ADE. Os valores do seu caso dependem do seu vencimento básico e da faixa alcançada.",
+        items: [
+          {
+            value: "R$ 500",
+            label: "a mais por mês é o que a nova faixa representa nesse exemplo",
+          },
+          {
+            value: "9",
+            label: "meses sem a diferença, de janeiro a setembro, quando a nova faixa só chega em outubro",
+          },
+          {
+            value: "R$ 4.500",
+            label: "de diferença no período, antes dos reflexos em 13º salário e férias, da correção e dos juros",
+          },
+          {
+            value: "5",
+            label: "anos de diferenças, em regra, podem ser cobrados; as parcelas mais antigas prescrevem",
+          },
+        ],
+      },
+      {
+        ...quem,
+        eyebrow: "Quem tem direito",
+        title: "Confira se o seu caso se encaixa",
+        text: "Se você se reconhece nestes pontos, vale pedir a análise das suas avaliações e dos seus contracheques.",
+        button: { label: "Quero analisar meu caso", link: { tipo: "contato" } },
+        items: [
+          {
+            title: "É servidor efetivo do Estado de Minas Gerais",
+            text: "Policial penal ou servidor de outra carreira do Poder Executivo, sob regime estatutário.",
+          },
+          {
+            title: "Recebe o Adicional de Desempenho",
+            text: "Ingressou no serviço público depois de julho de 2003 ou fez a opção expressa pelo ADE.",
+          },
+          {
+            title: "Mudou de faixa do ADE",
+            text: "Passou, por exemplo, de 6% para 10% ou de 10% para 20%, ao completar o número de avaliações satisfatórias.",
+          },
+          {
+            title: "Só recebeu o novo percentual em outubro",
+            text: "De janeiro a setembro, o contracheque continuou com o percentual antigo.",
+          },
+          {
+            title: "Isso aconteceu nos últimos cinco anos",
+            text: "Em regra, é o período que ainda pode ser cobrado.",
+          },
+        ],
+      },
+      {
         ...depoimentos,
+        eyebrow: `Nota ${googleReviews.rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })} no Google, com ${googleReviews.count} avaliações`,
         title: "Quem confiou no escritório recomenda",
       },
       {
         ...equipe,
         title: "Quem vai cuidar do seu caso",
         text: "Advogados com experiência em Direito do Servidor Público, que conhecem a legislação de Minas Gerais e acompanham cada etapa com você.",
+      },
+      {
+        ...etapas,
+        eyebrow: "Como funciona",
+        title: "Do primeiro contato à cobrança, sem complicar a sua rotina",
+        text: "O pedido se apoia em documentos que você já tem ou consegue emitir no sistema funcional.",
+        items: [
+          {
+            title: "Você envia os documentos",
+            text: "O extrato das avaliações de desempenho (SISAP) e os contracheques do período em que houve a mudança de faixa.",
+          },
+          {
+            title: "O escritório confere e calcula",
+            text: "As datas das avaliações são comparadas com o percentual pago em cada mês, e a diferença é calculada com os reflexos.",
+          },
+          {
+            title: "A cobrança vai ao Juizado",
+            text: "A ação corre no Juizado Especial da Fazenda Pública, com rito mais simples e, em muitos casos, sem audiência.",
+          },
+          {
+            title: "Você acompanha cada etapa",
+            text: "O escritório informa cada andamento até a decisão. Reconhecido o direito, os valores são pagos com correção e juros.",
+          },
+        ],
+      },
+      {
+        ...motivos,
+        eyebrow: "Por que agir agora",
+        title: "Cada mês de espera deixa uma parcela para trás",
+        text: "A prescrição alcança parcela por parcela. Quanto antes o caso é analisado, maior o período que ainda pode ser cobrado.",
+        button: { label: "Verificar meu contracheque", link: { tipo: "contato" } },
+        items: [
+          ...adeMotivos,
+          {
+            title: "Sem reflexo na sua carreira",
+            text: "Cobrar uma verba devida é um direito do servidor e não interfere nas avaliações de desempenho, na lotação nem na estabilidade.",
+          },
+        ],
       },
       {
         ...perguntas,
@@ -573,6 +684,10 @@ const AM = "/images/landing/ade-policiais-militares";
 function adePoliciaisMilitares(): LandingPageInput {
   const cards = newSection("cards") as LpSectionOf<"cards">;
   const numeros = newSection("numeros") as LpSectionOf<"numeros">;
+  const atraso = newSection("passos") as LpSectionOf<"passos">;
+  const etapas = newSection("passos") as LpSectionOf<"passos">;
+  const quem = newSection("lista") as LpSectionOf<"lista">;
+  const motivos = newSection("lista") as LpSectionOf<"lista">;
   const destaque = newSection("destaque") as LpSectionOf<"destaque">;
   const depoimentos = newSection("depoimentos") as LpSectionOf<"depoimentos">;
   const equipe = newSection("equipe") as LpSectionOf<"equipe">;
@@ -644,22 +759,22 @@ function adePoliciaisMilitares(): LandingPageInput {
         ],
       },
       {
-        ...numeros,
-        title: "O que o Estatuto dos Militares garante",
-        text: "O ADE foi incluído na Lei 5.301/1969 pela Lei Complementar 109/2009, para o militar que ingressou depois de julho de 2003 ou que fez a opção pelo adicional.",
+        ...atraso,
+        eyebrow: "Como o atraso acontece",
+        title: "O direito nasce em uma data. O pagamento, em outra",
+        text: "O ADE do militar sobe de faixa quando você completa o número de Avaliações de Desempenho Individual (ADIs) satisfatórias. O problema está no intervalo entre conquistar o direito e começar a receber.",
         items: [
           {
-            value: "60%",
-            label: "da remuneração básica é o percentual do ADE de quem alcança 30 avaliações satisfatórias",
+            title: "Você completa as avaliações",
+            text: "Com mais uma ADI com resultado igual ou superior a 70%, você alcança o número exigido para a faixa seguinte: 3, 5, 10, 15, 20, 25 ou 30 avaliações.",
           },
           {
-            value: "70%",
-            label: "é o resultado mínimo na Avaliação de Desempenho Individual para que ela conte para o ADE",
+            title: "O direito ao novo percentual nasce",
+            text: "Com estabilidade e avaliações satisfatórias, os requisitos do Estatuto dos Militares estão cumpridos. O novo percentual já deveria incidir sobre a remuneração básica.",
           },
-          { value: "5", label: "anos de diferenças, em regra, podem ser cobrados; as parcelas mais antigas prescrevem" },
           {
-            value: googleReviews.rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 }),
-            label: `é a nota do escritório no Google, com ${googleReviews.count} avaliações`,
+            title: "O contracheque só muda depois",
+            text: "Quando o novo percentual é implantado meses mais tarde, todo o intervalo fica sem a diferença. É esse período que pode ser cobrado.",
           },
         ],
       },
@@ -676,13 +791,104 @@ function adePoliciaisMilitares(): LandingPageInput {
         },
       },
       {
+        ...numeros,
+        title: "Quanto isso pode representar",
+        text: "Um exemplo ilustrativo: militar com remuneração básica de R$ 5.000 que passou da faixa de 10% para a de 20% do ADE. Os valores do seu caso dependem da sua remuneração básica, da faixa alcançada e do tempo de atraso.",
+        items: [
+          {
+            value: "R$ 500",
+            label: "a mais por mês é o que a nova faixa representa nesse exemplo",
+          },
+          {
+            value: "R$ 3.000",
+            label: "de diferença a cada seis meses de atraso, antes dos reflexos em 13º salário e férias, da correção e dos juros",
+          },
+          {
+            value: "60%",
+            label: "da remuneração básica é o percentual do ADE de quem alcança 30 avaliações satisfatórias",
+          },
+          {
+            value: "5",
+            label: "anos de diferenças, em regra, podem ser cobrados; as parcelas mais antigas prescrevem",
+          },
+        ],
+      },
+      {
+        ...quem,
+        eyebrow: "Quem tem direito",
+        title: "Confira se o seu caso se encaixa",
+        text: "Se você se reconhece nestes pontos, vale pedir a análise das suas avaliações e dos seus contracheques.",
+        button: { label: "Quero analisar meu caso", link: { tipo: "contato" } },
+        items: [
+          {
+            title: "É militar estadual de Minas Gerais",
+            text: "Policial militar ou bombeiro militar: o Estatuto dos Militares vale para as duas instituições.",
+          },
+          {
+            title: "Recebe o Adicional de Desempenho",
+            text: "Ingressou depois de julho de 2003 ou fez a opção pelo ADE, e já tem estabilidade.",
+          },
+          {
+            title: "Subiu de faixa do ADE",
+            text: "Passou, por exemplo, de 6% para 10% ou de 10% para 20%, ao completar o número de avaliações satisfatórias.",
+          },
+          {
+            title: "O novo percentual chegou com atraso",
+            text: "O contracheque continuou com o percentual antigo por meses depois de cumpridos os requisitos.",
+          },
+          {
+            title: "Isso aconteceu nos últimos cinco anos",
+            text: "Em regra, é o período que ainda pode ser cobrado.",
+          },
+        ],
+      },
+      {
         ...depoimentos,
+        eyebrow: `Nota ${googleReviews.rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })} no Google, com ${googleReviews.count} avaliações`,
         title: "Quem confiou no escritório recomenda",
       },
       {
         ...equipe,
         title: "Quem vai cuidar do seu caso",
         text: "Advogados com experiência em Direito do Servidor Público, que conhecem a legislação de Minas Gerais e acompanham cada etapa com você.",
+      },
+      {
+        ...etapas,
+        eyebrow: "Como funciona",
+        title: "Do primeiro contato à cobrança, sem complicar a sua rotina",
+        text: "O pedido se apoia em documentos que você já tem ou consegue solicitar à sua unidade.",
+        items: [
+          {
+            title: "Você envia os documentos",
+            text: "O registro das suas Avaliações de Desempenho Individual e os contracheques do período em que houve a mudança de faixa.",
+          },
+          {
+            title: "O escritório confere e calcula",
+            text: "As datas das avaliações são comparadas com o percentual pago em cada mês, e a diferença é calculada com os reflexos.",
+          },
+          {
+            title: "A cobrança vai ao Juizado",
+            text: "A ação corre no Juizado Especial da Fazenda Pública, com rito mais simples e, em muitos casos, sem audiência.",
+          },
+          {
+            title: "Você acompanha cada etapa",
+            text: "O escritório informa cada andamento até a decisão. Reconhecido o direito, os valores são pagos com correção e juros.",
+          },
+        ],
+      },
+      {
+        ...motivos,
+        eyebrow: "Por que agir agora",
+        title: "Cada mês de espera deixa uma parcela para trás",
+        text: "A prescrição alcança parcela por parcela. Quanto antes o caso é analisado, maior o período que ainda pode ser cobrado.",
+        button: { label: "Verificar meu contracheque", link: { tipo: "contato" } },
+        items: [
+          ...adeMotivos,
+          {
+            title: "Sem reflexo na sua carreira",
+            text: "Cobrar uma verba devida é um direito do militar e não interfere nas avaliações de desempenho nem na situação funcional.",
+          },
+        ],
       },
       {
         ...perguntas,

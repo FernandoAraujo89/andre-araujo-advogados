@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import JsonLd from "@/components/JsonLd";
 import Reveal from "@/components/Reveal";
@@ -297,13 +297,18 @@ function NumerosSection({ s, i, ctx }: { s: LpSectionOf<"numeros">; i: number; c
             >
               <Reveal delay={j * 0.08}>
                 {/* Valor curto (até 4 caracteres) no corpo grande do layout;
-                    mais longo ("1.000+", "Brasil") desce um degrau para caber */}
+                    mais longo ("1.000+", "Brasil") desce um degrau para caber,
+                    e valores em reais ("R$ 4.500") descem mais um */}
                 <K.Text
                   path={[...list, j, "value"]}
                   value={item.value}
                   as="p"
                   className={`block whitespace-nowrap [overflow-wrap:normal] text-ink ${
-                    item.value.length > 4 ? "text-lp-heading" : "text-lp-stat"
+                    item.value.length > 7
+                      ? "text-lp-heading @5xl:text-[calc(var(--lp-u)*3.5)]"
+                      : item.value.length > 4
+                        ? "text-lp-heading"
+                        : "text-lp-stat"
                   }`}
                   placeholder="00"
                 />
@@ -323,6 +328,180 @@ function NumerosSection({ s, i, ctx }: { s: LpSectionOf<"numeros">; i: number; c
             <K.Add list={list} count={s.items.length} make={newItem.numero} label="Adicionar número" />
           </div>
         )}
+      </div>
+    </section>
+  );
+}
+
+/** Colunas do passo a passo no desktop, pelo número de etapas. */
+function passosCols(count: number): string {
+  if (count <= 2) return "@5xl:grid-cols-2";
+  if (count % 3 === 0) return "@5xl:grid-cols-3";
+  return "@5xl:grid-cols-4";
+}
+
+function PassosSection({ s, i, ctx }: { s: LpSectionOf<"passos">; i: number; ctx: Ctx }) {
+  const { K } = ctx;
+  const p: LpPath = ["sections", i];
+  const list: LpPath = [...p, "items"];
+  return (
+    <section className="bg-paper-light py-20 @5xl:py-28">
+      <div className={wrap}>
+        <Reveal className="text-center">
+          <K.Text
+            path={[...p, "eyebrow"]}
+            value={s.eyebrow}
+            as="p"
+            className={`mb-6 block ${eyebrowOnLight}`}
+            placeholder="Sobretítulo (opcional)"
+          />
+          <K.Text
+            path={[...p, "title"]}
+            value={s.title}
+            as="h2"
+            className={`mx-auto block max-w-3xl ${heading} text-ink`}
+            placeholder="Título da seção"
+          />
+          <K.Text
+            path={[...p, "text"]}
+            value={s.text}
+            as="p"
+            multiline
+            className="mx-auto mt-6 block max-w-[38rem] text-lg text-pretty text-ink-soft"
+            placeholder="Texto de apoio (opcional)"
+          />
+        </Reveal>
+        {/* Faixa branca: os cards invertem para o creme */}
+        <ol className={`mt-12 grid gap-5 @3xl:grid-cols-2 @5xl:mt-16 @5xl:gap-6 ${passosCols(s.items.length)}`}>
+          {s.items.map((item, j) => (
+            <K.Item
+              key={j}
+              as="li"
+              list={list}
+              index={j}
+              count={s.items.length}
+              className="border border-line bg-paper p-7 @5xl:p-9"
+            >
+              <Reveal delay={j * 0.08}>
+                <span aria-hidden className="block font-serif text-5xl italic leading-none text-accent">
+                  {String(j + 1).padStart(2, "0")}
+                </span>
+                <K.Text
+                  path={[...list, j, "title"]}
+                  value={item.title}
+                  as="h3"
+                  className="mt-7 block text-2xl leading-tight tracking-[-0.015em] text-ink"
+                  placeholder="Título da etapa"
+                />
+                <K.Text
+                  path={[...list, j, "text"]}
+                  value={item.text}
+                  as="p"
+                  multiline
+                  className="mt-3 block text-pretty text-ink-soft"
+                  placeholder="O que acontece nesta etapa"
+                />
+              </Reveal>
+            </K.Item>
+          ))}
+        </ol>
+        {K.editing && (
+          <div className="mt-8 flex justify-center">
+            <K.Add list={list} count={s.items.length} make={newItem.passo} label="Adicionar etapa" />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function ListaSection({ s, i, ctx }: { s: LpSectionOf<"lista">; i: number; ctx: Ctx }) {
+  const { K, wa } = ctx;
+  const p: LpPath = ["sections", i];
+  const list: LpPath = [...p, "items"];
+  return (
+    <section className="bg-paper py-20 @5xl:py-28">
+      <div
+        className={`${wrap} grid gap-12 @5xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] @5xl:items-start @5xl:gap-[calc(var(--lp-u)*7.8)]`}
+      >
+        <Reveal className="@5xl:sticky @5xl:top-32">
+          <K.Text
+            path={[...p, "eyebrow"]}
+            value={s.eyebrow}
+            as="p"
+            className={`mb-6 block ${eyebrowOnLight}`}
+            placeholder="Sobretítulo (opcional)"
+          />
+          <K.Text
+            path={[...p, "title"]}
+            value={s.title}
+            as="h2"
+            className={`block max-w-[32rem] ${heading} text-ink`}
+            placeholder="Título"
+          />
+          <K.Text
+            path={[...p, "text"]}
+            value={s.text}
+            as="p"
+            multiline
+            className="mt-6 block max-w-[30rem] text-lg text-pretty text-ink-soft"
+            placeholder="Texto de apoio (opcional)"
+          />
+          <div className="mt-10">
+            <K.Btn
+              path={[...p, "button"]}
+              value={s.button}
+              href={linkHref(s.button.link, wa)}
+              variant="primary"
+            />
+          </div>
+        </Reveal>
+        <div>
+          {/* Faixa creme: os cards ficam brancos */}
+          <ul className="grid gap-4">
+            {s.items.map((item, j) => (
+              <K.Item
+                key={j}
+                as="li"
+                list={list}
+                index={j}
+                count={s.items.length}
+                className="border border-line bg-paper-light p-6 @5xl:p-7"
+              >
+                <Reveal delay={j * 0.06} className="flex gap-5">
+                  <span
+                    aria-hidden
+                    className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-full bg-accent-mist text-accent-deep"
+                  >
+                    <Check className="size-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <K.Text
+                      path={[...list, j, "title"]}
+                      value={item.title}
+                      as="h3"
+                      className="block text-xl leading-snug text-ink"
+                      placeholder="Título do ponto"
+                    />
+                    <K.Text
+                      path={[...list, j, "text"]}
+                      value={item.text}
+                      as="p"
+                      multiline
+                      className="mt-2 block text-pretty text-ink-soft"
+                      placeholder="Explicação"
+                    />
+                  </div>
+                </Reveal>
+              </K.Item>
+            ))}
+          </ul>
+          {K.editing && (
+            <div className="mt-6">
+              <K.Add list={list} count={s.items.length} make={newItem.ponto} label="Adicionar ponto" />
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
@@ -796,6 +975,10 @@ function SectionBody({ section, index, ctx }: { section: LpSection; index: numbe
       return <CardsSection s={section} i={index} ctx={ctx} />;
     case "numeros":
       return <NumerosSection s={section} i={index} ctx={ctx} />;
+    case "passos":
+      return <PassosSection s={section} i={index} ctx={ctx} />;
+    case "lista":
+      return <ListaSection s={section} i={index} ctx={ctx} />;
     case "destaque":
       return <DestaqueSection s={section} i={index} ctx={ctx} />;
     case "depoimentos":

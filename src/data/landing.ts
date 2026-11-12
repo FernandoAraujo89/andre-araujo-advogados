@@ -54,10 +54,28 @@ export type LpCard = { image: LpImage; title: string; href?: string };
 export type LpNumero = { value: string; label: string };
 export type LpDepoimento = { quote: string; name: string; role: string };
 export type LpPergunta = { question: string; answer: string };
+/** Item de texto das seções "Passo a passo" e "Lista de pontos". */
+export type LpPonto = { title: string; text: string };
 
 export type LpSection =
   | (Base & { type: "cards"; title: string; text: string; items: LpCard[] })
   | (Base & { type: "numeros"; title: string; text: string; items: LpNumero[] })
+  | (Base & {
+      type: "passos";
+      eyebrow: string;
+      title: string;
+      text: string;
+      /** Numerados na ordem em que aparecem */
+      items: LpPonto[];
+    })
+  | (Base & {
+      type: "lista";
+      eyebrow: string;
+      title: string;
+      text: string;
+      button: LpButton;
+      items: LpPonto[];
+    })
   | (Base & {
       type: "destaque";
       eyebrow: string;
@@ -130,6 +148,8 @@ export const LP_LIMITS = { sections: 20, items: 12 } as const;
 export const sectionLabels: Record<LpSectionType, string> = {
   cards: "Cards com foto",
   numeros: "Números",
+  passos: "Passo a passo",
+  lista: "Lista de pontos",
   destaque: "Destaque com foto",
   depoimentos: "Depoimentos",
   equipe: "Equipe",
@@ -143,6 +163,8 @@ export const sectionLabels: Record<LpSectionType, string> = {
 export const sectionHints: Record<LpSectionType, string> = {
   cards: "Carrossel de cards verticais com foto e título",
   numeros: "Título, texto e quatro números em destaque",
+  passos: "Etapas numeradas, lado a lado, com título e texto",
+  lista: "Título e botão ao lado de uma lista de pontos com texto",
   destaque: "Faixa escura com foto, texto e botão",
   depoimentos: "Citações em carrossel ao lado do título",
   equipe: "Fotos redondas de quem atende",
@@ -216,6 +238,8 @@ export const newItem = {
     answer: "Escreva a resposta em linguagem simples.",
   }),
   foto: (): LpImage => ({ src: "", alt: "" }),
+  passo: (): LpPonto => ({ title: "Nova etapa", text: "Explique o que acontece nesta etapa." }),
+  ponto: (): LpPonto => ({ title: "Novo ponto", text: "Explique este ponto em uma ou duas frases." }),
 };
 
 /** Uma seção nova, com textos de exemplo que o cliente substitui. */
@@ -265,6 +289,33 @@ export function newSection(type: LpSectionType): LpSection {
             label: `nota no Google, com ${googleReviews.count} avaliações`,
           },
           { value: "Brasil", label: "atendimento em todo o país" },
+        ],
+      };
+    case "passos":
+      return {
+        type,
+        id,
+        eyebrow: "Como funciona",
+        title: "Do primeiro contato à solução",
+        text: "Mostre, em poucas etapas, o caminho que o cliente percorre com o escritório.",
+        items: [
+          { title: "Você conta o seu caso", text: "Pelo formulário da página, com os dados principais da sua situação." },
+          { title: "O escritório analisa", text: "Os documentos são conferidos e você recebe uma orientação clara." },
+          { title: "O caso segue em frente", text: "Com o caminho definido, o escritório cuida de cada etapa e mantém você informado." },
+        ],
+      };
+    case "lista":
+      return {
+        type,
+        id,
+        eyebrow: "Para quem é",
+        title: "Quem pode ter esse direito",
+        text: "Liste as situações ou os motivos que ajudam o visitante a se reconhecer na página.",
+        button: formButton(),
+        items: [
+          { title: "Primeiro ponto", text: "Explique este ponto em uma ou duas frases." },
+          { title: "Segundo ponto", text: "Explique este ponto em uma ou duas frases." },
+          { title: "Terceiro ponto", text: "Explique este ponto em uma ou duas frases." },
         ],
       };
     case "destaque":
