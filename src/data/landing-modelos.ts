@@ -422,7 +422,7 @@ function adePoliciaisPenais(): LandingPageInput {
       text: "Quem completa o número de avaliações satisfatórias em dezembro já cumpre, em janeiro, os requisitos para o novo percentual do Adicional de Desempenho. Quando o Estado só atualiza o contracheque em 1º de outubro, a diferença de janeiro a setembro pode ser cobrada.",
       button: { label: "Verificar meu contracheque", link: { tipo: "contato" } },
       image: {
-        src: `${AP}/hero-policial-penal.webp`,
+        src: `${AP}/topo-policial-penal.webp`,
         alt: "Policial penal de uniforme preto, de braços cruzados e expressão confiante",
       },
       ornament: true,
@@ -602,7 +602,7 @@ function adePoliciaisMilitares(): LandingPageInput {
       text: "O Adicional de Desempenho do militar está no Estatuto dos Militares e cresce com o número de avaliações satisfatórias. Quando o novo percentual demora meses para chegar ao contracheque, a diferença do período pode ser cobrada.",
       button: { label: "Verificar meu contracheque", link: { tipo: "contato" } },
       image: {
-        src: `${AM}/hero-policial-militar.webp`,
+        src: `${AM}/topo-policial-militar.webp`,
         alt: "Policial militar de farda cáqui, com expressão serena e confiante",
       },
       ornament: true,
