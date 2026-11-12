@@ -362,6 +362,392 @@ function progressaoPromocao(): LandingPageInput {
   };
 }
 
+/**
+ * Perguntas que valem para as duas páginas de ADE (policiais penais e
+ * militares): prazo, processo e efeitos na carreira.
+ */
+const adePrazo = {
+  question: "Até quanto tempo para trás dá para cobrar?",
+  answer:
+    "Em regra, as diferenças dos últimos cinco anos. Como a prescrição alcança cada parcela mensal, a cada mês que passa uma parcela mais antiga deixa de poder ser cobrada. Por isso vale verificar o quanto antes.",
+};
+
+const adeProcesso = {
+  question: "Como funciona o processo?",
+  answer:
+    "A cobrança costuma ser feita no Juizado Especial da Fazenda Pública, que tem um rito mais simples. Em primeira instância não há custas processuais nem honorários de sucumbência, e a prova é essencialmente documental, o que em muitos casos dispensa audiência.",
+};
+
+const AP = "/images/landing/ade-policiais-penais";
+
+/**
+ * ADE (Adicional de Desempenho) de policiais penais de Minas Gerais:
+ * diferenças de janeiro a setembro quando o Estado só implanta a nova faixa
+ * em 1º de outubro (art. 2º-A, § 4º, III, da Lei Estadual 14.693/2003).
+ * Conteúdo a partir do material do escritório "Landing Page - ADE", da lei e
+ * de sentença favorável de Juizado Especial da Fazenda Pública (nov/2026).
+ * A sentença é citada sem nome das partes e como decisão de primeira
+ * instância; nada de "pacífico", "consulta gratuita" ou promessa de
+ * resultado (Provimento 205/2021 da OAB).
+ */
+function adePoliciaisPenais(): LandingPageInput {
+  const cards = newSection("cards") as LpSectionOf<"cards">;
+  const numeros = newSection("numeros") as LpSectionOf<"numeros">;
+  const destaque = newSection("destaque") as LpSectionOf<"destaque">;
+  const depoimentos = newSection("depoimentos") as LpSectionOf<"depoimentos">;
+  const equipe = newSection("equipe") as LpSectionOf<"equipe">;
+  const perguntas = newSection("perguntas") as LpSectionOf<"perguntas">;
+  const blog = newSection("blog") as LpSectionOf<"blog">;
+  const galeria = newSection("galeria") as LpSectionOf<"galeria">;
+  const contato = newSection("contato") as LpSectionOf<"contato">;
+
+  return {
+    version: 2,
+    slug: "ade-policiais-penais",
+    status: "rascunho",
+    name: "ADE de policiais penais",
+    tagline:
+      "Policial penal de MG que mudou de faixa do ADE e só recebeu o novo percentual em outubro pode ter diferenças a receber.",
+    seo: {
+      title: "ADE só em outubro? Diferenças para policiais penais de MG",
+      description:
+        "Policial penal de MG que mudou de faixa do ADE e só recebeu em outubro pode ter diferenças de janeiro a setembro a receber. Veja como conferir.",
+    },
+    whatsappMessage:
+      "Olá! Vim pela página de ADE. Sou policial penal de Minas Gerais e gostaria de saber se tenho diferenças do Adicional de Desempenho a receber.",
+    hero: {
+      eyebrow: "Policiais penais de Minas Gerais",
+      title: "Seu ADE só aumentou em outubro? Você pode ter",
+      highlight: "diferenças a receber",
+      text: "Quem completa o número de avaliações satisfatórias em dezembro já cumpre, em janeiro, os requisitos para o novo percentual do Adicional de Desempenho. Quando o Estado só atualiza o contracheque em 1º de outubro, a diferença de janeiro a setembro pode ser cobrada.",
+      button: { label: "Verificar meu contracheque", link: { tipo: "contato" } },
+      image: {
+        src: `${AP}/hero-policial-penal.webp`,
+        alt: "Policial penal de uniforme preto, de braços cruzados e expressão confiante",
+      },
+      ornament: true,
+    },
+    sections: [
+      {
+        ...cards,
+        title: "Você se reconhece em alguma destas situações?",
+        text: "O ADE cresce conforme o número de avaliações de desempenho satisfatórias: 6% com 3 avaliações, 10% com 5, 20% com 10, e assim por diante. O problema aparece na hora de mudar de faixa.",
+        items: [
+          {
+            image: {
+              src: `${AP}/policial-contracheques.webp`,
+              alt: "Policial penal comparando dois contracheques à mesa da copa",
+            },
+            title: "Mudei de faixa do ADE",
+          },
+          {
+            image: {
+              src: `${AP}/policial-calendario.webp`,
+              alt: "Policial penal marcando uma data no calendário de parede",
+            },
+            title: "O novo percentual só veio em outubro",
+          },
+          {
+            image: {
+              src: `${AP}/policial-corredor.webp`,
+              alt: "Policial penal em serviço no corredor de uma unidade prisional",
+            },
+            title: "Completei 3, 5 ou 10 avaliações",
+          },
+          {
+            image: {
+              src: `${AP}/policial-documentos-casa.webp`,
+              alt: "Servidora organizando contracheques e documentos à mesa de casa",
+            },
+            title: "Aconteceu nos últimos 5 anos",
+          },
+        ],
+      },
+      {
+        ...numeros,
+        title: "Nove meses que fazem diferença no contracheque",
+        text: "O ciclo anual de avaliação termina em dezembro. A partir de janeiro, o servidor já cumpre os requisitos para o novo percentual, calculado sobre o vencimento básico.",
+        items: [
+          {
+            value: "9",
+            label: "meses de diferença, de janeiro a setembro, quando a nova faixa só é implantada em outubro",
+          },
+          {
+            value: "70%",
+            label: "é o resultado mínimo na avaliação de desempenho para que ela conte para o ADE",
+          },
+          { value: "5", label: "anos de diferenças, em regra, podem ser cobrados; as parcelas mais antigas prescrevem" },
+          {
+            value: googleReviews.rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 }),
+            label: `é a nota do escritório no Google, com ${googleReviews.count} avaliações`,
+          },
+        ],
+      },
+      {
+        ...destaque,
+        eyebrow: "O que diz a Justiça",
+        title: "Outubro é a data de atualização da folha,",
+        highlight: "não a data em que o direito nasce",
+        text: "Em decisões sobre o tema, a Justiça mineira tem reconhecido que o 1º de outubro previsto na Lei Estadual 14.693/2003 é um marco de organização administrativa, e não uma condição para adiar o pagamento de um direito que o servidor já conquistou ao concluir o ciclo de avaliação.\n\nEm sentença de primeira instância de um Juizado Especial da Fazenda Pública de Minas Gerais, um policial penal que completou a décima avaliação satisfatória em 2024 e só passou a receber os 20% em outubro de 2025 teve reconhecidas as diferenças de janeiro a setembro, com reflexos em férias e 13º salário. Cada caso depende da análise dos documentos do servidor.",
+        button: { label: "Falar com o escritório", link: { tipo: "contato" } },
+        image: {
+          src: "/images/escritorio/reuniao-andamento.jpg",
+          alt: "Equipe do escritório reunida na sala de reuniões",
+        },
+      },
+      {
+        ...depoimentos,
+        title: "Quem confiou no escritório recomenda",
+      },
+      {
+        ...equipe,
+        title: "Quem vai cuidar do seu caso",
+        text: "Advogados com experiência em Direito do Servidor Público, que conhecem a legislação de Minas Gerais e acompanham cada etapa com você.",
+      },
+      {
+        ...perguntas,
+        title: "Perguntas sobre o ADE do policial penal",
+        items: [
+          {
+            question: "O que é o Adicional de Desempenho (ADE)?",
+            answer:
+              "É uma vantagem mensal criada pela Lei Estadual 14.693/2003 para o servidor do Poder Executivo de Minas Gerais que ingressou no serviço público depois de julho de 2003, ou que optou pelo adicional. Tem direito quem concluiu o estágio probatório e obteve resultado igual ou superior a 70% na avaliação de desempenho (ADI ou AED).",
+          },
+          {
+            question: "Quais são os percentuais do ADE?",
+            answer:
+              "O percentual é calculado sobre o vencimento básico e sobe com o número de avaliações satisfatórias:\n\n3 avaliações: 6%\n5 avaliações: 10%\n10 avaliações: 20%\n15 avaliações: 30%\n20 avaliações: 40%\n25 avaliações: 50%\n30 avaliações: 60%\n35 avaliações: 70%\n\nA soma do ADE com os adicionais por tempo de serviço não pode passar de 90% do vencimento básico.",
+          },
+          {
+            question: "O Estado pode pagar o aumento do meu ADE só em outubro?",
+            answer:
+              "A lei prevê o dia 1º de outubro para a atualização anual do valor do ADE, e é com base nisso que o Estado costuma implantar o novo percentual só nessa data. Em decisões sobre o tema, porém, a Justiça mineira tem entendido que o direito ao percentual maior se consolida com a conclusão do ciclo anual de avaliação, e que as diferenças são devidas desde janeiro.",
+          },
+          {
+            question: "Quanto posso ter a receber?",
+            answer:
+              "Depende do seu vencimento básico, da faixa que você alcançou e de quantos meses o pagamento atrasou. A conta considera a diferença entre o percentual novo e o anterior em cada mês, de janeiro a setembro, mais os reflexos em 13º salário e no terço de férias. Com os contracheques em mãos, o escritório calcula o valor do seu caso.",
+          },
+          adePrazo,
+          {
+            question: "Entrar com a ação pode prejudicar a minha carreira?",
+            answer:
+              "Não. Cobrar na Justiça uma verba salarial devida é um direito do servidor e não interfere nas avaliações de desempenho, na lotação nem na estabilidade.",
+          },
+          adeProcesso,
+          {
+            question: "Quais documentos preciso separar?",
+            answer:
+              "O extrato das avaliações de desempenho, emitido pelo sistema funcional (SISAP), e os contracheques do período em que houve a mudança de faixa do ADE, para comprovar o percentual pago em cada mês. Se faltar algum, o escritório orienta como solicitar.",
+          },
+          {
+            question: "O ADE pago com atraso vale só para policiais penais?",
+            answer:
+              "Não. A mesma lei alcança outras carreiras do Poder Executivo de Minas Gerais, e os militares estaduais têm o ADE previsto no Estatuto dos Militares. Se você é de outra carreira e também mudou de faixa com atraso, o caso pode ser analisado da mesma forma.",
+          },
+        ],
+      },
+      { ...blog, title: "Conteúdos para servidores", category: "Tributário e Servidor Público" },
+      galeria,
+      {
+        ...contato,
+        title: "Confira se o seu ADE foi pago com atraso",
+        text: "Conte rapidamente em que ano você mudou de faixa e quando o novo percentual apareceu no contracheque. O escritório analisa as suas avaliações e os seus contracheques e explica, com clareza, se há diferenças a receber.",
+      },
+    ],
+  };
+}
+
+const AM = "/images/landing/ade-policiais-militares";
+
+/**
+ * ADE de policiais militares de Minas Gerais. A tese é a mesma da página dos
+ * policiais penais; muda a lei: arts. 59-A a 59-D do Estatuto dos Militares
+ * (Lei 5.301/1969), incluídos pela Lei Complementar 109/2009. Diferenças em
+ * relação aos civis, tiradas do texto da lei: percentuais até 60% (30 ADIs),
+ * sobre a remuneração básica; requisito de estabilidade; e período anual de
+ * avaliação contado do dia e mês do ingresso (não de janeiro a dezembro).
+ * Por isso a página fala em "atraso" e "meses depois", sem fixar "janeiro a
+ * setembro": o escritório ajusta no editor se a prática for a mesma.
+ */
+function adePoliciaisMilitares(): LandingPageInput {
+  const cards = newSection("cards") as LpSectionOf<"cards">;
+  const numeros = newSection("numeros") as LpSectionOf<"numeros">;
+  const destaque = newSection("destaque") as LpSectionOf<"destaque">;
+  const depoimentos = newSection("depoimentos") as LpSectionOf<"depoimentos">;
+  const equipe = newSection("equipe") as LpSectionOf<"equipe">;
+  const perguntas = newSection("perguntas") as LpSectionOf<"perguntas">;
+  const blog = newSection("blog") as LpSectionOf<"blog">;
+  const galeria = newSection("galeria") as LpSectionOf<"galeria">;
+  const contato = newSection("contato") as LpSectionOf<"contato">;
+
+  return {
+    version: 2,
+    slug: "ade-policiais-militares",
+    status: "rascunho",
+    name: "ADE de policiais militares",
+    tagline:
+      "Policial militar de MG que subiu de faixa do ADE e recebeu o novo percentual com atraso pode ter diferenças a receber.",
+    seo: {
+      title: "ADE atrasado? Diferenças para policiais militares de MG",
+      description:
+        "Policial militar de MG que subiu de faixa do ADE e recebeu o novo percentual com atraso pode ter diferenças a receber. Veja quem tem direito.",
+    },
+    whatsappMessage:
+      "Olá! Vim pela página de ADE. Sou policial militar de Minas Gerais e gostaria de saber se tenho diferenças do Adicional de Desempenho a receber.",
+    hero: {
+      eyebrow: "Policiais militares de Minas Gerais",
+      title: "Seu ADE subiu de faixa com atraso? Você pode ter",
+      highlight: "diferenças a receber",
+      text: "O Adicional de Desempenho do militar está no Estatuto dos Militares e cresce com o número de avaliações satisfatórias. Quando o novo percentual demora meses para chegar ao contracheque, a diferença do período pode ser cobrada.",
+      button: { label: "Verificar meu contracheque", link: { tipo: "contato" } },
+      image: {
+        src: `${AM}/hero-policial-militar.webp`,
+        alt: "Policial militar de farda cáqui, com expressão serena e confiante",
+      },
+      ornament: true,
+    },
+    sections: [
+      {
+        ...cards,
+        title: "Você se reconhece em alguma destas situações?",
+        text: "O ADE do militar vai de 6% a 60% da remuneração básica, conforme o número de Avaliações de Desempenho Individual (ADIs) satisfatórias. O problema costuma aparecer na mudança de faixa.",
+        items: [
+          {
+            image: {
+              src: `${AM}/militar-contracheque.webp`,
+              alt: "Policial militar lendo o contracheque em uma sala administrativa",
+            },
+            title: "Subi de faixa do ADE",
+          },
+          {
+            image: {
+              src: `${AM}/militar-celular.webp`,
+              alt: "Policial militar conferindo o celular na rua, com uma viatura ao fundo",
+            },
+            title: "O novo percentual demorou a chegar",
+          },
+          {
+            image: {
+              src: `${AM}/militares-instrucao.webp`,
+              alt: "Policiais militares em formação no pátio durante uma instrução",
+            },
+            title: "Completei 3, 5 ou 10 avaliações",
+          },
+          {
+            image: {
+              src: `${AM}/militar-documentos-casa.webp`,
+              alt: "Homem conferindo contracheques com uma calculadora à mesa de casa",
+            },
+            title: "Aconteceu nos últimos 5 anos",
+          },
+        ],
+      },
+      {
+        ...numeros,
+        title: "O que o Estatuto dos Militares garante",
+        text: "O ADE foi incluído na Lei 5.301/1969 pela Lei Complementar 109/2009, para o militar que ingressou depois de julho de 2003 ou que fez a opção pelo adicional.",
+        items: [
+          {
+            value: "60%",
+            label: "da remuneração básica é o percentual do ADE de quem alcança 30 avaliações satisfatórias",
+          },
+          {
+            value: "70%",
+            label: "é o resultado mínimo na Avaliação de Desempenho Individual para que ela conte para o ADE",
+          },
+          { value: "5", label: "anos de diferenças, em regra, podem ser cobrados; as parcelas mais antigas prescrevem" },
+          {
+            value: googleReviews.rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 }),
+            label: `é a nota do escritório no Google, com ${googleReviews.count} avaliações`,
+          },
+        ],
+      },
+      {
+        ...destaque,
+        eyebrow: "O que diz a Justiça",
+        title: "O direito nasce quando você cumpre os requisitos,",
+        highlight: "não quando o Estado atualiza a folha",
+        text: "Em decisões sobre o Adicional de Desempenho, a Justiça mineira tem reconhecido que o direito ao novo percentual se consolida com o cumprimento dos requisitos, e que a data usada pela Administração para atualizar a folha não pode adiar o pagamento.\n\nPara o militar, o que muda é a lei: os requisitos e os percentuais estão nos artigos 59-A a 59-D do Estatuto dos Militares. Se você completou o número de avaliações exigido e o novo percentual só apareceu meses depois, as diferenças do período, com reflexos em 13º salário e férias, podem ser cobradas. Cada caso depende da análise dos documentos do militar.",
+        button: { label: "Falar com o escritório", link: { tipo: "contato" } },
+        image: {
+          src: "/images/escritorio/apresentacao.jpg",
+          alt: "André Araújo conduzindo uma reunião com a equipe na sala de reuniões do escritório",
+        },
+      },
+      {
+        ...depoimentos,
+        title: "Quem confiou no escritório recomenda",
+      },
+      {
+        ...equipe,
+        title: "Quem vai cuidar do seu caso",
+        text: "Advogados com experiência em Direito do Servidor Público, que conhecem a legislação de Minas Gerais e acompanham cada etapa com você.",
+      },
+      {
+        ...perguntas,
+        title: "Perguntas sobre o ADE do militar",
+        items: [
+          {
+            question: "O que é o ADE do militar?",
+            answer:
+              "É uma vantagem remuneratória mensal prevista no Estatuto dos Militares de Minas Gerais (Lei 5.301/1969, artigos 59-A a 59-D, incluídos pela Lei Complementar 109/2009). É devida ao militar que ingressou nas instituições militares estaduais depois de julho de 2003, ou que optou pelo adicional, e que tem estabilidade e avaliações de desempenho satisfatórias.",
+          },
+          {
+            question: "Quais são os percentuais do ADE do militar?",
+            answer:
+              "O percentual incide sobre a remuneração básica e sobe com o número de Avaliações de Desempenho Individual (ADIs) satisfatórias:\n\n3 avaliações: 6%\n5 avaliações: 10%\n10 avaliações: 20%\n15 avaliações: 30%\n20 avaliações: 40%\n25 avaliações: 50%\n30 avaliações: 60%\n\nA soma do ADE com os adicionais por tempo de serviço não pode passar de 90% da remuneração básica.",
+          },
+          {
+            question: "Como funciona a avaliação de desempenho do militar?",
+            answer:
+              "A ADI considera a Avaliação Anual de Desempenho e Produtividade (AADP), o conceito disciplinar e o treinamento profissional básico. O resultado é satisfatório quando é igual ou superior a 70%. O período anual de avaliação começa no dia e mês do ingresso do militar, ou da opção pelo ADE.",
+          },
+          {
+            question: "Subi de faixa e o novo percentual atrasou. Tenho direito às diferenças?",
+            answer:
+              "Em decisões sobre o ADE, a Justiça mineira tem entendido que o direito ao percentual maior nasce quando os requisitos são cumpridos. Se o novo percentual só foi implantado meses depois, em regra há diferença a receber em cada mês desse intervalo, com reflexos em 13º salário e férias. A análise das avaliações e dos contracheques confirma as datas.",
+          },
+          {
+            question: "Bombeiros militares também têm esse direito?",
+            answer:
+              "Sim. O Estatuto dos Militares vale para as instituições militares estaduais, o que inclui a Polícia Militar e o Corpo de Bombeiros Militar de Minas Gerais.",
+          },
+          {
+            question: "Quanto posso ter a receber?",
+            answer:
+              "Depende da sua remuneração básica, da faixa que você alcançou e de quantos meses o pagamento atrasou. Com os contracheques em mãos, o escritório calcula o valor do seu caso.",
+          },
+          adePrazo,
+          {
+            question: "Entrar com a ação pode prejudicar a minha carreira?",
+            answer:
+              "Não. Cobrar na Justiça uma verba remuneratória devida é um direito do militar, exercido perante o Poder Judiciário, e não interfere nas avaliações de desempenho nem na situação funcional.",
+          },
+          adeProcesso,
+          {
+            question: "Quais documentos preciso separar?",
+            answer:
+              "O registro das suas Avaliações de Desempenho Individual, com o resultado de cada ano, e os contracheques do período em que houve a mudança de faixa do ADE. Se faltar algum, o escritório orienta como solicitar à sua unidade.",
+          },
+          {
+            question: "Estou na reserva. O ADE entra nos proventos?",
+            answer:
+              "O Estatuto prevê a incorporação do ADE aos proventos na transferência para a inatividade, em percentual que depende do número de avaliações satisfatórias obtidas na carreira. Diferenças do período da ativa também podem ser cobradas, se estiverem dentro do prazo de cinco anos.",
+          },
+        ],
+      },
+      { ...blog, title: "Conteúdos para servidores", category: "Tributário e Servidor Público" },
+      galeria,
+      {
+        ...contato,
+        title: "Confira se o seu ADE foi pago com atraso",
+        text: "Conte rapidamente quando você completou as avaliações e quando o novo percentual apareceu no contracheque. O escritório analisa os seus documentos e explica, com clareza, se há diferenças a receber.",
+      },
+    ],
+  };
+}
+
 export const landingModelos: LandingModelo[] = [
   {
     id: "padrao",
@@ -383,6 +769,20 @@ export const landingModelos: LandingModelo[] = [
     descricao:
       "Página pronta para professores da rede estadual de Minas Gerais com progressão ou promoção publicada em atraso.",
     criar: progressaoPromocao,
+  },
+  {
+    id: "ade-policiais-penais",
+    nome: "ADE de policiais penais",
+    descricao:
+      "Página pronta para policiais penais de Minas Gerais que mudaram de faixa do Adicional de Desempenho e só receberam em outubro.",
+    criar: adePoliciaisPenais,
+  },
+  {
+    id: "ade-policiais-militares",
+    nome: "ADE de policiais militares",
+    descricao:
+      "Página pronta para policiais militares de Minas Gerais que subiram de faixa do Adicional de Desempenho com atraso.",
+    criar: adePoliciaisMilitares,
   },
 ];
 
